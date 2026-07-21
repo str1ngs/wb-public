@@ -686,6 +686,13 @@ function initRubricPopover() {
     wrap.classList.toggle("open");
   });
 
+  if (closeBtn) {
+    closeBtn.addEventListener("click", function (e) {
+      e.stopPropagation();
+      wrap.classList.remove("open");
+    });
+  }
+
   document.addEventListener("click", function (e) {
     if (!wrap.contains(e.target)) wrap.classList.remove("open");
   });
