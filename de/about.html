@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme = saved || "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Über WattBench | WattBench</title>
+<meta name="description" content="WattBench ist eine unabhängige Testseite für tragbare Powerstations. So testen, bewerten und finanzieren wir uns.">
+<link rel="canonical" href="https://www.wattbench.eu/de/about.html">
+<link rel="alternate" hreflang="en" href="https://www.wattbench.eu/about.html">
+<link rel="alternate" hreflang="de" href="https://www.wattbench.eu/de/about.html">
+<link rel="alternate" hreflang="x-default" href="https://www.wattbench.eu/about.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Über WattBench | WattBench">
+<meta property="og:description" content="WattBench ist eine unabhängige Testseite für tragbare Powerstations. So testen, bewerten und finanzieren wir uns.">
+<meta property="og:url" content="https://www.wattbench.eu/de/about.html">
+<meta property="og:locale" content="de">
+<meta property="og:image" content="https://www.wattbench.eu/images/pages/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.wattbench.eu/images/pages/og-cover.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%224%22 fill=%22%2314181c%22/><path d=%22M13 2 4 14h6l-1 8 9-12h-6z%22 fill=%22%23e8a13d%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Startseite","item":"https://www.wattbench.eu/de/"},
+    {"@type":"ListItem","position":2,"name":"Über WattBench","item":"https://www.wattbench.eu/de/about.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="../de/index.html" class="logo"><span class="bolt">⚡</span>WattBench<small>Daten statt Werbung</small></a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">MENU</button>
+    <nav class="main-nav">
+      <a href="../de/index.html">Startseite</a>
+      <div class="nav-dropdown">
+        <a href="../de/reviews/index.html" class="nav-dropdown-toggle">Testberichte</a>
+        <div class="nav-dropdown-menu">
+          <a href="../de/reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+          <a href="../de/reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+          <a href="../de/reviews/index.html?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+        </div>
+      </div>
+      <a href="../de/guides/index.html">Kaufratgeber</a>
+
+      <div class="nav-controls">
+        <div class="lang-switch">
+          <a href="../about.html" class=" lang-link" data-lang="en" hreflang="en">
+            <span class="lang-flag">
+              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+            </span>en
+          </a>
+          <a href="../de/about.html" class="active lang-link" data-lang="de" hreflang="de">
+            <span class="lang-flag">
+              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+            </span>de
+          </a>
+        </div>
+        <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="disclosure">
+  Diese Website erhält Provisionen für qualifizierte Käufe über Affiliate-Links. <a href="../de/affiliate-disclosure.html">Vollständige Offenlegung</a>.
+</div>
+
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="../de/index.html">Startseite</a> / Über WattBench</p>
+</div>
+
+<section class="section-tight">
+  <div class="wrap article">
+    <h1>Über WattBench</h1>
+    <p class="lede">WattBench (wattbench.eu) gibt es, weil sich die meisten Tests von Power-Geräten lesen, als hätte sie der Hersteller selbst geschrieben. Wir wollten eine Seite, die mit dem Datenblatt beginnt — echte Kapazität, echte Leistung, echte Ladezeiten — und erst danach erzählt, wie es wirklich ist, eine solche Station zu besitzen.</p><h2>Wie wir bewerten</h2><p>Jedes Gerät, das wir testen, erhält fünf Teilbewertungen von 5: Preis-Leistung, Leistung, Portabilität, Ladegeschwindigkeit und Zuverlässigkeit. Diese werden gewichtet und zur Gesamtbewertung gemittelt, die du in jedem Test und in den Vergleichstabellen siehst. Dieselbe Formel gilt für jede Marke, und kein Hersteller kann sich nach oben bezahlen.</p><h2>Wie wir Geld verdienen</h2><p>Einige Links auf dieser Seite sind Affiliate-Links — wenn du darüber kaufst, erhalten wir möglicherweise eine Provision, ohne dass es dich extra kostet. Das beeinflusst nie, welche Produkte wir testen oder wie wir sie bewerten. Details in unserer <a href="affiliate-disclosure.html">Affiliate-Offenlegung</a>.</p><h2>Korrekturen</h2><p>Spezifikationen und Preise ändern sich, und Hersteller aktualisieren Firmware und Hardware ohne große Ankündigung. Wenn uns etwas Veraltetes auffällt, korrigieren wir es im Rahmen unseres laufenden Recherche- und Review-Prozesses.</p>
+
+    <h2>Rubric v1.0, visualisiert</h2>
+    <p>Fünf Teilbewertungen, gewichtet und zur Zahl gemittelt, die du in jedem Test siehst. Keine versteckten Faktoren, kein redaktioneller Daumen auf der Waage.</p>
+    <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis-Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:25%"></div></div>
+    <span class="rubric-bar-pct">25%</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:25%"></div></div>
+    <span class="rubric-bar-pct">25%</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:15%"></div></div>
+    <span class="rubric-bar-pct">15%</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladegeschwindigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:15%"></div></div>
+    <span class="rubric-bar-pct">15%</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">20%</span>
+  </div>
+</div>
+    <p class="rubric-footnote">Bei Ladegeräten ersetzen wir Ladegeschwindigkeit durch Effizienz — ein Ladegerät hat selbst keinen Akku zum Aufladen, aber wie sauber und effizient es Strom an deine Geräte liefert, ist genauso entscheidungsrelevant.</p>
+
+    <h2>Ein Rechenbeispiel</h2>
+    <p>So sieht die Rechnung an einem echten Produkt dieser Seite aus — dem EcoFlow DELTA Pro 3, das insgesamt 4.3/5 erreicht:</p>
+    <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis-Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:96%"></div></div>
+    <span class="rubric-bar-pct">4.8/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:56%"></div></div>
+    <span class="rubric-bar-pct">2.8/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladegeschwindigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:92%"></div></div>
+    <span class="rubric-bar-pct">4.6/5</span>
+  </div>
+</div>
+    <p class="rubric-example-result">
+      <span class="stars">★★★★☆</span>
+      <strong>4.3/5</strong>
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../de/index.html" class="logo"><span class="bolt">⚡</span>WattBench</a>
+      <p class="fine">WattBench ist eine Testseite für Power-Geräte — darunter tragbare Powerstations, Powerbanks und Ladegeräte. Wir bewerten jedes Gerät nach unserem klaren Rubric-1.0-Framework: keine überkomplizierte Methodik, nur klare und ehrliche Daten. Wir hoffen, du findest das passende Gerät für deine Ansprüche! Wir erhalten möglicherweise eine Provision für Käufe über Links auf dieser Website.</p>
+    </div>
+    <div>
+      <h5>Entdecken</h5>
+      <a href="../de/reviews/index.html?category=power-stations">Powerstations</a>
+    </div>
+    <div>
+      <h5>Rechtliches</h5>
+      <a href="../de/about.html">Über uns</a>
+      <a href="../de/affiliate-disclosure.html">Affiliate-Offenlegung</a>
+      <a href="../de/privacy-policy.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. Alle Produktnamen und Marken gehören ihren jeweiligen Eigentümern.</span>
+    <span>Spezifikationen geprüft im Juli 2026 • v0.1.0</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "de";
+  window.WB_ROOT = "../";
+  window.WB_SEARCH_INDEX = [{"title": "Anker SOLIX F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}];
+  window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
+  window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
+  window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} Ergebnisse";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Powerbanks, Stationen oder Marken suchen...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Suche innerhalb {category}...";
+  window.WB_SEARCH_PREFIX = "Suche";
+  window.WB_THEME_LABELS = { dark: "\u263d DUNKEL", light: "\u2600 HELL" };
+  window.WB_ALT_LINKS = { "en": "../about.html", "de": "../de/about.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Powerstations", accent: "#a855f7", icon: "bolt", url: "../de/reviews/index.html?category=power-stations" }, { id: "power-banks", label: "Powerbanks", accent: "#00e5ff", icon: "battery", url: "../de/reviews/index.html?category=power-banks" }, { id: "chargers", label: "Ladeger\u00e4te", accent: "#00d98b", icon: "plug", url: "../de/reviews/index.html?category=chargers" }];
+</script>
+<script src="../js/main.js"></script>
+</body>
+</html>

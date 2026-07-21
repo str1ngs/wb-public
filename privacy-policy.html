@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme = saved || "dark";
+    document.documentElement.setAttribute("data-theme", theme);
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy | WattBench</title>
+<meta name="description" content="WattBench's privacy policy: what data this static site collects and how affiliate and analytics links work.">
+<link rel="canonical" href="https://www.wattbench.eu/privacy-policy.html">
+<link rel="alternate" hreflang="en" href="https://www.wattbench.eu/privacy-policy.html">
+<link rel="alternate" hreflang="de" href="https://www.wattbench.eu/de/privacy-policy.html">
+<link rel="alternate" hreflang="x-default" href="https://www.wattbench.eu/privacy-policy.html">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Privacy Policy | WattBench">
+<meta property="og:description" content="WattBench's privacy policy: what data this static site collects and how affiliate and analytics links work.">
+<meta property="og:url" content="https://www.wattbench.eu/privacy-policy.html">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://www.wattbench.eu/images/pages/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.wattbench.eu/images/pages/og-cover.jpg">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><rect width=%2224%22 height=%2224%22 rx=%224%22 fill=%22%2314181c%22/><path d=%22M13 2 4 14h6l-1 8 9-12h-6z%22 fill=%22%23e8a13d%22/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://www.wattbench.eu/"},
+    {"@type":"ListItem","position":2,"name":"Privacy Policy","item":"https://www.wattbench.eu/privacy-policy.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="wrap">
+    <a href="index.html" class="logo"><span class="bolt">⚡</span>WattBench<small>Specs Over Spin</small></a>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">MENU</button>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="reviews/index.html" class="nav-dropdown-toggle">Reviews</a>
+        <div class="nav-dropdown-menu">
+          <a href="reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+          <a href="reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+          <a href="reviews/index.html?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+        </div>
+      </div>
+      <a href="guides/index.html">Buying Guide</a>
+
+      <div class="nav-controls">
+        <div class="lang-switch">
+          <a href="privacy-policy.html" class="active lang-link" data-lang="en" hreflang="en">
+            <span class="lang-flag">
+              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+            </span>en
+          </a>
+          <a href="de/privacy-policy.html" class=" lang-link" data-lang="de" hreflang="de">
+            <span class="lang-flag">
+              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+            </span>de
+          </a>
+        </div>
+        <button class="theme-toggle" aria-pressed="false" type="button">☽ DARK</button>
+      </div>
+    </nav>
+  </div>
+</header>
+
+<div class="disclosure">
+  This site earns commission from qualifying purchases via affiliate links. <a href="affiliate-disclosure.html">Full disclosure</a>.
+</div>
+
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="index.html">Home</a> / Privacy Policy</p>
+</div>
+
+<section class="section-tight">
+  <div class="wrap article">
+    <h1>Privacy Policy</h1>
+    <p class="lede">WattBench is operated for an EU audience and this policy is written to meet GDPR (Regulation (EU) 2016/679) requirements. This is a static website with no user accounts, no server-side database, and no comment system — here's exactly what that means for your data.</p><h2>Data controller</h2><p>[Insert your company/individual name, address, and contact email here — required under GDPR Art. 13.]</p><h2>What we process, and on what legal basis</h2><p><strong>Theme preference (light/dark mode):</strong> stored only in your browser's <code>localStorage</code> (key <code>wattbench-theme</code>). It never leaves your device and is never transmitted to us — this isn't personal data processing on our end at all.</p><p><strong>Google Fonts:</strong> this site currently loads fonts from Google's CDN, which sends your browser's IP address to Google (a data transfer outside the EU) for each page load. If you're adapting this template for production, consider self-hosting the font files instead — this avoids the transfer entirely and is the approach EU data protection authorities generally recommend.</p><p><strong>Analytics:</strong> none are active by default. If you add analytics (e.g. a cookieless tool like Plausible, or Google Analytics) or ad scripts, you must update this section, identify the legal basis (typically consent under the ePrivacy Directive for anything non-essential), and add a consent mechanism before enabling them.</p><h2>Affiliate links</h2><p>When you click an affiliate link to a retailer, that retailer's own privacy policy and cookies apply once you land on their site — not this one.</p><h2>Your rights under GDPR</h2><p>Because this site doesn't collect personal data server-side, most GDPR data-subject rights (access, rectification, erasure, restriction, portability, objection) have nothing to act on here. If that changes — e.g. a contact form or analytics is added — this section must be updated to explain how to exercise those rights, and a route to contact your national supervisory authority must be provided.</p>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="index.html" class="logo"><span class="bolt">⚡</span>WattBench</a>
+      <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric 1.0 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
+    </div>
+    <div>
+      <h5>Explore</h5>
+      <a href="reviews/index.html?category=power-stations">Power Stations</a>
+    </div>
+    <div>
+      <h5>Legal</h5>
+      <a href="about.html">About</a>
+      <a href="affiliate-disclosure.html">Affiliate Disclosure</a>
+      <a href="privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. All product names and trademarks belong to their respective owners.</span>
+    <span>Specs verified July 2026 • v0.1.0</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "en";
+  window.WB_ROOT = "";
+  window.WB_SEARCH_INDEX = [{"title": "Anker SOLIX F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}];
+  window.WB_SEARCH_NO_RESULTS = "No results found.";
+  window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
+  window.WB_SEARCH_SUGGESTED = "Suggested Categories";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} results";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search power banks, stations, or brands...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Search within {category}...";
+  window.WB_SEARCH_PREFIX = "Search";
+  window.WB_THEME_LABELS = { dark: "\u263d DARK", light: "\u2600 LIGHT" };
+  window.WB_ALT_LINKS = { "en": "privacy-policy.html", "de": "de/privacy-policy.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Power Stations", accent: "#a855f7", icon: "bolt", url: "reviews/index.html?category=power-stations" }, { id: "power-banks", label: "Power Banks", accent: "#00e5ff", icon: "battery", url: "reviews/index.html?category=power-banks" }, { id: "chargers", label: "Chargers", accent: "#00d98b", icon: "plug", url: "reviews/index.html?category=chargers" }];
+</script>
+<script src="js/main.js"></script>
+</body>
+</html>
