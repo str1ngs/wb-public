@@ -680,10 +680,24 @@ function initRubricPopover() {
   var wrap = document.querySelector(".rubric-trigger-wrap");
   if (!wrap) return;
   var trigger = wrap.querySelector(".rubric-trigger");
+  var popover = wrap.querySelector(".rubric-popover");
+  var closeBtn = wrap.querySelector(".rubric-popover-close");
+  var dragHandle = wrap.querySelector(".rubric-popover-title");
+
+  function resetPosition() {
+    popover.style.transition = "";
+    popover.style.position = "";
+    popover.style.left = "";
+    popover.style.top = "";
+    popover.style.right = "";
+    popover.style.bottom = "";
+    popover.style.transform = "";
+  }
 
   trigger.addEventListener("click", function (e) {
     e.stopPropagation();
-    wrap.classList.toggle("open");
+    resetPosition(); // always reopen centered/anchored, not wherever it was last dragged
+    wrap.classList.add("open");
   });
 
   if (closeBtn) {
@@ -693,11 +707,44 @@ function initRubricPopover() {
     });
   }
 
-  document.addEventListener("click", function (e) {
-    if (!wrap.contains(e.target)) wrap.classList.remove("open");
-  });
+  if (dragHandle) {
+    var dragging = false;
+    var startX, startY, startLeft, startTop;
 
-  document.addEventListener("keydown", function (e) {
-    if (e.key === "Escape") wrap.classList.remove("open");
-  });
+    dragHandle.addEventListener("pointerdown", function (e) {
+      dragging = true;
+      var rect = popover.getBoundingClientRect();
+      popover.style.transition = "none"; // must be set before the lines below, so the position swap isn't animated
+      popover.style.position = "fixed";
+      popover.style.left = rect.left + "px";
+      popover.style.top = rect.top + "px";
+      popover.style.right = "auto";
+      popover.style.bottom = "auto";
+      popover.style.transform = "none";
+      startX = e.clientX;
+      startY = e.clientY;
+      startLeft = rect.left;
+      startTop = rect.top;
+      dragHandle.setPointerCapture(e.pointerId);
+    });
+
+    dragHandle.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var newLeft = startLeft + (e.clientX - startX);
+      var newTop = startTop + (e.clientY - startY);
+      var margin = 20;
+      newLeft = Math.max(margin - popover.offsetWidth, Math.min(newLeft, window.innerWidth - margin));
+      newTop = Math.max(0, Math.min(newTop, window.innerHeight - margin));
+      popover.style.left = newLeft + "px";
+      popover.style.top = newTop + "px";
+    });
+
+    function endDrag() {
+      if (!dragging) return;
+      dragging = false;
+      popover.style.transition = ""; // restore normal fade transition for next close/open
+    }
+    dragHandle.addEventListener("pointerup", endDrag);
+    dragHandle.addEventListener("pointercancel", endDrag);
+  }
 }
