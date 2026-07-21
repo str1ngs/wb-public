@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // ---- Product photo gallery (review pages with more than one photo) ----
   initProductGallery();
   initRubricPopover();
+  initRecentStacks();
 
   // ---- Comparison table pagination ----
   initTablePagination();
@@ -747,4 +748,137 @@ function initRubricPopover() {
     dragHandle.addEventListener("pointerup", endDrag);
     dragHandle.addEventListener("pointercancel", endDrag);
   }
+}
+
+function initRecentStacks() {
+  var SWIPE_THRESHOLD = 80; // px of horizontal drag before it counts as a swipe rather than a tap
+  var FLY_MS = 350;         // matches the .35s transition on .recent-stack .recent-card in CSS
+
+  document.querySelectorAll("[data-stack]").forEach(function (stack) {
+    var cards = Array.prototype.slice.call(stack.querySelectorAll("[data-stack-card]"));
+    var dots = Array.prototype.slice.call(stack.querySelectorAll(".recent-stack-dot"));
+    var total = cards.length;
+    if (total < 2) return; // only one card in this category -- nothing to stack or swipe
+
+    var front = 0;
+
+    function layout() {
+      cards.forEach(function (card, i) {
+        card.dataset.stackPos = (i - front + total) % total;
+      });
+      dots.forEach(function (dot, i) { dot.classList.toggle("active", i === front); });
+    }
+    layout();
+
+    function goTo(index) {
+      front = ((index % total) + total) % total;
+      layout();
+    }
+
+    dots.forEach(function (dot, i) {
+      dot.addEventListener("click", function () { goTo(i); });
+    });
+
+    // Drag handling targets whichever card is currently on top. Cards
+    // behind it have pointer-events:none (see CSS), so these listeners
+    // only ever see gestures meant for the front card -- no need to
+    // re-bind anything as the stack cycles.
+    var dragging = false, draggedFar = false, captured = false;
+    var startX = 0, dx = 0, activeCard = null;
+
+    stack.addEventListener("pointerdown", function (e) {
+      if (e.target.closest(".recent-stack-dot")) return;
+      activeCard = cards[front];
+      dragging = true;
+      draggedFar = false;
+      captured = false;
+      startX = e.clientX;
+      dx = 0;
+      // Deliberately NOT calling setPointerCapture here yet. Capturing
+      // immediately -- before we know this is an actual drag -- can
+      // redirect the eventual click away from whatever link the user
+      // pressed down on (header/title/View), breaking plain taps
+      // entirely. Capture only kicks in once real movement confirms a
+      // drag, in pointermove below.
+    });
+
+    stack.addEventListener("pointermove", function (e) {
+      if (!dragging || !activeCard) return;
+      dx = e.clientX - startX;
+      if (!draggedFar && Math.abs(dx) > 10) {
+        draggedFar = true;
+        captured = true;
+        activeCard.classList.add("is-dragging");
+        activeCard.setPointerCapture(e.pointerId);
+      }
+      if (draggedFar) {
+        activeCard.style.transform = "translate(" + dx + "px,0) rotate(" + (dx / 18) + "deg) scale(1)";
+        activeCard.style.opacity = String(1 - Math.min(Math.abs(dx) / 280, 0.6));
+      }
+    });
+
+    function endDrag(e) {
+      if (!dragging || !activeCard) return;
+      dragging = false;
+      var card = activeCard;
+      activeCard = null;
+
+      if (captured) {
+        card.classList.remove("is-dragging"); // re-enables the CSS transition for what follows
+        try { card.releasePointerCapture(e.pointerId); } catch (err) {}
+      }
+      captured = false;
+
+      if (!draggedFar) return; // was just a tap -- never touched, let the native click proceed
+
+      if (Math.abs(dx) > SWIPE_THRESHOLD) {
+        // finish flying the card off in the direction it was dragged --
+        // just past its own edge, not across the whole viewport, so the
+        // motion stays quick and contained instead of a long trip
+        var direction = dx < 0 ? 1 : -1; // dragged left = advance, dragged right = go back
+        var travel = Math.max(card.offsetWidth * 1.15, 420);
+        var flyX = dx > 0 ? travel : -travel;
+        card.style.transform = "translate(" + flyX + "px,0) rotate(" + (dx / 18) + "deg) scale(1)";
+        card.style.opacity = "0";
+        setTimeout(function () {
+          card.style.transform = "";
+          card.style.opacity = "";
+          if (direction > 0) {
+            // advancing: the card lands deep in the faded stack (nearly
+            // invisible), so reset instantly -- no visible "flying back in"
+            card.classList.add("is-dragging");
+            goTo(front + direction);
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                card.classList.remove("is-dragging");
+              });
+            });
+          } else {
+            // going back: the card lands at position 1, which is fully
+            // visible now, so let it animate smoothly into place instead
+            // of popping in unanimated
+            goTo(front + direction);
+          }
+        }, FLY_MS);
+      } else {
+        // didn't clear the threshold -- snap back to center
+        card.style.transform = "";
+        card.style.opacity = "";
+      }
+    }
+
+    stack.addEventListener("pointerup", endDrag);
+    stack.addEventListener("pointercancel", endDrag);
+
+    // A drag that passed the "moved" threshold shouldn't also fire the
+    // link it started on (title/photo/read-more) -- swallow just that
+    // one click, without affecting a normal tap that never dragged.
+    stack.addEventListener("click", function (e) {
+      if (draggedFar) {
+        e.preventDefault();
+        e.stopPropagation();
+        draggedFar = false;
+      }
+    }, true);
+  });
 }
