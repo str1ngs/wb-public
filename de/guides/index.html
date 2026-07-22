@@ -96,25 +96,53 @@
   <div class="wrap article">
     <div class="eyebrow">Kaufratgeber</div>
     <h1>Kaufratgeber</h1>
-    <p class="lede">Die Watt-Rechnung, die kaum jemand richtig erklärt — wie du Kapazität und Leistung auf das abstimmst, was du wirklich betreiben willst.</p>
 
-    <div class="grid cols-auto" style="margin-top:32px;">
-      <div class="cat-card" style="--cat-accent: #a855f7;">
-        <div class="eyebrow">Powerstations</div>
-        <h3>Kaufratgeber: Powerstations</h3>
-        <a class="more" href="../../de/guides/how-to-choose-power-station.html" style="color:#a855f7;">Ratgeber lesen →</a>
-      </div>
-      <div class="cat-card" style="--cat-accent: #00e5ff;">
-        <div class="eyebrow">Powerbanks</div>
-        <h3>Kaufratgeber: Powerbanks</h3>
-        <a class="more" href="../../de/guides/how-to-choose-a-power-bank.html" style="color:#00e5ff;">Ratgeber lesen →</a>
-      </div>
-      <div class="cat-card" style="--cat-accent: #00d98b;">
-        <div class="eyebrow">Ladegeräte</div>
-        <h3>Kaufratgeber: Ladegeräte</h3>
-        <a class="more" href="../../de/guides/how-to-choose-a-charger.html" style="color:#00d98b;">Ratgeber lesen →</a>
-      </div>
-    </div>
+    <h2>Die drei Säulen: Powerstations, Powerbanks und Ladegeräte</h2>
+<p>Alle drei Kategorien bewegen Strom, aber sie sind für völlig unterschiedliche Aufgaben gebaut &ndash; und welcher Wert wirklich zählt, ändert sich jedes Mal.</p>
+
+<div class="pillar-card" style="--pillar-accent:#a855f7;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>
+    <h3>Powerstations</h3>
+  </div>
+  <p class="focus-line">Wh vs. W &middot; 230V-Wechselstromausgang &middot; Spitzenleistung &middot; LiFePO4-Chemie</p>
+  <ul>
+    <li><strong>Kapazität (Wh) ist der Tank, Leistung (W) ist der Motor &ndash; beide müssen groß genug sein.</strong> Eine 2.000-Wh-Station mit 500 W Leistung lässt einen Laptop tagelang laufen, schafft aber trotzdem keine 1.800-W-Induktionsplatte &ndash; der Tank ist riesig, der Motor nicht.</li>
+    <li><strong>Der 230V-Wechselstromausgang ist der Unterschied zur Powerbank.</strong> Eine echte Haushaltssteckdose direkt im Gerät, nicht nur USB-Anschlüsse &ndash; alles, was sonst in die Wand kommt, funktioniert auch hier.</li>
+    <li><strong>Bei allem mit Motor oder Kompressor zählt die Spitzenleistung mehr als die Dauerleistung.</strong> Ein Mini-Kühlschrank zieht im Betrieb vielleicht nur 80 W, sein Kompressor kann beim Start aber kurzzeitig 200&ndash;300 W verlangen. Die Dauerleistungsangabe einer Station zeigt das nicht &ndash; auf die separate Spitzen-/Surge-Angabe achten.</li>
+    <li><strong>LiFePO4 (Lithium-Eisenphosphat) ist die Chemie, die heute fast jede ernstzunehmende Station nutzt,</strong> statt älterem Lithium-Ionen. Sie ist bei gleicher Kapazität schwerer, hält dafür aber rund 3.000+ Ladezyklen statt 500&ndash;1.000 durch und hat nicht das Thermal-Runaway-Risiko von Lithium-Ionen &ndash; wichtig zu wissen, wenn die Station in Schlafnähe steht.</li>
+  </ul>
+</div>
+
+<div class="pillar-card" style="--pillar-accent:#00e5ff;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>
+    <h3>Powerbanks</h3>
+  </div>
+  <p class="focus-line">mAh-zu-Wh-Umrechnung &middot; Zellspannung &middot; Hosentaschen-Format</p>
+  <ul>
+    <li><strong>Powerbanks werden in mAh angegeben, aber erst Wh macht sie mit allem anderen vergleichbar.</strong> Umrechnung: <span style="font-family:var(--mono); color:var(--amber-deep);">Wh = (mAh &times; 3,7V) / 1.000</span>. Eine 20.000-mAh-Powerbank kommt so auf rund 74 Wh &ndash; jetzt lässt sie sich direkt mit der Wh-Angabe einer Powerstation vergleichen oder ausrechnen, für wie viele Handy-Ladungen sie wirklich reicht.</li>
+    <li><strong>Die 3,7V sind die interne Zellspannung, nicht das, was am USB-Anschluss ankommt.</strong> Die Elektronik der Powerbank wandelt sie je nach Anschluss und angeschlossenem Gerät auf 5V, 9V oder 20V um &ndash; und diese Umwandlung ist nie zu 100&nbsp;% verlustfrei. Warum der reale Wert deshalb immer etwas unter der reinen Aufkleber-Rechnung liegt, erklärt die Laufzeit-Formel weiter unten.</li>
+    <li><strong>Airlines erlauben Powerbanks im Handgepäck nur bis 100 Wh (teils bis 160 Wh mit Genehmigung).</strong> Genau diese mAh-zu-Wh-Formel ist, wie das geprüft wird &ndash; eine 27.000-mAh-Powerbank liegt genau an dieser Grenze, vor dem Flug lohnt sich das Nachrechnen.</li>
+    <li><strong>Portabilität ist der ganze Sinn dieser Kategorie,</strong> deshalb zählen Gewicht und Größe hier genauso wie die Kapazität &ndash; anders als bei einer Station, die meist zuhause stehen bleibt.</li>
+  </ul>
+</div>
+
+<div class="pillar-card" style="--pillar-accent:#00d98b;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>
+    <h3>Schnellladegeräte</h3>
+  </div>
+  <p class="focus-line">GaN-Technologie &middot; Aufteilung der Leistung auf mehrere Anschlüsse &middot; PD 3.1 / PPS</p>
+  <ul>
+    <li><strong>Ladegeräte haben keinen eigenen Akku &ndash; sie leiten nur durch,</strong> wandeln Netzstrom in die passende Spannung für das angeschlossene Gerät um. Das ist die ganze Kategorie in einem Satz: keine Kapazitätsangabe, keine Laufzeit, nur wie viel Leistung sie liefern und an wie viele Geräte gleichzeitig.</li>
+    <li><strong>GaN (Galliumnitrid) ist der Grund, warum moderne Ladegeräte so klein geworden sind.</strong> Es ersetzt Silizium in den internen Transistoren, bleibt bei hoher Leistung kühler und ist der Grund, warum ein 100-W-Ladegerät heute in eine Jackentasche passt statt einen eigenen Klotz zu brauchen.</li>
+    <li><strong>Die Leistungsaufteilung auf mehrere Anschlüsse bedeutet: Die Zahl auf der Verpackung ist eine Obergrenze, keine Garantie pro Anschluss.</strong> Ein "100-W"-Ladegerät mit drei Anschlüssen liefert die 100 W vielleicht nur an ein einzelnes Gerät &ndash; sobald alle drei belegt sind, kann es auf 65 W + 20 W + 15 W runtergehen. Auf die Anschluss-für-Anschluss-Aufschlüsselung des Herstellers achten, nicht nur auf die große Zahl.</li>
+    <li><strong>PD 3.1 und PPS sind die Protokolle, die aushandeln, wie viel Leistung ein Gerät wirklich bekommt.</strong> PD 3.1 erweitert Schnellladen auf bis zu 240 W für Laptops; PPS (Programmable Power Supply) lässt ein Handy sehr genaue Spannungsstufen anfordern, für schnelleres und kühleres Laden. Gerät und Ladegerät müssen dasselbe Protokoll unterstützen, damit das greift &ndash; die Watt-Zahl allein garantiert das nicht.</li>
+  </ul>
+</div>
+
+    
   </div>
 </section>
 
@@ -123,7 +151,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-brand">
-      <a href="../../de/index.html" class="logo"><span class="bolt">⚡</span>WattBench</a>
+      <a href="../../de/index.html" class="logo">WattBench</a>
       <p class="fine">WattBench ist eine Testseite für Power-Geräte — darunter tragbare Powerstations, Powerbanks und Ladegeräte. Wir bewerten jedes Gerät nach unserem klaren Rubric-1.0-Framework: keine überkomplizierte Methodik, nur klare und ehrliche Daten. Wir hoffen, du findest das passende Gerät für deine Ansprüche! Wir erhalten möglicherweise eine Provision für Käufe über Links auf dieser Website.</p>
     </div>
     <div>
@@ -148,7 +176,7 @@
 <script>
   window.WB_LOCALE = "de";
   window.WB_ROOT = "../../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}];
   window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
   window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
   window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";

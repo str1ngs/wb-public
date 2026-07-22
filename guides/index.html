@@ -96,25 +96,53 @@
   <div class="wrap article">
     <div class="eyebrow">Buyer's Guide</div>
     <h1>Buying Guide</h1>
-    <p class="lede">The wattage math nobody explains well — how to size capacity and output to what you actually want to run.</p>
 
-    <div class="grid cols-auto" style="margin-top:32px;">
-      <div class="cat-card" style="--cat-accent: #a855f7;">
-        <div class="eyebrow">Power Stations</div>
-        <h3>How to Choose Power Stations</h3>
-        <a class="more" href="../guides/how-to-choose-power-station.html" style="color:#a855f7;">Read the guide →</a>
-      </div>
-      <div class="cat-card" style="--cat-accent: #00e5ff;">
-        <div class="eyebrow">Power Banks</div>
-        <h3>How to Choose Power Banks</h3>
-        <a class="more" href="../guides/how-to-choose-a-power-bank.html" style="color:#00e5ff;">Read the guide →</a>
-      </div>
-      <div class="cat-card" style="--cat-accent: #00d98b;">
-        <div class="eyebrow">Chargers</div>
-        <h3>How to Choose Chargers</h3>
-        <a class="more" href="../guides/how-to-choose-a-charger.html" style="color:#00d98b;">Read the guide →</a>
-      </div>
-    </div>
+    <h2>The three pillars: stations, banks, and chargers</h2>
+<p>These three categories all move electricity around, but they're built for completely different jobs, and the spec that actually matters shifts each time.</p>
+
+<div class="pillar-card" style="--pillar-accent:#a855f7;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>
+    <h3>Power stations</h3>
+  </div>
+  <p class="focus-line">Wh vs W &middot; 230V AC output &middot; surge rating &middot; LiFePO4 chemistry</p>
+  <ul>
+    <li><strong>Capacity (Wh) is the tank, output (W) is the engine, and you need both to be big enough.</strong> A 2,000Wh station with a 500W output can run a laptop for days but still can't power a 1,800W induction hob -- the tank is huge, the engine isn't.</li>
+    <li><strong>230V AC output is what makes these different from a power bank.</strong> A real household socket built into the unit, not just USB ports, so anything you'd normally plug into a wall works here too.</li>
+    <li><strong>Surge rating matters more than the running wattage for anything with a motor or compressor.</strong> A mini-fridge might only draw 80W running, but its compressor can briefly demand 200-300W just to start. A station's continuous output rating won't show you this -- check the separate surge/peak spec.</li>
+    <li><strong>LiFePO4 (lithium iron phosphate) is the chemistry almost every serious station uses now,</strong> over older lithium-ion. It's heavier for the same capacity, but rated for roughly 3,000+ charge cycles instead of 500-1,000, and it doesn't share lithium-ion's thermal runaway risk -- worth knowing if this is going near where you sleep.</li>
+  </ul>
+</div>
+
+<div class="pillar-card" style="--pillar-accent:#00e5ff;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>
+    <h3>Power banks</h3>
+  </div>
+  <p class="focus-line">mAh-to-Wh math &middot; cell voltage &middot; pocket portability</p>
+  <ul>
+    <li><strong>Power banks are rated in mAh, but Wh is what actually lets you compare them to anything else.</strong> Convert with: <span style="font-family:var(--mono); color:var(--amber-deep);">Wh = (mAh &times; 3.7V) / 1,000</span>. A 20,000mAh bank works out to roughly 74Wh -- now you can compare it directly against a power station's Wh rating, or figure out how many phone charges it's really good for.</li>
+    <li><strong>That 3.7V is the internal cell voltage, not what comes out of the USB port.</strong> The bank's own electronics step it up to 5V, 9V, or 20V depending on the port and what's plugged in, and that conversion isn't 100% efficient -- see the runtime formula below for why the real-world number is always a bit lower than the sticker math.</li>
+    <li><strong>Airlines cap carry-on power banks at 100Wh (some allow up to 160Wh with approval).</strong> That mAh-to-Wh formula is exactly how they check -- a 27,000mAh bank is right at the edge of that limit, worth converting before you fly with one.</li>
+    <li><strong>Portability is the entire point of this category,</strong> so weight and physical size matter as much as capacity here in a way they don't for a station that mostly sits at home.</li>
+  </ul>
+</div>
+
+<div class="pillar-card" style="--pillar-accent:#00d98b;">
+  <div class="pillar-head">
+    <span class="pillar-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>
+    <h3>High-draw chargers</h3>
+  </div>
+  <p class="focus-line">GaN technology &middot; multi-port wattage splitting &middot; PD 3.1 / PPS</p>
+  <ul>
+    <li><strong>Chargers have no battery at all -- they're pure pass-through,</strong> converting wall power into the right voltage for whatever's plugged in. That's the whole category in one sentence: no capacity spec, no runtime, just how much power it can push and to how many things at once.</li>
+    <li><strong>GaN (gallium nitride) is why modern chargers got small.</strong> It replaced silicon in the internal transistors, runs cooler at high power, and is the reason a 100W charger today can fit in a jacket pocket instead of needing its own brick.</li>
+    <li><strong>Multi-port wattage splitting means the number on the box is a ceiling, not a guarantee per port.</strong> A "100W" charger with three ports might do 100W to one device alone, but drop to 65W + 20W + 15W the moment all three are plugged in -- check the manufacturer's port-by-port breakdown, not just the headline number.</li>
+    <li><strong>PD 3.1 and PPS are the protocols that negotiate exactly how much power your device actually gets.</strong> PD 3.1 extends fast charging up to 240W for laptops; PPS (Programmable Power Supply) lets a phone request very specific voltage steps for faster, cooler charging. A device and charger both need to support the same protocol for any of this to kick in -- the wattage number alone doesn't guarantee it.</li>
+  </ul>
+</div>
+
+    
   </div>
 </section>
 
@@ -123,7 +151,7 @@
 <footer class="site-footer">
   <div class="wrap">
     <div class="footer-brand">
-      <a href="../index.html" class="logo"><span class="bolt">⚡</span>WattBench</a>
+      <a href="../index.html" class="logo">WattBench</a>
       <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric 1.0 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
     </div>
     <div>
@@ -148,7 +176,7 @@
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}];
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";
