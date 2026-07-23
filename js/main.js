@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initProductGallery();
   initRubricPopover();
   initRecentStacks();
+  initProductFinder();
 
   // ---- Comparison table pagination ----
   initTablePagination();
@@ -881,4 +882,272 @@ function initRecentStacks() {
       }
     }, true);
   });
+}
+
+function initProductFinder() {
+  var panel = document.querySelector(".finder-grid");
+  if (!panel || !window.WB_FINDER_INDEX) return;
+
+  // Every pill is independently toggleable -- a group can have zero, one,
+  // or several active at once. Nothing is pre-selected: an empty group
+  // just means "no preference" for that dimension, and the button stays
+  // valid either way. Once a match is shown, every pill freezes in place
+  // (dimmed, inert) as a record of what was picked -- only Reset clears
+  // it and lets the pills respond to clicks again.
+  var state = { usage: [], usecase: [], budget: [] };
+  var frozen = false;
+
+  panel.querySelectorAll(".finder-pills").forEach(function (group) {
+    var groupName = group.getAttribute("data-finder-group");
+    var pills = Array.prototype.slice.call(group.querySelectorAll(".finder-pill"));
+    pills.forEach(function (pill) {
+      var value = pill.getAttribute("data-value");
+      pill.addEventListener("click", function () {
+        if (frozen) return; // belt-and-suspenders -- CSS already blocks this via pointer-events:none
+        var idx = state[groupName].indexOf(value);
+        if (idx === -1) {
+          state[groupName].push(value);
+        } else {
+          state[groupName].splice(idx, 1);
+        }
+        pill.classList.toggle("active", idx === -1);
+      });
+    });
+  });
+
+  // ---- mobile step-wizard: below 640px, only one step is visible at a
+  // time. The 4th step is the same best-match card desktop reveals in
+  // column 3. The dots/Back/Next nav is a single shared element that
+  // gets physically re-parented into whichever step's body is currently
+  // showing, so it's genuinely part of that card (not a separate piece
+  // styled to merely look attached). ----
+  var STEP_ORDER = ["usage", "usecase", "budget", "results"];
+  var stepEls = {};
+  document.querySelectorAll("[data-finder-step]").forEach(function (el) {
+    stepEls[el.getAttribute("data-finder-step")] = el;
+  });
+  var submitRowEl = document.querySelector(".finder-step-submit");
+  var mobileNav = document.getElementById("finder-mobile-nav");
+  var dots = Array.prototype.slice.call(document.querySelectorAll("#finder-dots .finder-dot"));
+  var backBtn = document.getElementById("finder-back");
+  var nextBtn = document.getElementById("finder-next");
+  var questionButtonsEl = document.getElementById("finder-mobile-question-buttons");
+  var mq = window.matchMedia("(max-width: 640px)");
+  var isMobile = mq.matches;
+  var wizardStep = 0;
+
+  function updateWizardView() {
+    if (!isMobile) {
+      if (stepEls.usage) stepEls.usage.hidden = false;
+      if (stepEls.usecase) stepEls.usecase.hidden = false;
+      if (stepEls.budget) stepEls.budget.hidden = false;
+      if (stepEls.results) stepEls.results.hidden = !frozen;
+      if (submitRowEl) submitRowEl.hidden = frozen; // nothing to re-submit until Reset
+      if (mobileNav) mobileNav.hidden = true;
+      return;
+    }
+    STEP_ORDER.forEach(function (key, i) { if (stepEls[key]) stepEls[key].hidden = i !== wizardStep; });
+
+    if (mobileNav) {
+      mobileNav.hidden = false;
+      var activeKey = STEP_ORDER[wizardStep];
+      var activeStepEl = stepEls[activeKey];
+      var activeBody = activeStepEl && activeStepEl.querySelector(".finder-step-body");
+      if (activeBody && mobileNav.parentNode !== activeBody) {
+        activeBody.appendChild(mobileNav);
+      }
+    }
+    dots.forEach(function (dot, i) { dot.classList.toggle("active", i === wizardStep); });
+
+    var isResultsStep = wizardStep === STEP_ORDER.length - 1;
+    if (questionButtonsEl) questionButtonsEl.hidden = isResultsStep;
+    if (!isResultsStep) {
+      if (backBtn) backBtn.disabled = wizardStep === 0;
+      if (nextBtn) {
+        var isLastQuestion = wizardStep === STEP_ORDER.length - 2;
+        nextBtn.textContent = isLastQuestion ? (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192") : "Next \u2192";
+        nextBtn.classList.toggle("is-submit", isLastQuestion);
+      }
+    }
+  }
+
+  // Shared by the Back button, Next button, and swipe -- landing on the
+  // results step (from anywhere else) triggers a fresh match and freezes
+  // the pills, since selections may have changed since it was last shown.
+  function goToStep(newStep) {
+    var wasResults = wizardStep === STEP_ORDER.length - 1;
+    wizardStep = Math.max(0, Math.min(STEP_ORDER.length - 1, newStep));
+    var isResults = wizardStep === STEP_ORDER.length - 1;
+    updateWizardView();
+    if (isResults && !wasResults) runMatch();
+  }
+
+  function handleMqChange(e) {
+    isMobile = e.matches;
+    wizardStep = (isMobile && frozen) ? STEP_ORDER.length - 1 : 0; // land on the results step if a match is already showing, instead of hiding it
+    updateWizardView();
+  }
+  if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
+  else mq.addListener(handleMqChange); // older Safari
+
+  if (backBtn) backBtn.addEventListener("click", function () { goToStep(wizardStep - 1); });
+  if (nextBtn) nextBtn.addEventListener("click", function () { goToStep(wizardStep + 1); });
+
+  var touchStartX = null;
+  panel.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; });
+  panel.addEventListener("touchend", function (e) {
+    if (touchStartX == null || !isMobile) return;
+    var dx = e.changedTouches[0].clientX - touchStartX;
+    if (dx < -40) goToStep(wizardStep + 1);
+    else if (dx > 40) goToStep(wizardStep - 1);
+    touchStartX = null;
+  });
+
+  function setFrozen(value) {
+    frozen = value;
+    panel.classList.toggle("is-frozen", value);
+  }
+
+  function resetAll() {
+    state = { usage: [], usecase: [], budget: [] };
+    panel.querySelectorAll(".finder-pill.active").forEach(function (pill) { pill.classList.remove("active"); });
+    setFrozen(false);
+    wizardStep = 0;
+    updateWizardView();
+  }
+
+  var resetIconBtn = document.getElementById("finder-reset-icon");
+  if (resetIconBtn) resetIconBtn.addEventListener("click", resetAll);
+  // Event delegation: the in-card reset link is created fresh each time
+  // renderBestMatch() runs, so it can't be looked up once at init time
+  // the way a static button can.
+  if (stepEls.results) {
+    stepEls.results.addEventListener("click", function (e) {
+      if (e.target.closest(".finder-reset-link")) {
+        e.preventDefault();
+        resetAll();
+      }
+    });
+  }
+
+  updateWizardView();
+
+  var USAGE_CATEGORY = { phone: "power-banks", laptop: "power-stations", fridge: "power-stations" };
+  var BUDGET_RANGES = { micro: [0, 100], low: [100, 400], high: [400, Infinity] };
+
+  function rankByUsecase(candidates, usecase) {
+    var sorted = candidates.slice();
+    if (usecase === "traveling") {
+      sorted.sort(function (a, b) {
+        var as = a.portability + a.charge_speed, bs = b.portability + b.charge_speed;
+        if (bs !== as) return bs - as;
+        var aw = a.weight_kg == null ? Infinity : a.weight_kg;
+        var bw = b.weight_kg == null ? Infinity : b.weight_kg;
+        return aw - bw;
+      });
+    } else if (usecase === "camping") {
+      sorted.sort(function (a, b) {
+        var as = a.portability + a.value + (a.is_rugged ? 0.5 : 0);
+        var bs = b.portability + b.value + (b.is_rugged ? 0.5 : 0);
+        if (bs !== as) return bs - as;
+        var aw = a.weight_kg == null ? Infinity : a.weight_kg;
+        var bw = b.weight_kg == null ? Infinity : b.weight_kg;
+        return (b.effective_wh / bw) - (a.effective_wh / aw);
+      });
+    } else if (usecase === "offgrid") {
+      var maxWh = Math.max.apply(null, candidates.map(function (p) { return p.effective_wh; })) || 1;
+      sorted.sort(function (a, b) {
+        var aScore = a.reliability * 0.6 + (5 * a.effective_wh / maxWh) * 0.4;
+        var bScore = b.reliability * 0.6 + (5 * b.effective_wh / maxWh) * 0.4;
+        if (bScore !== aScore) return bScore - aScore;
+        return b.output_w - a.output_w;
+      });
+    }
+    return sorted;
+  }
+
+  function pickRanked(candidates, usecases) {
+    if (!usecases.length) {
+      return candidates.slice().sort(function (a, b) { return b.rating - a.rating; });
+    }
+    if (usecases.length === 1) {
+      return rankByUsecase(candidates, usecases[0]);
+    }
+    var rankMaps = usecases.map(function (uc) {
+      var ranked = rankByUsecase(candidates, uc);
+      var map = {};
+      ranked.forEach(function (item, i) { map[item.id] = i; });
+      return map;
+    });
+    var withAvgRank = candidates.map(function (item) {
+      var sum = rankMaps.reduce(function (acc, map) { return acc + map[item.id]; }, 0);
+      return { item: item, avgRank: sum / rankMaps.length };
+    });
+    withAvgRank.sort(function (a, b) { return a.avgRank - b.avgRank; });
+    return withAvgRank.map(function (x) { return x.item; });
+  }
+
+  function smallImageSrc(src) {
+    return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
+  }
+
+  function renderBestMatch(item, usedFallback) {
+    var noteEl = document.getElementById("finder-note");
+    var bestEl = document.getElementById("finder-best");
+    if (!bestEl) return;
+
+    if (noteEl) {
+      noteEl.hidden = !usedFallback;
+      if (usedFallback) noteEl.textContent = window.WB_FINDER_FALLBACK_NOTE;
+    }
+
+    var photoHtml = item.image
+      ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="">'
+      : "\u26A1";
+    var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
+
+    bestEl.innerHTML =
+      '<div class="' + photoClass + '">' + photoHtml + "</div>" +
+      "<h4>" + item.title + "</h4>" +
+      '<p class="finder-mobile-best-specs">\u2605 ' + item.rating + " &middot; ~\u20AC" + item.price_eur.toLocaleString() + "</p>" +
+      '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
+      '<a class="finder-view-btn" href="' + window.WB_ROOT + item.url + '">' + window.WB_FINDER_CTA + " \u2192</a>" +
+      '<a href="#" class="finder-reset-link">\u21BA ' + window.WB_FINDER_RESET_LABEL + "</a>";
+  }
+
+  function computeMatch() {
+    var pool = window.WB_FINDER_INDEX.slice();
+
+    if (state.usage.length) {
+      var categories = state.usage.map(function (u) { return USAGE_CATEGORY[u]; });
+      pool = pool.filter(function (item) { return categories.indexOf(item.category) !== -1; });
+    }
+    if (!pool.length) return null;
+
+    var usedFallback = false;
+    if (state.budget.length) {
+      var ranges = state.budget.map(function (b) { return BUDGET_RANGES[b]; });
+      var inBudget = pool.filter(function (item) {
+        return ranges.some(function (r) { return item.price_eur >= r[0] && item.price_eur <= r[1]; });
+      });
+      if (inBudget.length) {
+        pool = inBudget;
+      } else {
+        usedFallback = true; // no exact match in any selected range -- show the closest fit instead
+      }
+    }
+
+    return { best: pickRanked(pool, state.usecase)[0], usedFallback: usedFallback };
+  }
+
+  function runMatch() {
+    var result = computeMatch();
+    if (!result) return;
+    renderBestMatch(result.best, result.usedFallback);
+    setFrozen(true);
+    updateWizardView();
+  }
+
+  var submitBtn = document.getElementById("finder-submit");
+  if (submitBtn) submitBtn.addEventListener("click", runMatch);
 }
