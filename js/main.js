@@ -888,22 +888,45 @@ function initProductFinder() {
   var panel = document.querySelector(".finder-grid");
   if (!panel || !window.WB_FINDER_INDEX) return;
 
-  // Every pill is independently toggleable -- a group can have zero, one,
-  // or several active at once. Nothing is pre-selected: an empty group
-  // just means "no preference" for that dimension, and the button stays
-  // valid either way. Once a match is shown, every pill freezes in place
-  // (dimmed, inert) as a record of what was picked -- only Reset clears
-  // it and lets the pills respond to clicks again.
-  var state = { usage: [], usecase: [], budget: [] };
-  var frozen = false;
+  // Defaults match what's pre-marked .active in the HTML (phone /
+  // traveling / micro budget), so the very first render already has a
+  // real result instead of an empty state. Pills are always clickable --
+  // there's no "frozen" state. Reset clears the selections back to
+  // nothing (un-ambers everything) but deliberately does NOT recompute
+  // the shown result -- the card keeps showing whatever it last showed
+  // until Show My Match is clicked again with the new selections.
+  var DEFAULT_STATE = { usage: ["phone"], usecase: ["traveling"], budget: ["micro"] };
+  var state = { usage: DEFAULT_STATE.usage.slice(), usecase: DEFAULT_STATE.usecase.slice(), budget: DEFAULT_STATE.budget.slice() };
 
+  // "usage" (device type) is a single-select group -- exactly one option
+  // is always the current answer, same idea as a radio group, because
+  // "traveling with a phone AND a fridge" isn't a meaningful combination
+  // the way "traveling AND camping" is for use case. usecase/budget stay
+  // multi-select/optional exactly as before.
   panel.querySelectorAll(".finder-pills").forEach(function (group) {
     var groupName = group.getAttribute("data-finder-group");
+    var isSingleSelect = groupName === "usage";
     var pills = Array.prototype.slice.call(group.querySelectorAll(".finder-pill"));
+    if (isSingleSelect) group.setAttribute("role", "radiogroup");
     pills.forEach(function (pill) {
       var value = pill.getAttribute("data-value");
+      if (isSingleSelect) {
+        pill.setAttribute("role", "radio");
+        pill.setAttribute("aria-checked", pill.classList.contains("active") ? "true" : "false");
+      } else {
+        pill.setAttribute("aria-pressed", pill.classList.contains("active") ? "true" : "false");
+      }
       pill.addEventListener("click", function () {
-        if (frozen) return; // belt-and-suspenders -- CSS already blocks this via pointer-events:none
+        if (isSingleSelect) {
+          if (state.usage[0] === value) return; // already the only answer -- radio groups don't unselect down to none
+          state.usage = [value];
+          pills.forEach(function (p) {
+            var isActive = p === pill;
+            p.classList.toggle("active", isActive);
+            p.setAttribute("aria-checked", isActive ? "true" : "false");
+          });
+          return;
+        }
         var idx = state[groupName].indexOf(value);
         if (idx === -1) {
           state[groupName].push(value);
@@ -911,59 +934,75 @@ function initProductFinder() {
           state[groupName].splice(idx, 1);
         }
         pill.classList.toggle("active", idx === -1);
+        pill.setAttribute("aria-pressed", idx === -1 ? "true" : "false");
       });
     });
   });
 
-  // ---- mobile step-wizard: below 640px, only one step is visible at a
-  // time. The 4th step is the same best-match card desktop reveals in
-  // column 3. The dots/Back/Next nav is a single shared element that
-  // gets physically re-parented into whichever step's body is currently
-  // showing, so it's genuinely part of that card (not a separate piece
-  // styled to merely look attached). ----
+  // ---- mobile step-wizard: below 700px, only one step is visible at a
+  // time (usage -> usecase -> budget -> results), driven by the nav bar
+  // below. Above 700px this whole block is a no-op and every step is
+  // always visible at once via the two-column layout. (This breakpoint
+  // must stay in sync with the CSS breakpoints for .finder-grid,
+  // .finder-step-submit, .finder-pair, and the mobile-nav merge rules.) ----
   var STEP_ORDER = ["usage", "usecase", "budget", "results"];
   var stepEls = {};
   document.querySelectorAll("[data-finder-step]").forEach(function (el) {
     stepEls[el.getAttribute("data-finder-step")] = el;
   });
-  var submitRowEl = document.querySelector(".finder-step-submit");
   var mobileNav = document.getElementById("finder-mobile-nav");
   var dots = Array.prototype.slice.call(document.querySelectorAll("#finder-dots .finder-dot"));
   var backBtn = document.getElementById("finder-back");
   var nextBtn = document.getElementById("finder-next");
-  var questionButtonsEl = document.getElementById("finder-mobile-question-buttons");
-  var mq = window.matchMedia("(max-width: 640px)");
+  var submitBtn = document.getElementById("finder-submit");
+  var hasShownResult = false; // tracks which of the two labels/actions the shared desktop button is currently in
+
+  function setSubmitButtonState(showingResult) {
+    hasShownResult = showingResult;
+    if (!submitBtn) return;
+    submitBtn.textContent = showingResult
+      ? ("\u21BA " + window.WB_FINDER_RESET_LABEL)
+      : (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192");
+  }
+  var mq = window.matchMedia("(max-width: 700px)");
   var isMobile = mq.matches;
   var wizardStep = 0;
 
   function updateWizardView() {
+    // .finder-col-left/.finder-col-right/.finder-pair are never hidden by
+    // the per-step loop below -- only the individual [data-finder-step]
+    // divs inside them are. Left on their own, the *empty* wrapper still
+    // occupies a grid row (finder-grid) or flex slot (finder-col-left),
+    // which still gets a `gap` around it even with nothing visible inside
+    // -- a phantom blank strip between the visible card and the nav bar.
+    // Collapsing the wrapper itself removes it from layout entirely.
+    var colLeft = panel.querySelector(".finder-col-left");
+    var colRight = panel.querySelector(".finder-col-right");
+    var pairEl = panel.querySelector(".finder-pair");
     if (!isMobile) {
-      if (stepEls.usage) stepEls.usage.hidden = false;
-      if (stepEls.usecase) stepEls.usecase.hidden = false;
-      if (stepEls.budget) stepEls.budget.hidden = false;
-      if (stepEls.results) stepEls.results.hidden = !frozen;
-      if (submitRowEl) submitRowEl.hidden = frozen; // nothing to re-submit until Reset
+      STEP_ORDER.forEach(function (key) { if (stepEls[key]) stepEls[key].hidden = false; });
       if (mobileNav) mobileNav.hidden = true;
+      if (colLeft) colLeft.hidden = false;
+      if (colRight) colRight.hidden = false;
+      if (pairEl) pairEl.hidden = false;
       return;
     }
     STEP_ORDER.forEach(function (key, i) { if (stepEls[key]) stepEls[key].hidden = i !== wizardStep; });
 
-    if (mobileNav) {
-      mobileNav.hidden = false;
-      var activeKey = STEP_ORDER[wizardStep];
-      var activeStepEl = stepEls[activeKey];
-      var activeBody = activeStepEl && activeStepEl.querySelector(".finder-step-body");
-      if (activeBody && mobileNav.parentNode !== activeBody) {
-        activeBody.appendChild(mobileNav);
-      }
-    }
+    var isResultsStep = wizardStep === STEP_ORDER.length - 1;
+    var isPairStep = wizardStep === 1 || wizardStep === 2;
+    if (colLeft) colLeft.hidden = isResultsStep;
+    if (colRight) colRight.hidden = !isResultsStep;
+    if (pairEl) pairEl.hidden = !isPairStep;
+    if (mobileNav) mobileNav.hidden = false;
     dots.forEach(function (dot, i) { dot.classList.toggle("active", i === wizardStep); });
 
-    var isResultsStep = wizardStep === STEP_ORDER.length - 1;
-    if (questionButtonsEl) questionButtonsEl.hidden = isResultsStep;
-    if (!isResultsStep) {
-      if (backBtn) backBtn.disabled = wizardStep === 0;
-      if (nextBtn) {
+    if (backBtn) backBtn.disabled = wizardStep === 0;
+    if (nextBtn) {
+      if (isResultsStep) {
+        nextBtn.hidden = true; // nothing to advance to from the last slide
+      } else {
+        nextBtn.hidden = false;
         var isLastQuestion = wizardStep === STEP_ORDER.length - 2;
         nextBtn.textContent = isLastQuestion ? (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192") : "Next \u2192";
         nextBtn.classList.toggle("is-submit", isLastQuestion);
@@ -971,9 +1010,9 @@ function initProductFinder() {
     }
   }
 
-  // Shared by the Back button, Next button, and swipe -- landing on the
-  // results step (from anywhere else) triggers a fresh match and freezes
-  // the pills, since selections may have changed since it was last shown.
+  // Landing on the results step (from anywhere else) recomputes the
+  // match, since that's the wizard's equivalent of clicking the desktop
+  // submit button -- selections may have changed since it was last shown.
   function goToStep(newStep) {
     var wasResults = wizardStep === STEP_ORDER.length - 1;
     wizardStep = Math.max(0, Math.min(STEP_ORDER.length - 1, newStep));
@@ -984,7 +1023,7 @@ function initProductFinder() {
 
   function handleMqChange(e) {
     isMobile = e.matches;
-    wizardStep = (isMobile && frozen) ? STEP_ORDER.length - 1 : 0; // land on the results step if a match is already showing, instead of hiding it
+    wizardStep = 0;
     updateWizardView();
   }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
@@ -1003,21 +1042,24 @@ function initProductFinder() {
     touchStartX = null;
   });
 
-  function setFrozen(value) {
-    frozen = value;
-    panel.classList.toggle("is-frozen", value);
-  }
-
   function resetAll() {
-    state = { usage: [], usecase: [], budget: [] };
+    state = { usage: DEFAULT_STATE.usage.slice(), usecase: [], budget: [] };
     panel.querySelectorAll(".finder-pill.active").forEach(function (pill) { pill.classList.remove("active"); });
-    setFrozen(false);
-    wizardStep = 0;
-    updateWizardView();
+    panel.querySelectorAll('.finder-pills[data-finder-group="usage"] .finder-pill').forEach(function (pill) {
+      var isDefault = pill.getAttribute("data-value") === DEFAULT_STATE.usage[0];
+      pill.classList.toggle("active", isDefault);
+      pill.setAttribute("aria-checked", isDefault ? "true" : "false");
+    });
+    panel.querySelectorAll('.finder-pills:not([data-finder-group="usage"]) .finder-pill').forEach(function (pill) {
+      pill.setAttribute("aria-pressed", "false");
+    });
+    if (isMobile) {
+      wizardStep = 0;
+      updateWizardView();
+    }
+    // deliberately no runMatch() here -- the shown result stays put until Show My Match is clicked again
   }
 
-  var resetIconBtn = document.getElementById("finder-reset-icon");
-  if (resetIconBtn) resetIconBtn.addEventListener("click", resetAll);
   // Event delegation: the in-card reset link is created fresh each time
   // renderBestMatch() runs, so it can't be looked up once at init time
   // the way a static button can.
@@ -1101,17 +1143,21 @@ function initProductFinder() {
       if (usedFallback) noteEl.textContent = window.WB_FINDER_FALLBACK_NOTE;
     }
 
-    var photoHtml = item.image
+    var photoInner = item.image
       ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="">'
       : "\u26A1";
     var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
 
+    // The whole card is one link to the review -- no separate "View
+    // review" button needed. <a> can legally wrap block-level content
+    // (div/h4/p), so this is valid markup, not a div-in-a-link hack.
     bestEl.innerHTML =
-      '<div class="' + photoClass + '">' + photoHtml + "</div>" +
-      "<h4>" + item.title + "</h4>" +
-      '<p class="finder-mobile-best-specs">\u2605 ' + item.rating + " &middot; ~\u20AC" + item.price_eur.toLocaleString() + "</p>" +
-      '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
-      '<a class="finder-view-btn" href="' + window.WB_ROOT + item.url + '">' + window.WB_FINDER_CTA + " \u2192</a>" +
+      '<a class="finder-best-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
+        '<div class="' + photoClass + '">' + photoInner + "</div>" +
+        "<h4>" + item.title + "</h4>" +
+        '<p class="finder-mobile-best-specs">\u2605 ' + item.rating + " &middot; ~\u20AC" + item.price_eur.toLocaleString() + "</p>" +
+        '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
+      "</a>" +
       '<a href="#" class="finder-reset-link">\u21BA ' + window.WB_FINDER_RESET_LABEL + "</a>";
   }
 
@@ -1144,10 +1190,28 @@ function initProductFinder() {
     var result = computeMatch();
     if (!result) return;
     renderBestMatch(result.best, result.usedFallback);
-    setFrozen(true);
-    updateWizardView();
   }
 
-  var submitBtn = document.getElementById("finder-submit");
-  if (submitBtn) submitBtn.addEventListener("click", runMatch);
+  function clearResult() {
+    var bestEl = document.getElementById("finder-best");
+    var noteEl = document.getElementById("finder-note");
+    if (bestEl) bestEl.innerHTML = "";
+    if (noteEl) noteEl.hidden = true;
+  }
+
+  if (submitBtn) {
+    submitBtn.addEventListener("click", function () {
+      if (hasShownResult) {
+        resetAll();
+        clearResult();
+        setSubmitButtonState(false);
+      } else {
+        runMatch();
+        setSubmitButtonState(true);
+      }
+    });
+  }
+
+  runMatch(); // show a result for the defaults immediately, before any interaction
+  setSubmitButtonState(true); // ...and since a result is already showing, the button starts as "Reset & start over", not "Show My Match"
 }

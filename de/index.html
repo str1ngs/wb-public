@@ -130,50 +130,55 @@
       <h2>Finden wir das richtige Gerät für dich</h2>
     </div>
     <div class="finder-grid">
-      <div class="finder-step finder-col-1" data-finder-step="usage">
-        <div class="finder-step-header">1. Was möchtest du versorgen?</div>
-        <div class="finder-step-body">
-          <div class="finder-pills" data-finder-group="usage">
-            <button type="button" class="finder-pill" data-value="phone">📱 Kleine Geräte (Handy/Kamera)</button>
-            <button type="button" class="finder-pill" data-value="laptop">💻 Mittlere Geräte (Laptops/Drohnen)</button>
-            <button type="button" class="finder-pill" data-value="fridge">🏠 Große Geräte (Haushaltsgeräte/Kühlschrank)</button>
+      <div class="finder-col-left">
+        <div class="finder-step" data-finder-step="usage">
+          <div class="finder-step-header">1. Was möchtest du versorgen?</div>
+          <div class="finder-step-body">
+            <div class="finder-pills" data-finder-group="usage">
+              <button type="button" class="finder-pill active" data-value="phone">📱 Kleine Geräte (Handy/Kamera)</button>
+              <button type="button" class="finder-pill" data-value="laptop">💻 Mittlere Geräte (Laptops/Drohnen)</button>
+              <button type="button" class="finder-pill" data-value="fridge">🏠 Große Geräte (Haushaltsgeräte/Kühlschrank)</button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div class="finder-step" data-finder-step="usecase">
-        <div class="finder-step-header">2. Dein Haupteinsatzzweck</div>
-        <div class="finder-step-body">
-          <div class="finder-pills" data-finder-group="usecase">
-            <button type="button" class="finder-pill" data-value="traveling">Reisen</button>
-            <button type="button" class="finder-pill" data-value="camping">Camping</button>
-            <button type="button" class="finder-pill" data-value="offgrid">Notstrom</button>
+        <div class="finder-pair">
+          <div class="finder-step" data-finder-step="usecase">
+            <div class="finder-step-header">2. Haupteinsatzzweck</div>
+            <div class="finder-step-body">
+              <div class="finder-pills" data-finder-group="usecase">
+                <button type="button" class="finder-pill active" data-value="traveling">Reisen</button>
+                <button type="button" class="finder-pill" data-value="camping">Camping</button>
+                <button type="button" class="finder-pill" data-value="offgrid">Notstrom</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="finder-step" data-finder-step="budget">
+            <div class="finder-step-header">3. Budget (EUR)</div>
+            <div class="finder-step-body">
+              <div class="finder-pills" data-finder-group="budget">
+                <button type="button" class="finder-pill active" data-value="micro">0€ – 100€</button>
+                <button type="button" class="finder-pill" data-value="low">100€ – 400€</button>
+                <button type="button" class="finder-pill" data-value="high">400€ – 1.000€+</button>
+              </div>
+            </div>
           </div>
         </div>
+
+        <div class="finder-step-submit">
+          <button type="button" class="finder-submit finder-view-btn" id="finder-submit">Mein Match anzeigen →</button>
+        </div>
       </div>
 
-      <div class="finder-step" data-finder-step="budget">
-        <div class="finder-step-header">3. Dein Budget (EUR)</div>
-        <div class="finder-step-body">
-          <div class="finder-pills" data-finder-group="budget">
-            <button type="button" class="finder-pill" data-value="micro">0€ – 100€</button>
-            <button type="button" class="finder-pill" data-value="low">100€ – 400€</button>
-            <button type="button" class="finder-pill" data-value="high">400€ – 1.000€+</button>
+      <div class="finder-col-right">
+        <div class="finder-step" data-finder-step="results">
+          <div class="finder-step-header">4. Beste Wahl</div>
+          <div class="finder-step-body">
+            <p class="finder-note" id="finder-note" hidden></p>
+            <div id="finder-best"></div>
           </div>
         </div>
-      </div>
-
-      <div class="finder-step" data-finder-step="results" hidden>
-        <div class="finder-step-header">4. Beste Wahl</div>
-        <div class="finder-step-body">
-          <p class="finder-note" id="finder-note" hidden></p>
-          <div id="finder-best"></div>
-        </div>
-      </div>
-
-      <div class="finder-step-submit">
-        <button type="button" class="finder-submit finder-view-btn" id="finder-submit">Mein Match anzeigen →</button>
-        <button type="button" class="finder-reset-icon-btn" id="finder-reset-icon" title="Zurücksetzen & neu starten">↺</button>
       </div>
     </div>
     <div class="finder-mobile-nav" id="finder-mobile-nav" hidden>
@@ -183,13 +188,11 @@
         <span class="finder-dot"></span>
         <span class="finder-dot"></span>
       </div>
-      <div class="finder-mobile-buttons" id="finder-mobile-question-buttons">
+      <div class="finder-mobile-buttons">
         <button type="button" class="finder-nav-btn finder-back" id="finder-back">← Back</button>
         <button type="button" class="finder-nav-btn finder-next" id="finder-next">Next →</button>
       </div>
     </div>
-  </div>
-
   </div>
 </section>
 
