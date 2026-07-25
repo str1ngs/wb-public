@@ -1,32 +1,31 @@
 document.addEventListener("DOMContentLoaded", function () {
-  var btn = document.querySelector(".nav-toggle");
-  var nav = document.querySelector(".main-nav");
-  if (btn && nav) {
-    btn.addEventListener("click", function () {
-      nav.classList.toggle("open");
-      var expanded = nav.classList.contains("open");
-      btn.setAttribute("aria-expanded", expanded ? "true" : "false");
-    });
-  }
+  initMobileDrawer();
 
   // Dark mode toggle. The actual theme is applied earlier by an inline
   // script in <head> (see templates/base.html) so there's no flash of
-  // the wrong theme on load -- this just wires up the button and
-  // keeps localStorage in sync with clicks.
-  var themeBtn = document.querySelector(".theme-toggle");
-  if (themeBtn) {
+  // the wrong theme on load -- this just wires up the button(s) and
+  // keeps localStorage in sync with clicks. There are two of these now
+  // (header, for desktop; drawer footer, for mobile) so every instance
+  // updates together rather than assuming there's only one on the page.
+  var themeBtns = Array.prototype.slice.call(document.querySelectorAll(".theme-toggle"));
+  if (themeBtns.length) {
     var setLabel = function () {
       var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-      themeBtn.textContent = isDark ? (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.light : "\u2600 LIGHT") : (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.dark : "\u263D DARK");
-      themeBtn.setAttribute("aria-pressed", isDark ? "true" : "false");
+      var label = isDark ? (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.light : "\u2600 LIGHT") : (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.dark : "\u263D DARK");
+      themeBtns.forEach(function (btn) {
+        btn.textContent = label;
+        btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+      });
     };
     setLabel();
-    themeBtn.addEventListener("click", function () {
-      var current = document.documentElement.getAttribute("data-theme");
-      var next = current === "dark" ? "light" : "dark";
-      document.documentElement.setAttribute("data-theme", next);
-      try { localStorage.setItem("wattbench-theme", next); } catch (e) {}
-      setLabel();
+    themeBtns.forEach(function (themeBtn) {
+      themeBtn.addEventListener("click", function () {
+        var current = document.documentElement.getAttribute("data-theme");
+        var next = current === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("wattbench-theme", next); } catch (e) {}
+        setLabel();
+      });
     });
   }
 
@@ -56,6 +55,55 @@ document.addEventListener("DOMContentLoaded", function () {
   // link/search result on purpose (see main.js comments below).
   initLanguageMemory();
 });
+
+// ---- Mobile slide-out drawer ----
+// App-style pattern: hamburger (far left of the header, before the logo)
+// opens a fixed full-height panel that slides in from the left over a
+// fading backdrop, replacing the old in-place collapsing dropdown. Closes
+// on: backdrop click, the drawer's own close button, Escape, clicking any
+// link inside it (so it doesn't stay open behind a page navigation on the
+// live site), or the viewport growing past the desktop breakpoint while
+// it happens to be open.
+function initMobileDrawer() {
+  var toggle = document.querySelector(".nav-toggle");
+  var drawer = document.getElementById("mobile-drawer");
+  var backdrop = document.getElementById("menu-backdrop");
+  var closeBtn = document.getElementById("drawer-close");
+  if (!toggle || !drawer || !backdrop) return;
+
+  function isOpen() { return drawer.classList.contains("is-open"); }
+
+  function openDrawer() {
+    drawer.classList.add("is-open");
+    backdrop.classList.add("is-open");
+    drawer.setAttribute("aria-hidden", "false");
+    toggle.setAttribute("aria-expanded", "true");
+    document.body.classList.add("drawer-open");
+  }
+  function closeDrawer() {
+    drawer.classList.remove("is-open");
+    backdrop.classList.remove("is-open");
+    drawer.setAttribute("aria-hidden", "true");
+    toggle.setAttribute("aria-expanded", "false");
+    document.body.classList.remove("drawer-open");
+  }
+
+  toggle.addEventListener("click", function () {
+    if (isOpen()) closeDrawer(); else openDrawer();
+  });
+  backdrop.addEventListener("click", closeDrawer);
+  if (closeBtn) closeBtn.addEventListener("click", closeDrawer);
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && isOpen()) closeDrawer();
+  });
+  drawer.querySelectorAll("a").forEach(function (a) {
+    a.addEventListener("click", closeDrawer);
+  });
+  var desktopMq = window.matchMedia("(min-width: 1041px)");
+  desktopMq.addEventListener("change", function (e) {
+    if (e.matches && isOpen()) closeDrawer();
+  });
+}
 
 function initLanguageMemory() {
   if (!window.WB_LOCALE || !window.WB_ALT_LINKS) return;
@@ -905,7 +953,7 @@ function initProductFinder() {
   // multi-select/optional exactly as before.
   panel.querySelectorAll(".finder-pills").forEach(function (group) {
     var groupName = group.getAttribute("data-finder-group");
-    var isSingleSelect = groupName === "usage";
+    var isSingleSelect = groupName === "usage" || groupName === "usecase";
     var pills = Array.prototype.slice.call(group.querySelectorAll(".finder-pill"));
     if (isSingleSelect) group.setAttribute("role", "radiogroup");
     pills.forEach(function (pill) {
@@ -918,8 +966,8 @@ function initProductFinder() {
       }
       pill.addEventListener("click", function () {
         if (isSingleSelect) {
-          if (state.usage[0] === value) return; // already the only answer -- radio groups don't unselect down to none
-          state.usage = [value];
+          if (state[groupName][0] === value) return; // already the only answer -- radio groups don't unselect down to none
+          state[groupName] = [value];
           pills.forEach(function (p) {
             var isActive = p === pill;
             p.classList.toggle("active", isActive);
@@ -959,10 +1007,24 @@ function initProductFinder() {
 
   function setSubmitButtonState(showingResult) {
     hasShownResult = showingResult;
-    if (!submitBtn) return;
-    submitBtn.textContent = showingResult
-      ? ("\u21BA " + window.WB_FINDER_RESET_LABEL)
-      : (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192");
+    if (submitBtn) {
+      submitBtn.textContent = showingResult
+        ? ("\u21BA " + window.WB_FINDER_RESET_LABEL)
+        : (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192");
+    }
+    setPillsInteractive(!showingResult);
+  }
+  // While a result is showing, the pills are locked rather than left live --
+  // changing them wouldn't do anything until Reset is clicked anyway (the
+  // shown result deliberately doesn't recompute itself), so leaving them
+  // clickable was misleading. Native `disabled` rather than a CSS-only
+  // treatment: it blocks the click for free, skips them in tab order, and
+  // gets announced correctly by screen readers, instead of reimplementing
+  // all of that by hand.
+  function setPillsInteractive(enabled) {
+    panel.querySelectorAll(".finder-pill").forEach(function (pill) {
+      pill.disabled = !enabled;
+    });
   }
   var mq = window.matchMedia("(max-width: 700px)");
   var isMobile = mq.matches;
@@ -997,12 +1059,22 @@ function initProductFinder() {
     if (mobileNav) mobileNav.hidden = false;
     dots.forEach(function (dot, i) { dot.classList.toggle("active", i === wizardStep); });
 
-    if (backBtn) backBtn.disabled = wizardStep === 0;
+    if (backBtn) backBtn.hidden = isResultsStep;
+    if (backBtn && !isResultsStep) backBtn.disabled = wizardStep === 0;
     if (nextBtn) {
       if (isResultsStep) {
-        nextBtn.hidden = true; // nothing to advance to from the last slide
+        // Nothing to advance to from the last slide -- this button becomes
+        // the wizard's reset control instead of being hidden, styled to
+        // match the desktop Show My Match / Reset button exactly (see
+        // .finder-next.is-reset in style.css) rather than the plain
+        // .finder-nav-btn look the Back/Next pair normally has.
+        nextBtn.hidden = false;
+        nextBtn.textContent = "\u21BA " + window.WB_FINDER_RESET_LABEL;
+        nextBtn.classList.remove("is-submit");
+        nextBtn.classList.add("is-reset");
       } else {
         nextBtn.hidden = false;
+        nextBtn.classList.remove("is-reset");
         var isLastQuestion = wizardStep === STEP_ORDER.length - 2;
         nextBtn.textContent = isLastQuestion ? (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192") : "Next \u2192";
         nextBtn.classList.toggle("is-submit", isLastQuestion);
@@ -1030,7 +1102,15 @@ function initProductFinder() {
   else mq.addListener(handleMqChange); // older Safari
 
   if (backBtn) backBtn.addEventListener("click", function () { goToStep(wizardStep - 1); });
-  if (nextBtn) nextBtn.addEventListener("click", function () { goToStep(wizardStep + 1); });
+  if (nextBtn) nextBtn.addEventListener("click", function () {
+    if (wizardStep === STEP_ORDER.length - 1) {
+      resetAll();
+      clearResult();
+      setSubmitButtonState(false);
+      return;
+    }
+    goToStep(wizardStep + 1);
+  });
 
   var touchStartX = null;
   panel.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; });
@@ -1043,33 +1123,20 @@ function initProductFinder() {
   });
 
   function resetAll() {
-    state = { usage: DEFAULT_STATE.usage.slice(), usecase: [], budget: [] };
+    state = { usage: [], usecase: [], budget: [] };
     panel.querySelectorAll(".finder-pill.active").forEach(function (pill) { pill.classList.remove("active"); });
-    panel.querySelectorAll('.finder-pills[data-finder-group="usage"] .finder-pill').forEach(function (pill) {
-      var isDefault = pill.getAttribute("data-value") === DEFAULT_STATE.usage[0];
-      pill.classList.toggle("active", isDefault);
-      pill.setAttribute("aria-checked", isDefault ? "true" : "false");
-    });
-    panel.querySelectorAll('.finder-pills:not([data-finder-group="usage"]) .finder-pill').forEach(function (pill) {
+    panel.querySelectorAll('.finder-pills[data-finder-group="usage"] .finder-pill, .finder-pills[data-finder-group="usecase"] .finder-pill').forEach(function (pill) {
+    pill.setAttribute("aria-checked", "false");
+  });
+    panel.querySelectorAll('.finder-pills[data-finder-group="budget"] .finder-pill').forEach(function (pill) {
       pill.setAttribute("aria-pressed", "false");
-    });
+  });
+    setPillsInteractive(true);
     if (isMobile) {
       wizardStep = 0;
       updateWizardView();
     }
     // deliberately no runMatch() here -- the shown result stays put until Show My Match is clicked again
-  }
-
-  // Event delegation: the in-card reset link is created fresh each time
-  // renderBestMatch() runs, so it can't be looked up once at init time
-  // the way a static button can.
-  if (stepEls.results) {
-    stepEls.results.addEventListener("click", function (e) {
-      if (e.target.closest(".finder-reset-link")) {
-        e.preventDefault();
-        resetAll();
-      }
-    });
   }
 
   updateWizardView();
@@ -1157,8 +1224,7 @@ function initProductFinder() {
         "<h4>" + item.title + "</h4>" +
         '<p class="finder-mobile-best-specs">\u2605 ' + item.rating + " &middot; ~\u20AC" + item.price_eur.toLocaleString() + "</p>" +
         '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
-      "</a>" +
-      '<a href="#" class="finder-reset-link">\u21BA ' + window.WB_FINDER_RESET_LABEL + "</a>";
+      "</a>";
   }
 
   function computeMatch() {

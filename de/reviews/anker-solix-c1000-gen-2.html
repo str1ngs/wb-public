@@ -77,10 +77,10 @@
 
 <header class="site-header">
   <div class="wrap">
-    <a href="../../de/index.html" class="logo">WattBench<small>Daten statt Werbung</small></a>
-    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle menu">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
     </button>
+    <a href="../../de/index.html" class="logo">WattBench<small>Daten statt Werbung</small></a>
     <nav class="main-nav">
       <a href="../../de/index.html">Startseite</a>
       <div class="nav-dropdown">
@@ -92,25 +92,58 @@
         </div>
       </div>
       <a href="../../de/guides/index.html">Kaufratgeber</a>
-
-      <div class="nav-controls">
-        <div class="lang-switch">
-          <a href="../../reviews/anker-solix-c1000-gen-2.html" class=" lang-link" data-lang="en" hreflang="en">
-            <span class="lang-flag">
-              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
-            </span>en
-          </a>
-          <a href="../../de/reviews/anker-solix-c1000-gen-2.html" class="active lang-link" data-lang="de" hreflang="de">
-            <span class="lang-flag">
-              <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
-            </span>de
-          </a>
-        </div>
-        <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
-      </div>
     </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../../reviews/anker-solix-c1000-gen-2.html" class=" lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../../de/reviews/anker-solix-c1000-gen-2.html" class="active lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
+    </div>
   </div>
 </header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Testberichte">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../../de/index.html">Startseite</a>
+    <div class="mobile-drawer-group-label">Testberichte</div>
+    <a href="../../de/reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+    <a href="../../de/reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+    <a href="../../de/reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+    <a href="../../de/guides/index.html">Kaufratgeber</a>
+  </div>
+  <div class="mobile-drawer-foot">
+    <div class="lang-switch">
+      <a href="../../reviews/anker-solix-c1000-gen-2.html" class=" lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../../de/reviews/anker-solix-c1000-gen-2.html" class="active lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
+  </div>
+</nav>
 
 <div class="disclosure">
   Diese Website erhält Provisionen für qualifizierte Käufe über Affiliate-Links. <a href="../../de/affiliate-disclosure.html">Vollständige Offenlegung</a>.
