@@ -5,7 +5,13 @@
 (function(){
   try{
     var saved = localStorage.getItem("wattbench-theme");
-    var theme = saved || "dark";
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
     document.documentElement.setAttribute("data-theme", theme);
   }catch(e){}
 })();
@@ -55,10 +61,10 @@
   "image": "https://wattbench.eu/images/products/ugreen-nexode-45w-retractable-cable-charger-1.webp",
   "review": {
     "@type": "Review",
-    "reviewRating": {"@type":"Rating","ratingValue":"4.5","bestRating":"5"},
+    "reviewRating": {"@type":"Rating","ratingValue":"4.2","bestRating":"5"},
     "author": {"@type":"Organization","name":"WattBench"}
   },
-  "offers": {"@type":"Offer","priceCurrency":"EUR","price":"29","availability":"https://schema.org/InStock"}
+  "offers": {"@type":"Offer","priceCurrency":"EUR","price":"25","availability":"https://schema.org/InStock"}
 }
 </script>
 <script type="application/ld+json">
@@ -167,12 +173,12 @@
     <article class="review-main article">
     <h1>
       UGREEN Nexode 45W <span class="h1-suffix">Review</span>
-      <span class="inline-rating">★★★★☆ <span class="inline-rating-num">4.5/5</span></span>
+      <span class="inline-rating">★★★★☆ <span class="inline-rating-num">4.2/5</span></span>
     </h1>
     <div class="review-meta-row">
       <span>Chargers</span>
       <span>Compact Travel Wall Charger</span>
-      <span>~€29 (Est.)</span>
+      <span>~€25 (Est.)</span>
       <span>Reviewed July 21, 2026</span>
       <span class="rubric-trigger-wrap">
         <button type="button" class="rubric-trigger">Tested via Rubric v1.0</button>
@@ -182,13 +188,13 @@
           <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:84%"></div></div>
-    <span class="rubric-bar-pct">4.2/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:88%"></div></div>
-    <span class="rubric-bar-pct">4.4/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Portability</span>
@@ -197,13 +203,13 @@
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Efficiency</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:84%"></div></div>
-    <span class="rubric-bar-pct">4.2/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:96%"></div></div>
-    <span class="rubric-bar-pct">4.8/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4/5</span>
   </div>
 </div>
         </div>
@@ -250,11 +256,11 @@ fetchpriority="high">
     <div class="pros-cons">
       <div class="pros">
         <h3>Strengths</h3>
-        <ul><li>Built-in 0.7m retractable fast-charging cable eliminates tangles and removes the need for extra wires</li><li>3-in-1 multi-port design allows simultaneous charging of a phone, tablet, and accessories from a single wall outlet</li><li>Supports 45W professional charging and Samsung Super Fast Charging 2.0 (e.g., Galaxy S25 Ultra to 67% in 30 minutes)</li><li>Advanced GaNInfinity tech and 8-stage protection improve energy efficiency up to 95% while keeping heat low</li><li>Sturdy, high-quality build makes it exceptionally reliable for travel and daily home use</li></ul>
+        <ul><li>Built-in 0.7m retractable fast-charging cable eliminates tangles and removes the need for extra wires</li><li>3-in-1 multi-port design allows simultaneous charging of a phone, tablet, and accessories from a single wall outlet</li><li>Supports 45W professional charging and Samsung Super Fast Charging 2.0 (e.g., Galaxy S25 Ultra to 67% in 30 minutes)</li><li>Heavy-duty protection, travel-friendly</li><li></li></ul>
       </div>
       <div class="cons">
         <h3>Trade-offs</h3>
-        <ul><li>The built-in retractable cable supports up to 25W Super Fast Charging, while the full 45W output is achieved via the dedicated port/PPS setup</li><li>45W maximum output is optimized for smartphones, tablets, and lightweight laptops like MacBook Air rather than heavy-duty pro workstations</li><li>Integrated cable cannot be easily replaced independently if physically damaged</li></ul>
+        <ul><li></li><li></li><li>Integrated cable cannot be easily replaced independently if physically damaged</li></ul>
       </div>
     </div>
 
@@ -289,7 +295,7 @@ fetchpriority="high">
         <div class="sidebar-card-text">
           <span class="brand">Anker</span>
           <h3>Nano 65W</h3>
-          <p class="desc desc-fade">The Anker Nano Charger (65W, 3 Ports) punches well above its weight class, delivering a true 65W max output from its individual USB-C ports—enough to fast-charge a 14-inch MacBook Pro from 0 to 50% in 35 minutes. Built with GaN II technology, it packs multi-device capability into a footprint 41% smaller than standard 65W chargers.</p>
+          <p class="desc desc-fade">The Anker Nano Charger (65W, 3 Ports) punches well above its weight class, delivering 65W max output from its individual USB-C ports—enough to fast-charge a 14-inch MacBook Pro from 0 to 50% in 35 minutes. Built with GaN II technology, it packs multi-device capability into a footprint 41% smaller than standard 65W chargers.</p>
           <a class="sidebar-card-link" href="../reviews/anker-nano-65w-3-port.html">View →</a>
         </div>
       </div>
@@ -341,7 +347,7 @@ fetchpriority="high">
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";

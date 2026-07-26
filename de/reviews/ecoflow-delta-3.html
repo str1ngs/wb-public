@@ -5,7 +5,13 @@
 (function(){
   try{
     var saved = localStorage.getItem("wattbench-theme");
-    var theme = saved || "dark";
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
     document.documentElement.setAttribute("data-theme", theme);
   }catch(e){}
 })();
@@ -303,6 +309,20 @@ fetchpriority="high"></div>
     <aside class="review-sidebar">
       <div class="section-head"><div class="eyebrow">Vergleichen</div><h2>Ähnliche Produkte</h2></div>
       <div class="sidebar-card">
+        <div class="sidebar-card-photo"><img src="../../images/products/bluetti-elite-100-v2-1.webp"
+     srcset="../../images/products/bluetti-elite-100-v2-1-sm.webp 480w, ../../images/products/bluetti-elite-100-v2-1-md.webp 900w, ../../images/products/bluetti-elite-100-v2-1.webp 1600w"
+     sizes="64px"
+     alt="BLUETTI Elite 100 V2"
+     loading="lazy"
+></div>
+        <div class="sidebar-card-text">
+          <span class="brand">BLUETTI</span>
+          <h3>Elite 100 V2</h3>
+          <p class="desc desc-fade">Die BLUETTI Elite 100 V2 ist eine ultraleichte 1024Wh Powerstation mit nur 11,5 kg Gewicht und einem kompakten 17L-Design. Mit 1800W Ausgangsleistung (2700W Lifting Power), schnellem 1200W AC TurboBoost, starkem 1000W Solareingang und einer nahtlosen 10ms USV-Notstromfunktion bietet sie erstklassige Energie für unterwegs und zu Hause.</p>
+          <a class="sidebar-card-link" href="../../de/reviews/bluetti-elite-100-v2.html">Ansehen →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
         <div class="sidebar-card-photo"><img src="../../images/products/anker-solix-c1000-gen-2-1.webp"
      srcset="../../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
      sizes="64px"
@@ -328,15 +348,6 @@ fetchpriority="high"></div>
           <h3>RIVER 2 Max</h3>
           <p class="desc desc-fade">Die EcoFlow RIVER 2 Max ist eine portable 512Wh Powerstation mit nur 6,1 kg Gewicht und einer ultraschnellen AC-Ladezeit von nur 60 Minuten. Ausgestattet mit einem langlebigen LFP-Akku für über 3.000 Zyklen, 500W Dauerleistung (erweiterbar auf 1000W) und App-Steuerung bietet sie maximale Flexibilität unterwegs.</p>
           <a class="sidebar-card-link" href="../../de/reviews/ecoflow-river-2-max.html">Ansehen →</a>
-        </div>
-      </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-photo placeholder"><span class="bolt-mark">⚡</span></div>
-        <div class="sidebar-card-text">
-          <span class="brand">DJI</span>
-          <h3>Power 1000</h3>
-          <p class="desc desc-fade">Die DJI Power 1000 bringt DJIs bekannte technische Präzision in den Markt der tragbaren Powerstations. Mit 1.024Wh Kapazität und starken 2.200W Ausgangsleistung bewältigt sie anspruchsvolles Outdoor-Equipment, schnelles Laden von Drohnenakkus und wichtige Haushaltsgeräte bei kurzen Stromausfällen.</p>
-          <a class="sidebar-card-link" href="../../de/reviews/dji-power-1000.html">Ansehen →</a>
         </div>
       </div>
     </aside>
@@ -373,7 +384,7 @@ fetchpriority="high"></div>
 <script>
   window.WB_LOCALE = "de";
   window.WB_ROOT = "../../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
   window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
   window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";

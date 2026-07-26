@@ -5,7 +5,13 @@
 (function(){
   try{
     var saved = localStorage.getItem("wattbench-theme");
-    var theme = saved || "dark";
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
     document.documentElement.setAttribute("data-theme", theme);
   }catch(e){}
 })();
@@ -55,7 +61,7 @@
   "image": "https://wattbench.eu/images/products/anker-solix-f3800-1.webp",
   "review": {
     "@type": "Review",
-    "reviewRating": {"@type":"Rating","ratingValue":"4.4","bestRating":"5"},
+    "reviewRating": {"@type":"Rating","ratingValue":"4.3","bestRating":"5"},
     "author": {"@type":"Organization","name":"WattBench"}
   },
   "offers": {"@type":"Offer","priceCurrency":"EUR","price":"2900","availability":"https://schema.org/InStock"}
@@ -66,7 +72,7 @@
   "@context": "https://schema.org",
   "@type": "FAQPage",
   "mainEntity": [
-    {"@type":"Question","name":"How long will the Anker SOLIX F3800 power a house?","acceptedAnswer":{"@type":"Answer","text":"On its own 3,840Wh charge, it typically covers essential loads (fridge, lights, WiFi, some outlets) for about a day. With the maximum expansion of six BP3800 battery packs, capacity reaches 26.9kWh, and pairing two F3800 units with 12 batteries brings the system to 53.8kWh \u2014 enough for roughly one to two weeks of essential backup."}},    {"@type":"Question","name":"Does the Anker SOLIX F3800 support 240V appliances?","acceptedAnswer":{"@type":"Answer","text":"Yes. It outputs both 120V and 240V split-phase power through its built-in NEMA L14-30 and NEMA 14-50 ports, so it can run dryers, well pumps, or EV chargers without a separate step-up converter."}},    {"@type":"Question","name":"Can the F3800 charge from solar panels?","acceptedAnswer":{"@type":"Answer","text":"Yes, it accepts up to 2,400W of solar input across two MPPT channels, which Anker states can fully recharge the unit in under two hours of strong sunlight."}}  ]
+    {"@type":"Question","name":"How long will the Anker SOLIX F3800 power a house?","acceptedAnswer":{"@type":"Answer","text":"On its own 3,840Wh charge, it typically covers essential loads (fridge, lights, WiFi, some outlets) for about a day."}},    {"@type":"Question","name":"Does the Anker SOLIX F3800 support 240V appliances?","acceptedAnswer":{"@type":"Answer","text":"Yes. It outputs both 120V and 240V split-phase power through its built-in NEMA L14-30 and NEMA 14-50 ports, so it can run dryers, well pumps, or EV chargers without a separate step-up converter."}},    {"@type":"Question","name":"Can the F3800 charge from solar panels?","acceptedAnswer":{"@type":"Answer","text":"Yes, it accepts up to 2,400W of solar input across two MPPT channels, which Anker states can fully recharge the unit in under two hours of strong sunlight."}}  ]
 }
 </script>
 <script type="application/ld+json">
@@ -167,7 +173,7 @@
     <article class="review-main article">
     <h1>
       Anker F3800 <span class="h1-suffix">Review</span>
-      <span class="inline-rating">★★★★☆ <span class="inline-rating-num">4.4/5</span></span>
+      <span class="inline-rating">★★★★☆ <span class="inline-rating-num">4.3/5</span></span>
     </h1>
     <div class="review-meta-row">
       <span>Power Stations</span>
@@ -202,8 +208,8 @@
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:96%"></div></div>
-    <span class="rubric-bar-pct">4.8/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
   </div>
 </div>
         </div>
@@ -229,6 +235,7 @@ fetchpriority="high">
       <div class="spec-strip-item"><strong>Cycle life</strong> 3,000+ to 80%</div>
       <div class="spec-strip-item"><strong>Solar input</strong> 2,400 W</div>
       <div class="spec-strip-item"><strong>AC input (wall)</strong> 1,800 W</div>
+      <div class="spec-strip-item"><strong>Weight</strong> 60.0 kg</div>
       <div class="spec-strip-item"><strong>0–80% AC charge time</strong> ~50 min</div>
       <div class="spec-strip-item"><strong>Warranty</strong> 5 years</div>
     </div>
@@ -245,12 +252,12 @@ fetchpriority="high">
     <p class="lede">The F3800 is Anker's answer to "what if a power station could replace a portable generator entirely." At 3,840Wh and 6,000W of dual-voltage output, it's less a camping accessory and more a wheeled appliance built to sit in a garage and take over the moment the grid drops.</p>
 
     <h2>Who it's for</h2>
-    <p>This is a home-backup unit first. If you're comparing it to a 1kWh camping battery, you're shopping in the wrong category — the F3800 is built for homeowners in outage-prone areas who want to power a fridge, well pump, and a handful of 240V circuits without running a gas generator in the driveway. It also doubles as a direct EV or RV charger through its NEMA 14-50 and L14-30 ports.</p>
+    <p>The F3800 is built for homeowners in outage-prone areas who want to power a fridge, well pump, and a handful of 240V circuits without running a gas generator in the driveway. It also doubles as a direct EV or RV charger through its NEMA 14-50 and L14-30 ports.</p>
 
     <div class="pros-cons">
       <div class="pros">
         <h3>Strengths</h3>
-        <ul><li>True 120V/240V split-phase output — no step-up converter needed</li><li>Expandable from 3.84kWh to 53.8kWh across two units and 12 battery packs</li><li>2,400W solar input across dual MPPT channels for sub-2-hour solar recharge</li><li>AC coupling support — one of few portable units that ties into existing home solar</li><li>Industrial castor wheels make a 100+ lb unit genuinely easy to reposition</li></ul>
+        <ul><li>True 120V/240V split-phase output — no step-up converter needed</li><li>Expandable from 3.84kWh to 53.8kWh across two units and 12 battery packs</li><li>2,400W solar input across dual MPPT channels for sub-2-hour solar recharge</li><li>AC coupling support — one of few portable units that ties into existing home solar</li><li></li></ul>
       </div>
       <div class="cons">
         <h3>Trade-offs</h3>
@@ -263,7 +270,7 @@ fetchpriority="high">
 
     <h2>Frequently asked questions</h2>
     <h3>How long will the Anker SOLIX F3800 power a house?</h3>
-    <p>On its own 3,840Wh charge, it typically covers essential loads (fridge, lights, WiFi, some outlets) for about a day. With the maximum expansion of six BP3800 battery packs, capacity reaches 26.9kWh, and pairing two F3800 units with 12 batteries brings the system to 53.8kWh — enough for roughly one to two weeks of essential backup.</p>
+    <p>On its own 3,840Wh charge, it typically covers essential loads (fridge, lights, WiFi, some outlets) for about a day.</p>
     <h3>Does the Anker SOLIX F3800 support 240V appliances?</h3>
     <p>Yes. It outputs both 120V and 240V split-phase power through its built-in NEMA L14-30 and NEMA 14-50 ports, so it can run dryers, well pumps, or EV chargers without a separate step-up converter.</p>
     <h3>Can the F3800 charge from solar panels?</h3>
@@ -297,7 +304,7 @@ fetchpriority="high">
         <div class="sidebar-card-text">
           <span class="brand">DJI</span>
           <h3>Power 1000</h3>
-          <p class="desc desc-fade">The DJI Power 1000 brings DJI's renowned engineering precision to the portable power station market. Packing 1,024Wh of LiFePO4 battery capacity and a robust 2,200W output, it is built to handle heavy-duty outdoor gear, rapid drone battery charging, and essential home appliances during a short power outage.</p>
+          <p class="desc desc-fade">The DJI Power 1000 brings DJI's to the portable power station market. Packing 1,024Wh of LiFePO4 battery capacity and a robust 2,200W output, it is built to handle heavy-duty outdoor gear, rapid drone battery charging, and essential home appliances during a short power outage.</p>
           <a class="sidebar-card-link" href="../reviews/dji-power-1000.html">View →</a>
         </div>
       </div>
@@ -349,7 +356,7 @@ fetchpriority="high">
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";

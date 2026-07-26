@@ -5,7 +5,13 @@
 (function(){
   try{
     var saved = localStorage.getItem("wattbench-theme");
-    var theme = saved || "dark";
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
     document.documentElement.setAttribute("data-theme", theme);
   }catch(e){}
 })();
@@ -182,7 +188,7 @@
            data-category="power-stations"
            data-price="2900"
            data-date="2026-07-10"
-           data-rating="4.4"
+           data-rating="4.3"
            data-title="anker f3800">
         <a href="../../de/reviews/anker-solix-f3800.html" class="card-photo-link">
           <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
@@ -198,7 +204,7 @@
         <div class="specrow">
           <span><strong>3,840</strong> Wh</span>
           <span><strong>6,000</strong> W</span>
-          <span><strong>4.4</strong>/5</span>
+          <span><strong>4.3</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die F3800 ist Ankers Antwort auf die Frage „Was wäre, wenn eine Powerstation einen tragbaren Generator komplett ersetzen könnte?“ Mit 3.840Wh und 6.000W Ausgangsleistung in zwei Spannungsebenen ist sie weniger ein Camping-Zubehör als ein fahrbares Gerät, das in der Garage wartet, um bei einem Stromausfall sofort einzuspringen.</p>
         <div class="card-cta">
@@ -213,7 +219,7 @@
            data-category="power-stations"
            data-price="1000"
            data-date="2026-07-21"
-           data-rating="4.5"
+           data-rating="3.8"
            data-title="dji power 1000">
         <a href="../../de/reviews/dji-power-1000.html" class="card-photo-link">
           <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
@@ -224,7 +230,7 @@
         <div class="specrow">
           <span><strong>102</strong> Wh</span>
           <span><strong>2,200</strong> W</span>
-          <span><strong>4.5</strong>/5</span>
+          <span><strong>3.8</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die DJI Power 1000 bringt DJIs bekannte technische Präzision in den Markt der tragbaren Powerstations. Mit 1.024Wh Kapazität und starken 2.200W Ausgangsleistung bewältigt sie anspruchsvolles Outdoor-Equipment, schnelles Laden von Drohnenakkus und wichtige Haushaltsgeräte bei kurzen Stromausfällen.</p>
         <div class="card-cta">
@@ -272,7 +278,7 @@
            data-category="power-banks"
            data-price="100"
            data-date="2026-07-21"
-           data-rating="4.3"
+           data-rating="4.2"
            data-title="anker a1695">
         <a href="../../de/reviews/anker-powerbank-a1695-165w.html" class="card-photo-link">
           <span class="rank" style="background:#00e5ff; color:var(--ink);">Powerbanks</span>
@@ -288,7 +294,7 @@
         <div class="specrow">
           <span><strong>25,000</strong> mAh</span>
           <span><strong>165</strong> W</span>
-          <span><strong>4.3</strong>/5</span>
+          <span><strong>4.2</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die Anker Laptop Power Bank (25K, 165W) ist ein leistungsstarkes tragbares Ladegerät, das die Lücke zwischen handlicher Bequemlichkeit und Leistung auf Workstation-Niveau schließt. Mit einer massiven Kapazität von 25.000 mAh (ca. 90 Wh) und einer maximalen Ausgangsleistung von 165 W über integrierte und einziehbare Kabel liefert sie reichlich Energie für stromhungrige Laptops und Zubehör, ohne die Freigrenzen für das Handgepäck im Flugzeug zu überschreiten.</p>
         <div class="card-cta">
@@ -304,7 +310,7 @@
            data-category="chargers"
            data-price="40"
            data-date="2026-07-21"
-           data-rating="4.7"
+           data-rating="4.2"
            data-title="anker nano 65w">
         <a href="../../de/reviews/anker-nano-65w-3-port.html" class="card-photo-link">
           <span class="rank" style="background:#00d98b; color:var(--ink);">Ladegeräte</span>
@@ -319,7 +325,7 @@
         <h3><a href="../../de/reviews/anker-nano-65w-3-port.html">Nano 65W</a></h3>
         <div class="specrow">
           <span><strong>70</strong> W</span>
-          <span><strong>4.7</strong>/5</span>
+          <span><strong>4.2</strong>/5</span>
         </div>
         <p class="desc desc-fade">Das Anker Nano Ladegerät (65W, 3 Ports) liefert echte 65W Leistung über seine einzelnen USB-C-Anschlüsse – genug, um ein 14-Zoll MacBook Pro in nur 35 Minuten von 0 auf 50% zu laden. Ausgestattet mit GaN II Technologie, vereint es starke Leistung in einem 41% kleineren Format als Standard-65W-Netzteile.</p>
         <div class="card-cta">
@@ -335,7 +341,7 @@
            data-category="power-stations"
            data-price="800"
            data-date="2026-07-22"
-           data-rating="4.7"
+           data-rating="4.3"
            data-title="anker solix c1000 gen 2">
         <a href="../../de/reviews/anker-solix-c1000-gen-2.html" class="card-photo-link">
           <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
@@ -351,7 +357,7 @@
         <div class="specrow">
           <span><strong>1,024</strong> Wh</span>
           <span><strong>2,000</strong> W</span>
-          <span><strong>4.7</strong>/5</span>
+          <span><strong>4.3</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die Anker SOLIX C1000 Gen 2 vereint 1.024Wh LiFePO4-Kapazität und robuste 2.000W Ausgangsleistung (3.000W Spitzenleistung) in einem Gehäuse, das 14% kleiner und 11% leichter als vergleichbare Modelle ist. Ausgestattet mit HyperFlash-Technologie für eine ultraschnelle Aufladung in 49 Minuten und intelligenter App-Steuerung mit TOU-Modus (Time-of-Use), dient sie als zuverlässige und langlebige Stromquelle.</p>
         <div class="card-cta">
@@ -367,7 +373,7 @@
            data-category="power-banks"
            data-price="209"
            data-date="2026-07-22"
-           data-rating="4.7"
+           data-rating="4.6"
            data-title="anker prime power bank (26k, 300w)">
         <a href="../../de/reviews/anker-prime-powerbank-26k-300w.html" class="card-photo-link">
           <span class="rank" style="background:#00e5ff; color:var(--ink);">Powerbanks</span>
@@ -383,7 +389,7 @@
         <div class="specrow">
           <span><strong>26,250</strong> mAh</span>
           <span><strong>300</strong> W</span>
-          <span><strong>4.7</strong>/5</span>
+          <span><strong>4.6</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die Anker Prime Powerbank (26K, 300W) liefert gewaltige 300W Gesamtausgangsleistung über zwei USB-C- und einen USB-A-Anschluss und treibt damit zwei Laptops gleichzeitig an. Mit 99.75Wh (26.250mAh) TSA-konformer Kapazität unterstützt sie blitzschnelles Laden mit 140W an einem Port und eine Rekord-Wiederaufladung mit 250W Dual-Eingang in nur 39 Minuten.</p>
         <div class="card-cta">
@@ -399,7 +405,7 @@
            data-category="chargers"
            data-price="120"
            data-date="2026-07-22"
-           data-rating="4.8"
+           data-rating="4.5"
            data-title="anker prime charger (160w, 3 ports)">
         <a href="../../de/reviews/anker-prime-charger-160w-3-port.html" class="card-photo-link">
           <span class="rank" style="background:#00d98b; color:var(--ink);">Ladegeräte</span>
@@ -414,7 +420,7 @@
         <h3><a href="../../de/reviews/anker-prime-charger-160w-3-port.html">Prime Charger (160W, 3 Ports)</a></h3>
         <div class="specrow">
           <span><strong>160</strong> W</span>
-          <span><strong>4.8</strong>/5</span>
+          <span><strong>4.5</strong>/5</span>
         </div>
         <p class="desc desc-fade">Das Anker Prime Ladegerät (160W, 3 Ports) vereint extreme Leistungsdichte in einem Gehäuse so kompakt wie ein AirPods Pro-Case. Mit konstanten 140W Einzelausgangsleistung und PowerIQ 5.0 versorgt es MacBook Pro, iPad und Smartphone gleichzeitig, während GaN-Technologie für effiziente Kühlung sorgt.</p>
         <div class="card-cta">
@@ -430,7 +436,7 @@
            data-category="power-stations"
            data-price="186"
            data-date="2026-07-22"
-           data-rating="4.6"
+           data-rating="4.2"
            data-title="jackery explorer 300d">
         <a href="../../de/reviews/jackery-explorer-300d.html" class="card-photo-link">
           <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
@@ -446,7 +452,7 @@
         <div class="specrow">
           <span><strong>288</strong> Wh</span>
           <span><strong>300</strong> W</span>
-          <span><strong>4.6</strong>/5</span>
+          <span><strong>4.2</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die Jackery Explorer 300D ist eine ultraleichte 288Wh Powerstation mit nur 2,5 kg Gewicht und schlankem Hochformat. Ausgestattet mit einem integrierten 140W USB-C-Kabel als Tragegriff, starken 140W USB-C-Ausgängen und herausragender Energieeffizienz ist sie der perfekte Begleiter für Outdoor-Abenteuer und Solar-Enthusiasten.</p>
         <div class="card-cta">
@@ -462,7 +468,7 @@
            data-category="power-banks"
            data-price="90"
            data-date="2026-07-22"
-           data-rating="4.7"
+           data-rating="4.4"
            data-title="ugreen nexode pro (20000mah, 165w)">
         <a href="../../de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html" class="card-photo-link">
           <span class="rank" style="background:#00e5ff; color:var(--ink);">Powerbanks</span>
@@ -478,7 +484,7 @@
         <div class="specrow">
           <span><strong>20,000</strong> mAh</span>
           <span><strong>165</strong> W</span>
-          <span><strong>4.7</strong>/5</span>
+          <span><strong>4.4</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die UGREEN Nexode Pro Powerbank (20.000mAh, 165W) besitzt ein cleveres, einziehbares 65cm-Kabel mit 5 Längeneinstellungen und macht separate Kabel überflüssig. Mit bis zu 165W Gesamtausgangsleistung (100W + 65W simultan für Laptops) und einem scharfen TFT-Display bietet sie maximale Flexibilität unterwegs.</p>
         <div class="card-cta">
@@ -492,9 +498,9 @@
       <div class="card review-card"
            style="--cat-accent: #00d98b;"
            data-category="chargers"
-           data-price="29"
+           data-price="25"
            data-date="2026-07-21"
-           data-rating="4.5"
+           data-rating="4.2"
            data-title="ugreen nexode 45w">
         <a href="../../de/reviews/ugreen-nexode-45w-retractable-cable-charger.html" class="card-photo-link">
           <span class="rank" style="background:#00d98b; color:var(--ink);">Ladegeräte</span>
@@ -509,11 +515,11 @@
         <h3><a href="../../de/reviews/ugreen-nexode-45w-retractable-cable-charger.html">Nexode 45W</a></h3>
         <div class="specrow">
           <span><strong>45</strong> W</span>
-          <span><strong>4.5</strong>/5</span>
+          <span><strong>4.2</strong>/5</span>
         </div>
         <p class="desc desc-fade">Das UGREEN Nexode 45W Ladegerät besitzt ein integriertes, einziehbares 0,7m Schnellladekabel und macht lästiges Kabelsuchen überflüssig. Dank GaNInfinity-Technologie und 3 Anschlüssen liefert es professionelle 45W Leistung in einem extrem kompakten Format, das perfekt für unterwegs ist.</p>
         <div class="card-cta">
-          <span class="price">~€29 <span class="price-est">(Gesch.)</span></span>
+          <span class="price">~€25 <span class="price-est">(Gesch.)</span></span>
           <a href="../../de/reviews/ugreen-nexode-45w-retractable-cable-charger.html" class="desc-more">Ansehen →</a>
         </div>
         <div class="card-buy-row">
@@ -557,7 +563,7 @@
            data-category="power-stations"
            data-price="400"
            data-date="2026-07-26"
-           data-rating="4.5"
+           data-rating="4.2"
            data-title="ecoflow river 2 max">
         <a href="../../de/reviews/ecoflow-river-2-max.html" class="card-photo-link">
           <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
@@ -573,7 +579,7 @@
         <div class="specrow">
           <span><strong>512</strong> Wh</span>
           <span><strong>500</strong> W</span>
-          <span><strong>4.5</strong>/5</span>
+          <span><strong>4.2</strong>/5</span>
         </div>
         <p class="desc desc-fade">Die EcoFlow RIVER 2 Max ist eine portable 512Wh Powerstation mit nur 6,1 kg Gewicht und einer ultraschnellen AC-Ladezeit von nur 60 Minuten. Ausgestattet mit einem langlebigen LFP-Akku für über 3.000 Zyklen, 500W Dauerleistung (erweiterbar auf 1000W) und App-Steuerung bietet sie maximale Flexibilität unterwegs.</p>
         <div class="card-cta">
@@ -582,6 +588,70 @@
         </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B08eWZ8Hf" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="599"
+           data-date="2026-07-26"
+           data-rating="4.7"
+           data-title="bluetti elite 100 v2">
+        <a href="../../de/reviews/bluetti-elite-100-v2.html" class="card-photo-link">
+          <span class="rank" style="background:#a855f7; color:var(--ink);">Powerstations</span>
+          <div class="product-photo"><img src="../../images/products/bluetti-elite-100-v2-1.webp"
+     srcset="../../images/products/bluetti-elite-100-v2-1-sm.webp 480w, ../../images/products/bluetti-elite-100-v2-1-md.webp 900w, ../../images/products/bluetti-elite-100-v2-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Elite 100 V2 - Powerstations review"
+     loading="lazy"
+></div>
+        </a>
+        <span class="brand">BLUETTI</span>
+        <h3><a href="../../de/reviews/bluetti-elite-100-v2.html">Elite 100 V2</a></h3>
+        <div class="specrow">
+          <span><strong>1,024</strong> Wh</span>
+          <span><strong>1,800</strong> W</span>
+          <span><strong>4.7</strong>/5</span>
+        </div>
+        <p class="desc desc-fade">Die BLUETTI Elite 100 V2 ist eine ultraleichte 1024Wh Powerstation mit nur 11,5 kg Gewicht und einem kompakten 17L-Design. Mit 1800W Ausgangsleistung (2700W Lifting Power), schnellem 1200W AC TurboBoost, starkem 1000W Solareingang und einer nahtlosen 10ms USV-Notstromfunktion bietet sie erstklassige Energie für unterwegs und zu Hause.</p>
+        <div class="card-cta">
+          <span class="price">~€599 <span class="price-est">(Gesch.)</span></span>
+          <a href="../../de/reviews/bluetti-elite-100-v2.html" class="desc-more">Ansehen →</a>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0j2WbTQQ" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="165"
+           data-date="2026-07-27"
+           data-rating="4.7"
+           data-title="ecoflow rapid pro power bank 300w">
+        <a href="../../de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="card-photo-link">
+          <span class="rank" style="background:#00e5ff; color:var(--ink);">Powerbanks</span>
+          <div class="product-photo"><img src="../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp"
+     srcset="../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-sm.webp 480w, ../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-md.webp 900w, ../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow RAPID Pro Power Bank 300W - Powerbanks review"
+     loading="lazy"
+></div>
+        </a>
+        <span class="brand">EcoFlow</span>
+        <h3><a href="../../de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html">RAPID Pro Power Bank 300W</a></h3>
+        <div class="specrow">
+          <span><strong>27,650</strong> mAh</span>
+          <span><strong>300</strong> W</span>
+          <span><strong>4.7</strong>/5</span>
+        </div>
+        <p class="desc desc-fade">Die EcoFlow RAPID Pro Powerbank (27.650mAh, 300W) liefert gewaltige 300W Gesamtausgangsleistung über vier USB-C-Ports, darunter zwei 140W-Anschlüsse und ein integriertes 140W-Einziehkabel. Mit maximaler flugkonformer 99.54Wh Kapazität, einer rasanten Ladezeit von 20 Minuten auf 80% und modulares Design setzt sie neue Maßstäbe.</p>
+        <div class="card-cta">
+          <span class="price">~€165 <span class="price-est">(Gesch.)</span></span>
+          <a href="../../de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="desc-more">Ansehen →</a>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0efJeZWm" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
         </div>
       </div>
     </div>
@@ -622,7 +692,7 @@
 <script>
   window.WB_LOCALE = "de";
   window.WB_ROOT = "../../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.3, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.7, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.8, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
   window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
   window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";

@@ -1028,7 +1028,16 @@ function initProductFinder() {
   }
   var mq = window.matchMedia("(max-width: 700px)");
   var isMobile = mq.matches;
-  var wizardStep = 0;
+  // Starts on the results step, not the first question -- a result is
+  // already computed for the defaults before any interaction happens
+  // (see runMatch() at the bottom of this block), so starting at step
+  // 0 would hide that behind three Next taps for no reason. Desktop
+  // shows this same default result immediately, with zero clicks,
+  // because its layout has room to show every step at once; starting
+  // the wizard here is how mobile gets the same "something useful,
+  // right away" experience despite only ever showing one step at a
+  // time.
+  var wizardStep = STEP_ORDER.length - 1;
 
   function updateWizardView() {
     // .finder-col-left/.finder-col-right/.finder-pair are never hidden by
@@ -1095,7 +1104,7 @@ function initProductFinder() {
 
   function handleMqChange(e) {
     isMobile = e.matches;
-    wizardStep = 0;
+    wizardStep = STEP_ORDER.length - 1;
     updateWizardView();
   }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
@@ -1126,11 +1135,11 @@ function initProductFinder() {
     state = { usage: [], usecase: [], budget: [] };
     panel.querySelectorAll(".finder-pill.active").forEach(function (pill) { pill.classList.remove("active"); });
     panel.querySelectorAll('.finder-pills[data-finder-group="usage"] .finder-pill, .finder-pills[data-finder-group="usecase"] .finder-pill').forEach(function (pill) {
-    pill.setAttribute("aria-checked", "false");
-  });
+      pill.setAttribute("aria-checked", "false");
+    });
     panel.querySelectorAll('.finder-pills[data-finder-group="budget"] .finder-pill').forEach(function (pill) {
       pill.setAttribute("aria-pressed", "false");
-  });
+    });
     setPillsInteractive(true);
     if (isMobile) {
       wizardStep = 0;
@@ -1200,6 +1209,23 @@ function initProductFinder() {
     return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
   }
 
+  // True only when every current selection still matches the original
+  // page-load defaults exactly -- used to show a brief hint that
+  // what's on screen is a generic starting point, not something
+  // personalized yet. Deliberately a comparison against current state
+  // rather than an "has anything happened" flag: it stays correct
+  // regardless of *how* someone ended up looking at this result
+  // (fresh load, or navigating forward through steps without changing
+  // any pill), and correctly turns itself off the moment a real
+  // difference exists, including after Reset (which clears to empty,
+  // not back to these defaults).
+  function isShowingDefaultSelections() {
+    return state.usage[0] === DEFAULT_STATE.usage[0]
+      && state.usecase[0] === DEFAULT_STATE.usecase[0]
+      && state.budget.length === DEFAULT_STATE.budget.length
+      && state.budget[0] === DEFAULT_STATE.budget[0];
+  }
+
   function renderBestMatch(item, usedFallback) {
     var noteEl = document.getElementById("finder-note");
     var bestEl = document.getElementById("finder-best");
@@ -1215,10 +1241,22 @@ function initProductFinder() {
       : "\u26A1";
     var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
 
+    // Shown only for the untouched default result -- explains what
+    // desktop's larger layout already makes obvious just from seeing
+    // every step's pills at once alongside the result: this is a
+    // generic starting point, not personalized yet, and here's the
+    // one action (Reset) that starts actually customizing it.
+    var defaultHintHtml = "";
+    if (isShowingDefaultSelections()) {
+      var hintText = window.WB_FINDER_DEFAULT_HINT || "Showing our default pick \u2014 tap \u21BA Reset & start over to answer for yourself.";
+      defaultHintHtml = '<p class="finder-default-hint">' + hintText + "</p>";
+    }
+
     // The whole card is one link to the review -- no separate "View
     // review" button needed. <a> can legally wrap block-level content
     // (div/h4/p), so this is valid markup, not a div-in-a-link hack.
     bestEl.innerHTML =
+      defaultHintHtml +
       '<a class="finder-best-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
         '<div class="' + photoClass + '">' + photoInner + "</div>" +
         "<h4>" + item.title + "</h4>" +
