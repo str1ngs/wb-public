@@ -1,0 +1,14 @@
+{
+  "name": "WattBench — Portable Power Reviews",
+  "short_name": "WattBench",
+  "description": "Independent, spec-first reviews of portable power stations, power banks, and chargers.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#14181c",
+  "theme_color": "#e8a13d",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
