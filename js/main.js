@@ -11,10 +11,10 @@ document.addEventListener("DOMContentLoaded", function () {
   if (themeBtns.length) {
     var setLabel = function () {
       var isDark = document.documentElement.getAttribute("data-theme") === "dark";
-      var label = isDark ? (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.light : "\u2600 LIGHT") : (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.dark : "\u263D DARK");
+      var label = isDark ? (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.light : "Light mode") : (window.WB_THEME_LABELS ? window.WB_THEME_LABELS.dark : "Dark mode");
       themeBtns.forEach(function (btn) {
-        btn.textContent = label;
-        btn.setAttribute("aria-pressed", isDark ? "true" : "false");
+        btn.setAttribute("aria-checked", isDark ? "true" : "false");
+        btn.setAttribute("aria-label", label);
       });
     };
     setLabel();
@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initProductGallery();
   initRubricPopover();
   initRecentStacks();
+  initCategoryTabs();
   initProductFinder();
 
   // ---- Comparison table pagination ----
@@ -426,12 +427,12 @@ function initReviewsFilter() {
   function renderPagination(totalPages) {
     if (!paginationEl) return;
     if (totalPages <= 1) { paginationEl.innerHTML = ""; return; }
-    var html = '<button type="button" class="review-page-arrow" data-page="' + (state.page - 1) + '"' +
+    var html = '<button type="button" class="wb-page-btn wb-page-arrow" data-page="' + (state.page - 1) + '"' +
       (state.page <= 1 ? ' disabled' : '') + ' aria-label="Previous">\u2039</button>';
     for (var i = 1; i <= totalPages; i++) {
-      html += '<button type="button" class="review-page-num' + (i === state.page ? ' active' : '') + '" data-page="' + i + '">' + i + '</button>';
+      html += '<button type="button" class="wb-page-btn' + (i === state.page ? ' active' : '') + '" data-page="' + i + '">' + i + '</button>';
     }
-    html += '<button type="button" class="review-page-arrow" data-page="' + (state.page + 1) + '"' +
+    html += '<button type="button" class="wb-page-btn wb-page-arrow" data-page="' + (state.page + 1) + '"' +
       (state.page >= totalPages ? ' disabled' : '') + ' aria-label="Next">\u203a</button>';
     paginationEl.innerHTML = html;
 
@@ -551,11 +552,10 @@ function initReviewsFilter() {
 function initTablePagination() {
   document.querySelectorAll(".compare-table").forEach(function (table) {
     var outerWrap = table.closest(".compare-table-wrap");
-    var pagination = outerWrap ? outerWrap.nextElementSibling : null;
+    var pagination = outerWrap ? outerWrap.querySelector(".table-pagination") : null;
     var pageSize = parseInt(table.getAttribute("data-page-size"), 10) || 4;
     var tbody = table.querySelector("tbody");
-    var buttons = pagination && pagination.classList.contains("table-pagination")
-      ? pagination.querySelectorAll(".table-page-btn") : [];
+    var buttons = pagination ? pagination.querySelectorAll(".wb-page-btn") : [];
 
     // Page membership is computed fresh from current DOM order every time,
     // rather than the page each row was assigned at build time -- that way
@@ -800,14 +800,11 @@ function initRubricPopover() {
 }
 
 function initRecentStacks() {
-  var SWIPE_THRESHOLD = 80; // px of horizontal drag before it counts as a swipe rather than a tap
-  var FLY_MS = 350;         // matches the .35s transition on .recent-stack .recent-card in CSS
-
   document.querySelectorAll("[data-stack]").forEach(function (stack) {
     var cards = Array.prototype.slice.call(stack.querySelectorAll("[data-stack-card]"));
     var dots = Array.prototype.slice.call(stack.querySelectorAll(".recent-stack-dot"));
     var total = cards.length;
-    if (total < 2) return; // only one card in this category -- nothing to stack or swipe
+    if (total < 2) return; // only one card in this category -- nothing to page through
 
     var front = 0;
 
@@ -819,6 +816,9 @@ function initRecentStacks() {
     }
     layout();
 
+    // Wraps in both directions (front - 1 on card 0 lands on the last
+    // card) -- same endless-loop behavior the old swipe stack had, so
+    // Back/Next never need a disabled state.
     function goTo(index) {
       front = ((index % total) + total) % total;
       layout();
@@ -828,107 +828,43 @@ function initRecentStacks() {
       dot.addEventListener("click", function () { goTo(i); });
     });
 
-    // Drag handling targets whichever card is currently on top. Cards
-    // behind it have pointer-events:none (see CSS), so these listeners
-    // only ever see gestures meant for the front card -- no need to
-    // re-bind anything as the stack cycles.
-    var dragging = false, draggedFar = false, captured = false;
-    var startX = 0, dx = 0, activeCard = null;
+    // Back/Next -- same goTo()/layout() the dots already use, so the
+    // motion comes for free from the .35s transform transition already
+    // on .recent-stack .recent-card in CSS. Mirrors the finder wizard's
+    // nav pattern instead of the old pointer-drag/fling gesture.
+    var backBtn = stack.querySelector(".recent-stack-back");
+    var nextBtn = stack.querySelector(".recent-stack-next");
+    if (backBtn) backBtn.addEventListener("click", function () { goTo(front - 1); });
+    if (nextBtn) nextBtn.addEventListener("click", function () { goTo(front + 1); });
+  });
+}
 
-    stack.addEventListener("pointerdown", function (e) {
-      if (e.target.closest(".recent-stack-dot")) return;
-      activeCard = cards[front];
-      dragging = true;
-      draggedFar = false;
-      captured = false;
-      startX = e.clientX;
-      dx = 0;
-      // Deliberately NOT calling setPointerCapture here yet. Capturing
-      // immediately -- before we know this is an actual drag -- can
-      // redirect the eventual click away from whatever link the user
-      // pressed down on (header/title/View), breaking plain taps
-      // entirely. Capture only kicks in once real movement confirms a
-      // drag, in pointermove below.
+// Mobile category tabs -- used by both the recent-reviews showcase and
+// the comparison tables below it. Scoped per [data-tabs-group] rather
+// than one flat document-wide lookup, since both sections have a
+// "power-stations"/"power-banks"/"chargers" panel and a global lookup
+// would let one section's tab click control the other section's panel.
+function initCategoryTabs() {
+  document.querySelectorAll("[data-tabs-group]").forEach(function (tabsGroup) {
+    var tabs = Array.prototype.slice.call(tabsGroup.querySelectorAll(".recent-tab"));
+    if (!tabs.length) return;
+    var panels = {};
+    tabsGroup.querySelectorAll("[data-category-panel]").forEach(function (panel) {
+      panels[panel.getAttribute("data-category-panel")] = panel;
     });
-
-    stack.addEventListener("pointermove", function (e) {
-      if (!dragging || !activeCard) return;
-      dx = e.clientX - startX;
-      if (!draggedFar && Math.abs(dx) > 10) {
-        draggedFar = true;
-        captured = true;
-        activeCard.classList.add("is-dragging");
-        activeCard.setPointerCapture(e.pointerId);
-      }
-      if (draggedFar) {
-        activeCard.style.transform = "translate(" + dx + "px,0) rotate(" + (dx / 18) + "deg) scale(1)";
-        activeCard.style.opacity = String(1 - Math.min(Math.abs(dx) / 280, 0.6));
-      }
+    tabs.forEach(function (tab) {
+      tab.addEventListener("click", function () {
+        var cat = tab.getAttribute("data-category-tab");
+        tabs.forEach(function (t) {
+          var isActive = t === tab;
+          t.classList.toggle("active", isActive);
+          t.setAttribute("aria-selected", isActive ? "true" : "false");
+        });
+        Object.keys(panels).forEach(function (key) {
+          panels[key].hidden = key !== cat;
+        });
+      });
     });
-
-    function endDrag(e) {
-      if (!dragging || !activeCard) return;
-      dragging = false;
-      var card = activeCard;
-      activeCard = null;
-
-      if (captured) {
-        card.classList.remove("is-dragging"); // re-enables the CSS transition for what follows
-        try { card.releasePointerCapture(e.pointerId); } catch (err) {}
-      }
-      captured = false;
-
-      if (!draggedFar) return; // was just a tap -- never touched, let the native click proceed
-
-      if (Math.abs(dx) > SWIPE_THRESHOLD) {
-        // finish flying the card off in the direction it was dragged --
-        // just past its own edge, not across the whole viewport, so the
-        // motion stays quick and contained instead of a long trip
-        var direction = dx < 0 ? 1 : -1; // dragged left = advance, dragged right = go back
-        var travel = Math.max(card.offsetWidth * 1.15, 420);
-        var flyX = dx > 0 ? travel : -travel;
-        card.style.transform = "translate(" + flyX + "px,0) rotate(" + (dx / 18) + "deg) scale(1)";
-        card.style.opacity = "0";
-        setTimeout(function () {
-          card.style.transform = "";
-          card.style.opacity = "";
-          if (direction > 0) {
-            // advancing: the card lands deep in the faded stack (nearly
-            // invisible), so reset instantly -- no visible "flying back in"
-            card.classList.add("is-dragging");
-            goTo(front + direction);
-            requestAnimationFrame(function () {
-              requestAnimationFrame(function () {
-                card.classList.remove("is-dragging");
-              });
-            });
-          } else {
-            // going back: the card lands at position 1, which is fully
-            // visible now, so let it animate smoothly into place instead
-            // of popping in unanimated
-            goTo(front + direction);
-          }
-        }, FLY_MS);
-      } else {
-        // didn't clear the threshold -- snap back to center
-        card.style.transform = "";
-        card.style.opacity = "";
-      }
-    }
-
-    stack.addEventListener("pointerup", endDrag);
-    stack.addEventListener("pointercancel", endDrag);
-
-    // A drag that passed the "moved" threshold shouldn't also fire the
-    // link it started on (title/photo/read-more) -- swallow just that
-    // one click, without affecting a normal tap that never dragged.
-    stack.addEventListener("click", function (e) {
-      if (draggedFar) {
-        e.preventDefault();
-        e.stopPropagation();
-        draggedFar = false;
-      }
-    }, true);
   });
 }
 
@@ -936,15 +872,20 @@ function initProductFinder() {
   var panel = document.querySelector(".finder-grid");
   if (!panel || !window.WB_FINDER_INDEX) return;
 
-  // Defaults match what's pre-marked .active in the HTML (phone /
-  // traveling / micro budget), so the very first render already has a
-  // real result instead of an empty state. Pills are always clickable --
-  // there's no "frozen" state. Reset clears the selections back to
-  // nothing (un-ambers everything) but deliberately does NOT recompute
-  // the shown result -- the card keeps showing whatever it last showed
-  // until Show My Match is clicked again with the new selections.
-  var DEFAULT_STATE = { usage: ["phone"], usecase: ["traveling"], budget: ["micro"] };
-  var state = { usage: DEFAULT_STATE.usage.slice(), usecase: DEFAULT_STATE.usecase.slice(), budget: DEFAULT_STATE.budget.slice() };
+  // No default selections and no default result anymore -- the panel
+  // starts genuinely empty (see the placeholder in #finder-best) until
+  // the person actually answers. "usage" and "usecase" are required
+  // (computeMatch() needs both to produce a real ranked answer);
+  // "budget" stays optional exactly as before, zero selected just means
+  // no price filter.
+  var state = { usage: [], usecase: [], budget: [] };
+
+  function canSubmit() {
+    return state.usage.length > 0 && state.usecase.length > 0;
+  }
+  function updateSubmitAvailability() {
+    if (submitBtn && !hasShownResult) submitBtn.disabled = !canSubmit();
+  }
 
   // "usage" (device type) is a single-select group -- exactly one option
   // is always the current answer, same idea as a radio group, because
@@ -973,6 +914,7 @@ function initProductFinder() {
             p.classList.toggle("active", isActive);
             p.setAttribute("aria-checked", isActive ? "true" : "false");
           });
+          updateSubmitAvailability();
           return;
         }
         var idx = state[groupName].indexOf(value);
@@ -983,6 +925,7 @@ function initProductFinder() {
         }
         pill.classList.toggle("active", idx === -1);
         pill.setAttribute("aria-pressed", idx === -1 ? "true" : "false");
+        updateSubmitAvailability();
       });
     });
   });
@@ -1011,8 +954,10 @@ function initProductFinder() {
       submitBtn.textContent = showingResult
         ? ("\u21BA " + window.WB_FINDER_RESET_LABEL)
         : (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192");
+      submitBtn.classList.toggle("is-submit", !showingResult);
     }
     setPillsInteractive(!showingResult);
+    if (!showingResult) updateSubmitAvailability(); // re-locks the button until a fresh selection is made -- this was the bug: Reset called this with showingResult=false but nothing re-evaluated .disabled, so the button stayed clickable from before Reset was pressed
   }
   // While a result is showing, the pills are locked rather than left live --
   // changing them wouldn't do anything until Reset is clicked anyway (the
@@ -1028,16 +973,12 @@ function initProductFinder() {
   }
   var mq = window.matchMedia("(max-width: 700px)");
   var isMobile = mq.matches;
-  // Starts on the results step, not the first question -- a result is
-  // already computed for the defaults before any interaction happens
-  // (see runMatch() at the bottom of this block), so starting at step
-  // 0 would hide that behind three Next taps for no reason. Desktop
-  // shows this same default result immediately, with zero clicks,
-  // because its layout has room to show every step at once; starting
-  // the wizard here is how mobile gets the same "something useful,
-  // right away" experience despite only ever showing one step at a
-  // time.
-  var wizardStep = STEP_ORDER.length - 1;
+  // Starts on the first question, not the results step -- there's no
+  // longer a default result computed up front (see below), so jumping
+  // straight to results would just show an empty placeholder as if it
+  // were step 1. Desktop is unaffected either way since every step is
+  // visible at once there regardless of wizardStep.
+  var wizardStep = 0;
 
   function updateWizardView() {
     // .finder-col-left/.finder-col-right/.finder-pair are never hidden by
@@ -1087,6 +1028,7 @@ function initProductFinder() {
         var isLastQuestion = wizardStep === STEP_ORDER.length - 2;
         nextBtn.textContent = isLastQuestion ? (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192") : "Next \u2192";
         nextBtn.classList.toggle("is-submit", isLastQuestion);
+        nextBtn.disabled = isLastQuestion && !canSubmit();
       }
     }
   }
@@ -1099,7 +1041,7 @@ function initProductFinder() {
     wizardStep = Math.max(0, Math.min(STEP_ORDER.length - 1, newStep));
     var isResults = wizardStep === STEP_ORDER.length - 1;
     updateWizardView();
-    if (isResults && !wasResults) runMatch();
+    if (isResults && !wasResults && canSubmit()) runMatch();
   }
 
   function handleMqChange(e) {
@@ -1209,21 +1151,9 @@ function initProductFinder() {
     return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
   }
 
-  // True only when every current selection still matches the original
-  // page-load defaults exactly -- used to show a brief hint that
-  // what's on screen is a generic starting point, not something
-  // personalized yet. Deliberately a comparison against current state
-  // rather than an "has anything happened" flag: it stays correct
-  // regardless of *how* someone ended up looking at this result
-  // (fresh load, or navigating forward through steps without changing
-  // any pill), and correctly turns itself off the moment a real
-  // difference exists, including after Reset (which clears to empty,
-  // not back to these defaults).
-  function isShowingDefaultSelections() {
-    return state.usage[0] === DEFAULT_STATE.usage[0]
-      && state.usecase[0] === DEFAULT_STATE.usecase[0]
-      && state.budget.length === DEFAULT_STATE.budget.length
-      && state.budget[0] === DEFAULT_STATE.budget[0];
+  function starString(rating) {
+    var filled = Math.max(0, Math.min(5, Math.round(rating)));
+    return "\u2605".repeat(filled) + "\u2606".repeat(5 - filled);
   }
 
   function renderBestMatch(item, usedFallback) {
@@ -1240,27 +1170,18 @@ function initProductFinder() {
       ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="">'
       : "\u26A1";
     var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
-
-    // Shown only for the untouched default result -- explains what
-    // desktop's larger layout already makes obvious just from seeing
-    // every step's pills at once alongside the result: this is a
-    // generic starting point, not personalized yet, and here's the
-    // one action (Reset) that starts actually customizing it.
-    var defaultHintHtml = "";
-    if (isShowingDefaultSelections()) {
-      var hintText = window.WB_FINDER_DEFAULT_HINT || "Showing our default pick \u2014 tap \u21BA Reset & start over to answer for yourself.";
-      defaultHintHtml = '<p class="finder-default-hint">' + hintText + "</p>";
-    }
+    var badgeHtml = item.is_top_rated
+      ? '<span class="top-rated-badge" title="' + (window.WB_TOP_RATED_LABEL || "Top Rated") + '"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.6 1.6 6.75L12 16.9l-6.2 3.31 1.6-6.75-5.2-4.6 6.9-.6z"></path></svg></span>'
+      : "";
 
     // The whole card is one link to the review -- no separate "View
     // review" button needed. <a> can legally wrap block-level content
     // (div/h4/p), so this is valid markup, not a div-in-a-link hack.
     bestEl.innerHTML =
-      defaultHintHtml +
       '<a class="finder-best-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
-        '<div class="' + photoClass + '">' + photoInner + "</div>" +
+        '<div class="' + photoClass + '">' + badgeHtml + photoInner + "</div>" +
         "<h4>" + item.title + "</h4>" +
-        '<p class="finder-mobile-best-specs">\u2605 ' + item.rating + " &middot; ~\u20AC" + item.price_eur.toLocaleString() + "</p>" +
+        '<p class="recent-card-stars">' + starString(item.rating) + ' <span>' + item.rating + "/5 \u00b7 ~\u20AC" + item.price_eur.toLocaleString() + "</span></p>" +
         '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
       "</a>";
   }
@@ -1296,11 +1217,26 @@ function initProductFinder() {
     renderBestMatch(result.best, result.usedFallback);
   }
 
+  var FINDER_PLACEHOLDER_HTML =
+    '<div class="finder-best-placeholder">' +
+      '<svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>' +
+      "<p>" + (window.WB_FINDER_PLACEHOLDER_TEXT || "Pick your answers on the left and your match will show up here.") + "</p>" +
+    "</div>";
+
   function clearResult() {
     var bestEl = document.getElementById("finder-best");
     var noteEl = document.getElementById("finder-note");
-    if (bestEl) bestEl.innerHTML = "";
+    if (bestEl) bestEl.innerHTML = FINDER_PLACEHOLDER_HTML;
     if (noteEl) noteEl.hidden = true;
+  }
+
+  function showFinderLoading() {
+    var bestEl = document.getElementById("finder-best");
+    var noteEl = document.getElementById("finder-note");
+    if (noteEl) noteEl.hidden = true;
+    if (bestEl) {
+      bestEl.innerHTML = '<div class="finder-loading"><div class="finder-loading-spinner"></div><p>' + (window.WB_FINDER_LOADING_TEXT || "Finding your match\u2026") + "</p></div>";
+    }
   }
 
   if (submitBtn) {
@@ -1309,13 +1245,18 @@ function initProductFinder() {
         resetAll();
         clearResult();
         setSubmitButtonState(false);
-      } else {
+        return;
+      }
+      setPillsInteractive(false);
+      submitBtn.disabled = true;
+      showFinderLoading();
+      setTimeout(function () {
         runMatch();
         setSubmitButtonState(true);
-      }
+        submitBtn.disabled = false;
+      }, 650);
     });
   }
 
-  runMatch(); // show a result for the defaults immediately, before any interaction
-  setSubmitButtonState(true); // ...and since a result is already showing, the button starts as "Reset & start over", not "Show My Match"
+  setSubmitButtonState(false); // starts as "Show My Match" (not "Reset"), disabled, and bold/is-submit -- all handled internally now
 }

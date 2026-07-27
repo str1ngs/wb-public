@@ -96,7 +96,13 @@
           </span>de
         </a>
       </div>
-      <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
     </div>
   </div>
 </header>
@@ -130,7 +136,13 @@
         </span>de
       </a>
     </div>
-    <button class="theme-toggle" aria-pressed="false" type="button">☽ DUNKEL</button>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
   </div>
 </nav>
 
@@ -146,7 +158,7 @@
 <section class="section-tight">
   <div class="wrap article">
     <h1>Datenschutz</h1>
-    <p class="lede">WattBench richtet sich an ein Publikum in der EU, und diese Erklärung ist auf die Anforderungen der DSGVO (Verordnung (EU) 2016/679) ausgelegt. Dies ist eine statische Website ohne Benutzerkonten, ohne serverseitige Datenbank und ohne Kommentarsystem — das bedeutet für deine Daten Folgendes.</p><h2>Verantwortlicher</h2><p>[Hier Name/Unternehmen, Adresse und Kontakt-E-Mail eintragen — erforderlich nach Art. 13 DSGVO.]</p><h2>Was wir verarbeiten, und auf welcher Rechtsgrundlage</h2><p><strong>Design-Einstellung (hell/dunkel):</strong> wird ausschließlich im <code>localStorage</code> deines Browsers gespeichert (Schlüssel <code>wattbench-theme</code>). Sie verlässt dein Gerät nie und wird nie an uns übermittelt — das ist auf unserer Seite überhaupt keine Verarbeitung personenbezogener Daten.</p><p><strong>Google Fonts:</strong> diese Seite lädt derzeit Schriftarten über das CDN von Google, wodurch die IP-Adresse deines Browsers bei jedem Seitenaufruf an Google übermittelt wird (eine Datenübermittlung außerhalb der EU). Wer diese Vorlage produktiv nutzt, sollte die Schriftdateien stattdessen selbst hosten — das vermeidet die Übermittlung vollständig und entspricht der Empfehlung europäischer Datenschutzbehörden.</p><p><strong>Analytics:</strong> standardmäßig nicht aktiv. Wer Analytics (z. B. ein cookieloses Tool wie Plausible oder Google Analytics) oder Werbeskripte hinzufügt, muss diesen Abschnitt aktualisieren, die Rechtsgrundlage benennen (bei nicht notwendigen Diensten in der Regel Einwilligung nach der ePrivacy-Richtlinie) und vor der Aktivierung einen Einwilligungsmechanismus einbauen.</p><h2>Affiliate-Links</h2><p>Beim Klick auf einen Affiliate-Link zu einem Händler gilt ab dem Zeitpunkt, an dem du auf dessen Seite landest, dessen eigene Datenschutzerklärung und dessen eigene Cookies — nicht die dieser Seite.</p><h2>Deine Rechte nach der DSGVO</h2><p>Da diese Seite serverseitig keine personenbezogenen Daten erhebt, laufen die meisten Betroffenenrechte der DSGVO (Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch) hier ins Leere. Ändert sich das — etwa durch ein Kontaktformular oder Analytics — muss dieser Abschnitt ergänzt werden, inklusive eines Wegs zur zuständigen Aufsichtsbehörde.</p>
+    <p class="lede">WattBench richtet sich an ein Publikum in der EU, und diese Erklärung ist auf die Anforderungen der DSGVO (Verordnung (EU) 2016/679) ausgelegt. Dies ist eine statische Website ohne Benutzerkonten, ohne serverseitige Datenbank und ohne Kommentarsystem — das bedeutet für deine Daten Folgendes.</p><h2>Was wir verarbeiten, und auf welcher Rechtsgrundlage</h2><p><strong>Design-Einstellung (hell/dunkel):</strong> wird ausschließlich im <code>localStorage</code> deines Browsers gespeichert (Schlüssel <code>wattbench-theme</code>). Sie verlässt dein Gerät nie und wird nie an uns übermittelt — das ist auf unserer Seite überhaupt keine Verarbeitung personenbezogener Daten.</p><p><strong>Google Fonts:</strong> diese Seite lädt derzeit Schriftarten über das CDN von Google, wodurch die IP-Adresse deines Browsers bei jedem Seitenaufruf an Google übermittelt wird (eine Datenübermittlung außerhalb der EU). Wer diese Vorlage produktiv nutzt, sollte die Schriftdateien stattdessen selbst hosten — das vermeidet die Übermittlung vollständig und entspricht der Empfehlung europäischer Datenschutzbehörden.</p><p><strong>Analytics:</strong> standardmäßig nicht aktiv. Wer Analytics (z. B. ein cookieloses Tool wie Plausible oder Google Analytics) oder Werbeskripte hinzufügt, muss diesen Abschnitt aktualisieren, die Rechtsgrundlage benennen (bei nicht notwendigen Diensten in der Regel Einwilligung nach der ePrivacy-Richtlinie) und vor der Aktivierung einen Einwilligungsmechanismus einbauen.</p><h2>Affiliate-Links</h2><p>Beim Klick auf einen Affiliate-Link zu einem Händler gilt ab dem Zeitpunkt, an dem du auf dessen Seite landest, dessen eigene Datenschutzerklärung und dessen eigene Cookies — nicht die dieser Seite.</p><h2>Deine Rechte nach der DSGVO</h2><p>Da diese Seite serverseitig keine personenbezogenen Daten erhebt, laufen die meisten Betroffenenrechte der DSGVO (Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit, Widerspruch) hier ins Leere. Ändert sich das — etwa durch ein Kontaktformular oder Analytics — muss dieser Abschnitt ergänzt werden, inklusive eines Wegs zur zuständigen Aufsichtsbehörde.</p>
 
   </div>
 </section>
