@@ -13,6 +13,25 @@
       theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
     }
     document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
   }catch(e){}
 })();
 </script>
@@ -47,10 +66,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../css/style.css">
-<style>
-:root{
---amber:#e8a13d;--amber-deep:#c17f22;}
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -63,6 +78,8 @@
 </script>
 </head>
 <body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
 
 <header class="site-header">
   <div class="wrap">
@@ -115,15 +132,7 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <div class="mobile-drawer-links">
-    <a href="../index.html">Home</a>
-    <div class="mobile-drawer-group-label">Reviews</div>
-    <a href="../reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
-    <a href="../reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
-    <a href="../reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
-    <a href="../guides/index.html">Buying Guide</a>
-  </div>
-  <div class="mobile-drawer-foot">
+  <div class="mobile-drawer-controls">
     <div class="lang-switch">
       <a href="../reviews/index.html" class="active lang-link" data-lang="en" hreflang="en">
         <span class="lang-flag">
@@ -144,6 +153,14 @@
       </span>
     </button>
   </div>
+  <div class="mobile-drawer-links">
+    <a href="../index.html">Home</a>
+    <div class="mobile-drawer-group-label">Reviews</div>
+    <a href="../reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+    <a href="../reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+    <a href="../reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+    <a href="../guides/index.html">Buying Guide</a>
+  </div>
 </nav>
 
 <div class="disclosure">
@@ -160,9 +177,9 @@
 
     <div class="hero-search page-search">
       <div class="hero-search-box page-search-box">
-        <input type="search" class="page-search-input hero-search-input" placeholder="Search power banks, stations, or brands..." aria-label="Search power banks, stations, or brands...">
+        <input type="search" class="page-search-input hero-search-input" placeholder="Search..." aria-label="Search...">
       </div>
-      <button type="button" class="hero-search-btn page-search-btn" aria-label="Search power banks, stations, or brands...">
+      <button type="button" class="hero-search-btn page-search-btn" aria-label="Search...">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
     </div>
@@ -198,13 +215,12 @@
       <div class="card review-card"
            style="--cat-accent: #a855f7;"
            data-category="power-stations"
-           data-price="2900"
+           data-price="2901"
            data-date="2026-07-10"
-           data-rating="4.3"
+           data-rating="3.6"
            data-title="anker f3800">
         <a href="../reviews/anker-solix-f3800.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/anker-solix-f3800-1.webp"
      srcset="../images/products/anker-solix-f3800-1-sm.webp 480w, ../images/products/anker-solix-f3800-1-md.webp 900w, ../images/products/anker-solix-f3800-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -215,13 +231,13 @@
           <span class="brand">Anker</span>
           <h3>F3800</h3>
           <div class="specrow">
-            <span><strong>4.3</strong>/5</span>
+            <span><strong>3.6</strong>/5</span>
             <span><strong>3,840</strong> Wh</span>
             <span><strong>6,000</strong> W</span>
             <span><strong>60.0 kg</strong></span>
           </div>
           <p class="desc desc-fade">The F3800 is Anker's answer to "what if a power station could replace a portable generator entirely." At 3,840Wh and 6,000W of dual-voltage output, it's less a camping accessory and more a wheeled appliance built to sit in a garage and take over the moment the grid drops.</p>
-          <span class="price">~€2,900 <span class="price-est">(Est.)</span></span>
+          <span class="price">~€2,901 <span class="price-est">(Est.)</span></span>
         </a>
         <div class="card-buy-row">
         </div>
@@ -231,20 +247,19 @@
            data-category="power-stations"
            data-price="1000"
            data-date="2026-07-21"
-           data-rating="3.8"
-           data-title="dji power 1000">
+           data-rating="4.4"
+           data-title="dji power 1000 v2">
         <a href="../reviews/dji-power-1000.html" class="card-body-link">
           <div class="product-photo placeholder">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
-            <span class="bolt-mark">⚡</span>DJI Power 1000
+            <span class="bolt-mark">⚡</span>DJI Power 1000 V2
           </div>
           <span class="brand">DJI</span>
-          <h3>Power 1000</h3>
+          <h3>Power 1000 V2</h3>
           <div class="specrow">
-            <span><strong>3.8</strong>/5</span>
-            <span><strong>102</strong> Wh</span>
-            <span><strong>2,200</strong> W</span>
-            <span><strong>13.0 kg</strong></span>
+            <span><strong>4.4</strong>/5</span>
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>2,600</strong> W</span>
+            <span><strong>14 g</strong></span>
           </div>
           <p class="desc desc-fade">The DJI Power 1000 brings DJI's to the portable power station market. Packing 1,024Wh of LiFePO4 battery capacity and a robust 2,200W output, it is built to handle heavy-duty outdoor gear, rapid drone battery charging, and essential home appliances during a short power outage.</p>
           <span class="price">~€1,000 <span class="price-est">(Est.)</span></span>
@@ -258,11 +273,14 @@
            data-category="power-stations"
            data-price="2800"
            data-date="2026-07-26"
-           data-rating="4.5"
+           data-rating="3.8"
            data-title="ecoflow delta pro 3">
         <a href="../reviews/ecoflow-delta-pro-3.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">⚡</span>
+              <span>Fastest Charge</span>
+            </div>
             <img src="../images/products/ecoflow-delta-pro-3-1.webp"
      srcset="../images/products/ecoflow-delta-pro-3-1-sm.webp 480w, ../images/products/ecoflow-delta-pro-3-1-md.webp 900w, ../images/products/ecoflow-delta-pro-3-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -273,7 +291,7 @@
           <span class="brand">EcoFlow</span>
           <h3>DELTA Pro 3</h3>
           <div class="specrow">
-            <span><strong>4.5</strong>/5</span>
+            <span><strong>3.8</strong>/5</span>
             <span><strong>4,096</strong> Wh</span>
             <span><strong>4,000</strong> W</span>
             <span><strong>51.5 kg</strong></span>
@@ -290,11 +308,10 @@
            data-category="power-banks"
            data-price="100"
            data-date="2026-07-21"
-           data-rating="4.2"
+           data-rating="3.8"
            data-title="anker a1695">
         <a href="../reviews/anker-powerbank-a1695-165w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00e5ff; color:var(--ink);">Power Banks</span>
             <img src="../images/products/anker-powerbank-a1695-1.webp"
      srcset="../images/products/anker-powerbank-a1695-1-sm.webp 480w, ../images/products/anker-powerbank-a1695-1-md.webp 900w, ../images/products/anker-powerbank-a1695-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -305,7 +322,7 @@
           <span class="brand">Anker</span>
           <h3>A1695</h3>
           <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
+            <span><strong>3.8</strong>/5</span>
             <span><strong>25,000</strong> mAh</span>
             <span><strong>165</strong> W</span>
             <span><strong>595 g</strong></span>
@@ -326,7 +343,6 @@
            data-title="anker nano 65w">
         <a href="../reviews/anker-nano-65w-3-port.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00d98b; color:var(--ink);">Chargers</span>
             <img src="../images/products/anker-nano-65w-3-port-1.webp"
      srcset="../images/products/anker-nano-65w-3-port-1-sm.webp 480w, ../images/products/anker-nano-65w-3-port-1-md.webp 900w, ../images/products/anker-nano-65w-3-port-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -353,11 +369,10 @@
            data-category="power-stations"
            data-price="800"
            data-date="2026-07-22"
-           data-rating="4.3"
+           data-rating="3.4"
            data-title="anker solix c1000 gen 2">
         <a href="../reviews/anker-solix-c1000-gen-2.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/anker-solix-c1000-gen-2-1.webp"
      srcset="../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -368,7 +383,7 @@
           <span class="brand">Anker</span>
           <h3>SOLIX C1000 Gen 2</h3>
           <div class="specrow">
-            <span><strong>4.3</strong>/5</span>
+            <span><strong>3.4</strong>/5</span>
             <span><strong>1,024</strong> Wh</span>
             <span><strong>2,000</strong> W</span>
             <span><strong>11.3 kg</strong></span>
@@ -385,11 +400,10 @@
            data-category="power-banks"
            data-price="209"
            data-date="2026-07-22"
-           data-rating="4.6"
+           data-rating="3.8"
            data-title="anker prime power bank (26k, 300w)">
         <a href="../reviews/anker-prime-powerbank-26k-300w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00e5ff; color:var(--ink);">Power Banks</span>
             <img src="../images/products/anker-prime-powerbank-26k-300w-1.webp"
      srcset="../images/products/anker-prime-powerbank-26k-300w-1-sm.webp 480w, ../images/products/anker-prime-powerbank-26k-300w-1-md.webp 900w, ../images/products/anker-prime-powerbank-26k-300w-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -400,7 +414,7 @@
           <span class="brand">Anker</span>
           <h3>Prime Power Bank (26K, 300W)</h3>
           <div class="specrow">
-            <span><strong>4.6</strong>/5</span>
+            <span><strong>3.8</strong>/5</span>
             <span><strong>26,250</strong> mAh</span>
             <span><strong>300</strong> W</span>
             <span><strong>600 g</strong></span>
@@ -417,12 +431,10 @@
            data-category="chargers"
            data-price="120"
            data-date="2026-07-22"
-           data-rating="4.5"
+           data-rating="4.3"
            data-title="anker prime charger (160w, 3 ports)">
         <a href="../reviews/anker-prime-charger-160w-3-port.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00d98b; color:var(--ink);">Chargers</span>
-            <span class="top-rated-badge" title="Top Rated"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.6 1.6 6.75L12 16.9l-6.2 3.31 1.6-6.75-5.2-4.6 6.9-.6z"></path></svg></span>
             <img src="../images/products/anker-prime-charger-160w-3-port-1.webp"
      srcset="../images/products/anker-prime-charger-160w-3-port-1-sm.webp 480w, ../images/products/anker-prime-charger-160w-3-port-1-md.webp 900w, ../images/products/anker-prime-charger-160w-3-port-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -433,7 +445,7 @@
           <span class="brand">Anker</span>
           <h3>Prime Charger (160W, 3 Ports)</h3>
           <div class="specrow">
-            <span><strong>4.5</strong>/5</span>
+            <span><strong>4.3</strong>/5</span>
             <span><strong>160</strong> W</span>
             <span><strong>221 g</strong></span>
           </div>
@@ -449,11 +461,10 @@
            data-category="power-stations"
            data-price="186"
            data-date="2026-07-22"
-           data-rating="4.2"
+           data-rating="3.4"
            data-title="jackery explorer 300d">
         <a href="../reviews/jackery-explorer-300d.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/jackery-explorer-300d-1.webp"
      srcset="../images/products/jackery-explorer-300d-1-sm.webp 480w, ../images/products/jackery-explorer-300d-1-md.webp 900w, ../images/products/jackery-explorer-300d-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -464,7 +475,7 @@
           <span class="brand">Jackery</span>
           <h3>Explorer 300D</h3>
           <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
+            <span><strong>3.4</strong>/5</span>
             <span><strong>288</strong> Wh</span>
             <span><strong>300</strong> W</span>
             <span><strong>2.5 kg</strong></span>
@@ -481,11 +492,14 @@
            data-category="power-banks"
            data-price="90"
            data-date="2026-07-22"
-           data-rating="4.4"
+           data-rating="3.9"
            data-title="ugreen nexode pro (20000mah, 165w)">
         <a href="../reviews/ugreen-nexode-pro-power-bank-20000-165w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00e5ff; color:var(--ink);">Power Banks</span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">🪶</span>
+              <span>Lightest</span>
+            </div>
             <img src="../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp"
      srcset="../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -496,7 +510,7 @@
           <span class="brand">UGREEN</span>
           <h3>Nexode Pro (20000mAh, 165W)</h3>
           <div class="specrow">
-            <span><strong>4.4</strong>/5</span>
+            <span><strong>3.9</strong>/5</span>
             <span><strong>20,000</strong> mAh</span>
             <span><strong>165</strong> W</span>
             <span><strong>550 g</strong></span>
@@ -513,11 +527,14 @@
            data-category="chargers"
            data-price="25"
            data-date="2026-07-21"
-           data-rating="4.2"
+           data-rating="4.5"
            data-title="ugreen nexode 45w">
         <a href="../reviews/ugreen-nexode-45w-retractable-cable-charger.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00d98b; color:var(--ink);">Chargers</span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">🪶</span>
+              <span>Lightest</span>
+            </div>
             <img src="../images/products/ugreen-nexode-45w-retractable-cable-charger-1.webp"
      srcset="../images/products/ugreen-nexode-45w-retractable-cable-charger-1-sm.webp 480w, ../images/products/ugreen-nexode-45w-retractable-cable-charger-1-md.webp 900w, ../images/products/ugreen-nexode-45w-retractable-cable-charger-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -528,8 +545,9 @@
           <span class="brand">UGREEN</span>
           <h3>Nexode 45W</h3>
           <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
+            <span><strong>4.5</strong>/5</span>
             <span><strong>45</strong> W</span>
+            <span><strong>55 g</strong></span>
           </div>
           <p class="desc desc-fade">The UGREEN Nexode 45W Charger features a built-in 0.7m retractable fast-charging cable, eliminating the need to pack loose wires. Powered by GaNInfinity technology and equipped with 3 total ports, it delivers professional 45W charging (supporting Samsung Super Fast Charging 2.0) while maintaining an ultra-compact footprint ideal for travel and everyday carry.</p>
           <span class="price">~€25 <span class="price-est">(Est.)</span></span>
@@ -543,11 +561,10 @@
            data-category="power-stations"
            data-price="651"
            data-date="2026-07-25"
-           data-rating="4.6"
+           data-rating="3.3"
            data-title="ecoflow delta 3 series">
         <a href="../reviews/ecoflow-delta-3.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/ecoflow-delta-3-2.webp"
      srcset="../images/products/ecoflow-delta-3-2-sm.webp 480w, ../images/products/ecoflow-delta-3-2-md.webp 900w, ../images/products/ecoflow-delta-3-2.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -558,7 +575,7 @@
           <span class="brand">EcoFlow</span>
           <h3>DELTA 3 Series</h3>
           <div class="specrow">
-            <span><strong>4.6</strong>/5</span>
+            <span><strong>3.3</strong>/5</span>
             <span><strong>1,024</strong> Wh</span>
             <span><strong>1,800</strong> W</span>
             <span><strong>12.5 kg</strong></span>
@@ -575,11 +592,10 @@
            data-category="power-stations"
            data-price="400"
            data-date="2026-07-26"
-           data-rating="4.2"
+           data-rating="3.0"
            data-title="ecoflow river 2 max">
         <a href="../reviews/ecoflow-river-2-max.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/ecoflow-river-2-max-1.webp"
      srcset="../images/products/ecoflow-river-2-max-1-sm.webp 480w, ../images/products/ecoflow-river-2-max-1-md.webp 900w, ../images/products/ecoflow-river-2-max-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -590,7 +606,7 @@
           <span class="brand">EcoFlow</span>
           <h3>RIVER 2 Max</h3>
           <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
+            <span><strong>3.0</strong>/5</span>
             <span><strong>512</strong> Wh</span>
             <span><strong>500</strong> W</span>
             <span><strong>6.1 kg</strong></span>
@@ -607,11 +623,10 @@
            data-category="power-stations"
            data-price="599"
            data-date="2026-07-26"
-           data-rating="4.5"
+           data-rating="3.7"
            data-title="bluetti elite 100 v2">
         <a href="../reviews/bluetti-elite-100-v2.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/bluetti-elite-100-v2-1.webp"
      srcset="../images/products/bluetti-elite-100-v2-1-sm.webp 480w, ../images/products/bluetti-elite-100-v2-1-md.webp 900w, ../images/products/bluetti-elite-100-v2-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -622,7 +637,7 @@
           <span class="brand">BLUETTI</span>
           <h3>Elite 100 V2</h3>
           <div class="specrow">
-            <span><strong>4.5</strong>/5</span>
+            <span><strong>3.7</strong>/5</span>
             <span><strong>1,024</strong> Wh</span>
             <span><strong>1,800</strong> W</span>
             <span><strong>11.5 kg</strong></span>
@@ -639,12 +654,14 @@
            data-category="power-banks"
            data-price="165"
            data-date="2026-07-27"
-           data-rating="4.7"
+           data-rating="3.9"
            data-title="ecoflow rapid pro power bank 300w">
         <a href="../reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00e5ff; color:var(--ink);">Power Banks</span>
-            <span class="top-rated-badge" title="Top Rated"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.6 1.6 6.75L12 16.9l-6.2 3.31 1.6-6.75-5.2-4.6 6.9-.6z"></path></svg></span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">⚡</span>
+              <span>Fastest Charge</span>
+            </div>
             <img src="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp"
      srcset="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -655,7 +672,7 @@
           <span class="brand">EcoFlow</span>
           <h3>RAPID Pro Power Bank 300W</h3>
           <div class="specrow">
-            <span><strong>4.7</strong>/5</span>
+            <span><strong>3.9</strong>/5</span>
             <span><strong>27,650</strong> mAh</span>
             <span><strong>300</strong> W</span>
             <span><strong>700 g</strong></span>
@@ -672,11 +689,14 @@
            data-category="chargers"
            data-price="160"
            data-date="2026-07-27"
-           data-rating="4.4"
+           data-rating="4.6"
            data-title="ecoflow rapid pro desktop charger (320w)">
         <a href="../reviews/ecoflow-rapid-pro-desktop-charger-320w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00d98b; color:var(--ink);">Chargers</span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">🏆</span>
+              <span>Top Rated</span>
+            </div>
             <img src="../images/products/ecoflow-rapid-pro-desktop-charger-320w-1.webp"
      srcset="../images/products/ecoflow-rapid-pro-desktop-charger-320w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-desktop-charger-320w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-desktop-charger-320w-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -687,7 +707,7 @@
           <span class="brand">EcoFlow</span>
           <h3>RAPID Pro Desktop Charger (320W)</h3>
           <div class="specrow">
-            <span><strong>4.4</strong>/5</span>
+            <span><strong>4.6</strong>/5</span>
             <span><strong>320</strong> W</span>
             <span><strong>885 g</strong></span>
           </div>
@@ -703,22 +723,25 @@
            data-category="power-banks"
            data-price="89"
            data-date="2026-07-27"
-           data-rating="4.7"
-           data-title="ecoflow rapid power bank (25,000mah, 170w)">
+           data-rating="4.4"
+           data-title="ecoflow rapid power bank (25k, 170w)">
         <a href="../reviews/ecoflow-rapid-power-bank-25000-170w.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#00e5ff; color:var(--ink);">Power Banks</span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">🏆</span>
+              <span>Top Rated</span>
+            </div>
             <img src="../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp"
      srcset="../images/products/ecoflow-rapid-power-bank-25000-170w-1-sm.webp 480w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1-md.webp 900w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="EcoFlow RAPID Power Bank (25,000mAh, 170W) - Power Banks review"
+     alt="EcoFlow RAPID Power Bank (25K, 170W) - Power Banks review"
      loading="lazy"
 >
           </div>
           <span class="brand">EcoFlow</span>
-          <h3>RAPID Power Bank (25,000mAh, 170W)</h3>
+          <h3>RAPID Power Bank (25K, 170W)</h3>
           <div class="specrow">
-            <span><strong>4.7</strong>/5</span>
+            <span><strong>4.4</strong>/5</span>
             <span><strong>25,000</strong> mAh</span>
             <span><strong>170</strong> W</span>
             <span><strong>565 g</strong></span>
@@ -735,11 +758,10 @@
            data-category="power-stations"
            data-price="139"
            data-date="2026-07-27"
-           data-rating="4.5"
+           data-rating="2.9"
            data-title="bluetti elite 10 mini">
         <a href="../reviews/bluetti-elite-10-mini-portable-power-station.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
             <img src="../images/products/bluetti-elite-10-mini-portable-power-station-1.webp"
      srcset="../images/products/bluetti-elite-10-mini-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-10-mini-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-10-mini-portable-power-station-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -750,7 +772,7 @@
           <span class="brand">BLUETTI</span>
           <h3>Elite 10 Mini</h3>
           <div class="specrow">
-            <span><strong>4.5</strong>/5</span>
+            <span><strong>2.9</strong>/5</span>
             <span><strong>128</strong> Wh</span>
             <span><strong>200</strong> W</span>
             <span><strong>1.8 kg</strong></span>
@@ -767,12 +789,14 @@
            data-category="power-stations"
            data-price="1260"
            data-date="2026-07-27"
-           data-rating="4.7"
+           data-rating="4.0"
            data-title="bluetti elite 300">
         <a href="../reviews/bluetti-elite-300-portable-power-station.html" class="card-body-link">
           <div class="product-photo">
-            <span class="rank" style="background:#a855f7; color:var(--ink);">Power Stations</span>
-            <span class="top-rated-badge" title="Top Rated"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.6 1.6 6.75L12 16.9l-6.2 3.31 1.6-6.75-5.2-4.6 6.9-.6z"></path></svg></span>
+            <div class="product-badge-pill">
+              <span class="badge-icon">💰</span>
+              <span>Best Value</span>
+            </div>
             <img src="../images/products/bluetti-elite-300-portable-power-station-1.webp"
      srcset="../images/products/bluetti-elite-300-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-300-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-300-portable-power-station-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
@@ -783,7 +807,7 @@
           <span class="brand">BLUETTI</span>
           <h3>Elite 300</h3>
           <div class="specrow">
-            <span><strong>4.7</strong>/5</span>
+            <span><strong>4.0</strong>/5</span>
             <span><strong>3,014.4</strong> Wh</span>
             <span><strong>2,400</strong> W</span>
             <span><strong>26.3 kg</strong></span>
@@ -793,6 +817,41 @@
         </a>
         <div class="card-buy-row">
           <a href="https://link.amazon/B06STIGVF" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="83.99"
+           data-date="2026-07-28"
+           data-rating="3.8"
+           data-title="ugreen nexode pro (25k, 200w)">
+        <a href="../reviews/ugreen-nexode-pro-powerbank-25000-200w.html" class="card-body-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">💰</span>
+              <span>Best Value</span>
+            </div>
+            <img src="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp"
+     srcset="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="UGREEN Nexode Pro (25K, 200W) - Power Banks review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (25K, 200W)</h3>
+          <div class="specrow">
+            <span><strong>3.8</strong>/5</span>
+            <span><strong>25,000</strong> mAh</span>
+            <span><strong>200</strong> W</span>
+            <span><strong>609 g</strong></span>
+          </div>
+          <p class="desc desc-fade">The UGREEN Nexode Pro Powerbank combines a 25000 mAh capacity with a 200W total output, featuring PD 3.1 support and an intelligent TFT display.</p>
+          <span class="price">~€83.99 <span class="price-est">(Est.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B02qHZFMF" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
       </div>
     </div>
@@ -809,7 +868,7 @@
   <div class="wrap">
     <div class="footer-brand">
       <a href="../index.html" class="logo">WattBench</a>
-      <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric 1.0 framework—no overly complex methodologies, just clear and honest data.</p>
+      <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
     </div>
     <div>
       <h4>Explore</h4>
@@ -833,12 +892,12 @@
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Chargers", "url": "reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.4, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25,000mAh, 170W)", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 3.6, "accent": "#a855f7"}, {"title": "DJI Power 1000 V2", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.3, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 3.3, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 3.0, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 3.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Chargers", "url": "reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.6, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25K, 170W)", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 2.9, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.0, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (25K, 200W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-powerbank-25000-200w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";
   window.WB_SEARCH_RESULTS_COUNT = "{count} results";
-  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search power banks, stations, or brands...";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search...";
   window.WB_SEARCH_PLACEHOLDER_FILTERED = "Search within {category}...";
   window.WB_SEARCH_PREFIX = "Search";
   window.WB_THEME_LABELS = { dark: "\u263d DARK", light: "\u2600 LIGHT" };

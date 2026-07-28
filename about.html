@@ -13,6 +13,25 @@
       theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
     }
     document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
   }catch(e){}
 })();
 </script>
@@ -47,10 +66,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/style.css">
-<style>
-:root{
---amber:#e8a13d;--amber-deep:#c17f22;}
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -63,6 +78,8 @@
 </script>
 </head>
 <body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
 
 <header class="site-header">
   <div class="wrap">
@@ -115,15 +132,7 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <div class="mobile-drawer-links">
-    <a href="index.html">Home</a>
-    <div class="mobile-drawer-group-label">Reviews</div>
-    <a href="reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
-    <a href="reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
-    <a href="reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
-    <a href="guides/index.html">Buying Guide</a>
-  </div>
-  <div class="mobile-drawer-foot">
+  <div class="mobile-drawer-controls">
     <div class="lang-switch">
       <a href="about.html" class="active lang-link" data-lang="en" hreflang="en">
         <span class="lang-flag">
@@ -144,6 +153,14 @@
       </span>
     </button>
   </div>
+  <div class="mobile-drawer-links">
+    <a href="index.html">Home</a>
+    <div class="mobile-drawer-group-label">Reviews</div>
+    <a href="reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+    <a href="reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+    <a href="reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+    <a href="guides/index.html">Buying Guide</a>
+  </div>
 </nav>
 
 <div class="disclosure">
@@ -158,20 +175,20 @@
 <section class="section-tight">
   <div class="wrap article">
     <h1>About WattBench</h1>
-    <p class="lede">WattBench (wattbench.eu) exists because most power device reviews read like the manufacturer wrote them. We wanted a site that leads with the spec sheet — real capacity, real output, real charge times — and only then tells you what it's actually like to own one.</p><h2>How we score</h2><p>Every unit we cover gets five sub-scores out of 5: value, power, portability, charge speed, and reliability. Those are weighted and averaged into the overall score you see on every review and in the comparison tables. The same rubric applies to every brand, and no manufacturer can pay to move up it. Our ratings are not conclusive, and mistakes can occasionally happen with the Rubric v.1.0 method.</p><h2>Pricing, Specs, and Disclaimers</h2><p>WattBench continuously checks prices and products. However, specs change, prices change, and manufacturers update firmware and hardware without much notice. Product labels, price indicators, and data discrepancies may occur over time. If you spot something out of date, please let us know so we can correct it as part of our review process.</p><p>This site is purely intended for hobbyists. We are not responsible for any mislabels, errors, or incorrect guidance resulting from data discrepancies.</p><h2>How we make money</h2><p>Some links on this site are affiliate links — if you buy through them, we may earn a commission at no extra cost to you. This never affects which products we cover or how we score them. See our <a href="affiliate-disclosure.html">affiliate disclosure</a> for the full policy.</p><h2>Privacy Policy</h2><p>WattBench takes user privacy seriously. We do not collect or process any personal data from our visitors.</p>
+    <p class="lede">WattBench (wattbench.eu) exists because most power device reviews read like the manufacturer wrote them. We wanted a site that leads with the spec sheet — real capacity, real output, real charge times — and only then tells you what it's actually like to own one.</p><h2>How we score</h2><p>Every unit we cover gets five sub-scores out of 5: value, power, portability, charge speed, and reliability. As of Rubric v1.5, these aren’t editorial guesses — each one is calculated automatically from the product’s real specs (price, capacity, weight, charge time, warranty). Rather than judging every product against some fixed abstract standard, each score is relative to the other products in its own category. For example: whichever power bank in our lineup is genuinely the lightest gets full marks on portability, the next-lightest gets a little less, and so on down the list — so a pocket power bank and a whole-home power station are never held to the same yardstick, and the strongest product in any given category is guaranteed to score full marks on whatever it’s genuinely best at, rather than potentially falling short of some arbitrary external bar. Those five scores are weighted and averaged into the overall score you see on every review and in the comparison tables. The same method applies to every brand, and no manufacturer can pay to move up it. Our ratings are not conclusive, and mistakes can occasionally happen with the Rubric v1.5 method.</p><p>Two of the five are worth a specific example. <strong>Power</strong> isn’t just raw capacity — a battery that’s huge but can only trickle out a few watts isn’t "powerful" in any useful sense, and one that can push a lot of wattage but empties again in minutes isn’t either. A genuinely powerful station or bank needs both: enough capacity (Wh) to run something for a reasonable stretch of time, <em>and</em> enough output (W) to actually run the thing you want plugged into it — so Power scores both together, not capacity alone. <strong>Efficiency</strong> (chargers only, replacing Charge Speed since a charger has no battery of its own to recharge) looks at GaN chip generation rather than raw wattage — a newer GaN design delivers power more cleanly than an older one at the same wattage figure, so two chargers rated at identical watts don’t automatically score the same here.</p><h2>What the badge means</h2><p>A product can carry one small badge on its photo — its single strongest, most distinctive strength. We deliberately show at most one badge per product, even if it would technically qualify for more, so it’s always clear what actually stands out. Each badge is earned automatically from the same specs behind the score above — nothing here is hand-picked:</p><ul><li>🏆 <strong>Top Rated</strong> — the highest-scoring product in its category.</li><li>💰 <strong>Best Value</strong> — the best price for what you get, among products that also score well overall, so a weak product can’t win this just by being cheap.</li><li>⚡ <strong>Fastest Charge</strong> — recharges quicker, relative to its size, than anything else in its category.</li><li>🪶 <strong>Lightest</strong> — the lowest weight in its category.</li></ul><p>Most products won’t carry a badge at all — only one product per category can hold each one.</p><h2>Pricing, Specs, and Disclaimers</h2><p>WattBench continuously checks prices and products. However, specs change, prices change, and manufacturers update firmware and hardware without much notice. Product labels, price indicators, and data discrepancies may occur over time. If you spot something out of date, please let us know so we can correct it as part of our review process.</p><p>This site is purely intended for hobbyists. We are not responsible for any mislabels, errors, or incorrect guidance resulting from data discrepancies.</p><h2>How we make money</h2><p>Some links on this site are affiliate links — if you buy through them, we may earn a commission at no extra cost to you. This never affects which products we cover or how we score them. See our <a href="affiliate-disclosure.html">affiliate disclosure</a> for the full policy.</p><h2>Privacy Policy</h2><p>WattBench takes user privacy seriously. We do not collect or process any personal data from our visitors.</p>
 
-    <h2>Rubric v1.0, visualized</h2>
-    <p>Five sub-scores, weighted, averaged into the number you see on every review. No hidden factors, no editorial thumb on the scale.</p>
+    <h2>Rubric v1.5, visualized</h2>
+    <p>Five sub-scores, computed automatically from real specs, weighted, and averaged into the number you see on every review. No hidden factors, no editorial thumb on the scale.</p>
     <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:25%"></div></div>
-    <span class="rubric-bar-pct">25%</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">20%</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:25%"></div></div>
-    <span class="rubric-bar-pct">25%</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:15%"></div></div>
+    <span class="rubric-bar-pct">15%</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Portability</span>
@@ -180,49 +197,49 @@
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Charge Speed</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:15%"></div></div>
-    <span class="rubric-bar-pct">15%</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">20%</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">20%</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">30%</span>
   </div>
 </div>
     <p class="rubric-footnote">For chargers, we swap Charge Speed for Efficiency — a charger has no battery of its own to recharge, but how cleanly and efficiently it delivers power to your devices is just as decision-relevant.</p>
 
     <h2>A worked example</h2>
-    <p>Here’s how that math plays out on a real product on this site — the EcoFlow DELTA Pro 3, which scores 4.5/5 overall:</p>
+    <p>Here’s how that math plays out on a real product on this site — the EcoFlow DELTA Pro 3, which scores 3.8/5 overall:</p>
     <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
-    <span class="rubric-bar-pct">4/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:96%"></div></div>
-    <span class="rubric-bar-pct">4.8/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:84%"></div></div>
-    <span class="rubric-bar-pct">4.2/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Charge Speed</span>
     <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5/5</span>
+    <span class="rubric-bar-pct">5.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:92%"></div></div>
-    <span class="rubric-bar-pct">4.6/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
   </div>
 </div>
     <p class="rubric-example-result">
       <span class="stars">★★★★☆</span>
-      <strong>4.5/5</strong>
+      <strong>3.8/5</strong>
     </p>
   </div>
 </section>
@@ -233,7 +250,7 @@
   <div class="wrap">
     <div class="footer-brand">
       <a href="index.html" class="logo">WattBench</a>
-      <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric 1.0 framework—no overly complex methodologies, just clear and honest data.</p>
+      <p class="fine">WattBench is a review site focused on power devices, including portable power stations, power banks, and chargers. We evaluate every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
     </div>
     <div>
       <h4>Explore</h4>
@@ -257,12 +274,12 @@
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Chargers", "url": "reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.4, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25,000mAh, 170W)", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Power Stations", "url": "reviews/anker-solix-f3800.html", "type": "review", "rating": 3.6, "accent": "#a855f7"}, {"title": "DJI Power 1000 V2", "subtitle": "Power Stations", "url": "reviews/dji-power-1000.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Power Banks", "url": "reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Chargers", "url": "reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Power Stations", "url": "reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Power Banks", "url": "reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Chargers", "url": "reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.3, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Power Stations", "url": "reviews/jackery-explorer-300d.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Chargers", "url": "reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Power Stations", "url": "reviews/ecoflow-delta-3.html", "type": "review", "rating": 3.3, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Power Stations", "url": "reviews/ecoflow-river-2-max.html", "type": "review", "rating": 3.0, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 3.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Chargers", "url": "reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.6, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25K, 170W)", "subtitle": "Power Banks", "url": "reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 2.9, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Power Stations", "url": "reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.0, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (25K, 200W)", "subtitle": "Power Banks", "url": "reviews/ugreen-nexode-pro-powerbank-25000-200w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";
   window.WB_SEARCH_RESULTS_COUNT = "{count} results";
-  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search power banks, stations, or brands...";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search...";
   window.WB_SEARCH_PLACEHOLDER_FILTERED = "Search within {category}...";
   window.WB_SEARCH_PREFIX = "Search";
   window.WB_THEME_LABELS = { dark: "\u263d DARK", light: "\u2600 LIGHT" };

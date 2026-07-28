@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // ---- Product photo gallery (review pages with more than one photo) ----
   initProductGallery();
-  initRubricPopover();
+  initRubricExplainerTabs();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
@@ -359,6 +359,7 @@ function initSiteSearch() {
 
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
+      e.preventDefault(); // stop the native form submit -- goToResults() below handles navigation, and also carries the category chip state a plain submit can't
       goToResults();
     } else if (e.key === "Backspace" && !input.value && activeCategory) {
       // Backspacing from an empty box is the natural way to "delete" the
@@ -369,7 +370,10 @@ function initSiteSearch() {
   });
 
   if (button) {
-    button.addEventListener("click", goToResults);
+    button.addEventListener("click", function (e) {
+      e.preventDefault(); // see the matching comment on the Enter-key handler above
+      goToResults();
+    });
   }
 
   document.addEventListener("click", function (e) {
@@ -726,77 +730,18 @@ function initLightbox() {
   });
 }
 
-function initRubricPopover() {
-  var wrap = document.querySelector(".rubric-trigger-wrap");
-  if (!wrap) return;
-  var trigger = wrap.querySelector(".rubric-trigger");
-  var popover = wrap.querySelector(".rubric-popover");
-  var closeBtn = wrap.querySelector(".rubric-popover-close");
-  var dragHandle = wrap.querySelector(".rubric-popover-title");
-
-  function resetPosition() {
-    popover.style.transition = "";
-    popover.style.position = "";
-    popover.style.left = "";
-    popover.style.top = "";
-    popover.style.right = "";
-    popover.style.bottom = "";
-    popover.style.transform = "";
-  }
-
-  trigger.addEventListener("click", function (e) {
-    e.stopPropagation();
-    resetPosition(); // always reopen centered/anchored, not wherever it was last dragged
-    wrap.classList.add("open");
+function initRubricExplainerTabs() {
+  var tabs = document.querySelectorAll(".rubric-explainer-tab");
+  var textEl = document.getElementById("rubric-explainer-text");
+  if (!tabs.length || !textEl) return;
+  tabs.forEach(function (tab) {
+    tab.addEventListener("click", function (e) {
+      e.stopPropagation(); // don't let this bubble up into the popover's own drag/close handling
+      tabs.forEach(function (t) { t.classList.remove("active"); });
+      tab.classList.add("active");
+      textEl.textContent = tab.getAttribute("data-explain");
+    });
   });
-
-  if (closeBtn) {
-    closeBtn.addEventListener("click", function (e) {
-      e.stopPropagation();
-      wrap.classList.remove("open");
-    });
-  }
-
-  if (dragHandle) {
-    var dragging = false;
-    var startX, startY, startLeft, startTop;
-
-    dragHandle.addEventListener("pointerdown", function (e) {
-      dragging = true;
-      var rect = popover.getBoundingClientRect();
-      popover.style.transition = "none"; // must be set before the lines below, so the position swap isn't animated
-      popover.style.position = "fixed";
-      popover.style.left = rect.left + "px";
-      popover.style.top = rect.top + "px";
-      popover.style.right = "auto";
-      popover.style.bottom = "auto";
-      popover.style.transform = "none";
-      startX = e.clientX;
-      startY = e.clientY;
-      startLeft = rect.left;
-      startTop = rect.top;
-      dragHandle.setPointerCapture(e.pointerId);
-    });
-
-    dragHandle.addEventListener("pointermove", function (e) {
-      if (!dragging) return;
-      var newLeft = startLeft + (e.clientX - startX);
-      var newTop = startTop + (e.clientY - startY);
-      var margin = 20;
-      newLeft = Math.max(margin - popover.offsetWidth, Math.min(newLeft, window.innerWidth - margin));
-      newTop = Math.max(0, Math.min(newTop, window.innerHeight - margin));
-      popover.style.left = newLeft + "px";
-      popover.style.top = newTop + "px";
-    });
-
-    function endDrag() {
-      if (!dragging) return;
-      dragging = false;
-      popover.style.transition = ""; // restore normal fade transition for next close/open
-    }
-    dragHandle.addEventListener("pointerup", endDrag);
-    dragHandle.addEventListener("pointercancel", endDrag);
-  }
 }
 
 function initRecentStacks() {
@@ -1092,60 +1037,32 @@ function initProductFinder() {
 
   updateWizardView();
 
-  var USAGE_CATEGORY = { phone: "power-banks", laptop: "power-stations", fridge: "power-stations" };
+  // Step 1, device type -- Wh/W thresholds against the real catalog
+  // rather than a fixed category mapping, so a small power station and a
+  // large power bank can both legitimately show up for "Medium Gear" if
+  // their numbers actually fit, instead of one category being silently
+  // excluded just because of what it's called.
+  var USAGE_FILTERS = {
+    phone: function (item) { return item.category === "power-banks" || item.effective_wh <= 300; },
+    laptop: function (item) { return item.effective_wh >= 300 && item.effective_wh <= 1000; },
+    fridge: function (item) { return item.effective_wh >= 1000 && item.output_w >= 1000; },
+  };
+
+  // Step 2, use case -- real hard filters now (this used to be a
+  // ranking-only formula that never actually excluded anything). "On the
+  // Go" deliberately drops the "AND category IN (power-bank,
+  // power-station)" clause a station-inclusive version of this rule
+  // would need: a real power station is never <=1.5kg, so that clause
+  // never excluded anything a weight threshold alone doesn't already
+  // handle -- keeping it would've been redundant, not more correct.
+  var USECASE_FILTERS = {
+    traveling: function (item) { return item.weight_kg != null && item.weight_kg <= 1.5; },
+    camping: function (item) { return item.weight_kg != null && item.weight_kg <= 25 && item.effective_wh >= 300; },
+    offgrid: function (item) { return item.category === "power-stations" && item.effective_wh >= 500; },
+  };
   var BUDGET_RANGES = { micro: [0, 100], low: [100, 400], high: [400, Infinity] };
 
-  function rankByUsecase(candidates, usecase) {
-    var sorted = candidates.slice();
-    if (usecase === "traveling") {
-      sorted.sort(function (a, b) {
-        var as = a.portability + a.charge_speed, bs = b.portability + b.charge_speed;
-        if (bs !== as) return bs - as;
-        var aw = a.weight_kg == null ? Infinity : a.weight_kg;
-        var bw = b.weight_kg == null ? Infinity : b.weight_kg;
-        return aw - bw;
-      });
-    } else if (usecase === "camping") {
-      sorted.sort(function (a, b) {
-        var as = a.portability + a.value + (a.is_rugged ? 0.5 : 0);
-        var bs = b.portability + b.value + (b.is_rugged ? 0.5 : 0);
-        if (bs !== as) return bs - as;
-        var aw = a.weight_kg == null ? Infinity : a.weight_kg;
-        var bw = b.weight_kg == null ? Infinity : b.weight_kg;
-        return (b.effective_wh / bw) - (a.effective_wh / aw);
-      });
-    } else if (usecase === "offgrid") {
-      var maxWh = Math.max.apply(null, candidates.map(function (p) { return p.effective_wh; })) || 1;
-      sorted.sort(function (a, b) {
-        var aScore = a.reliability * 0.6 + (5 * a.effective_wh / maxWh) * 0.4;
-        var bScore = b.reliability * 0.6 + (5 * b.effective_wh / maxWh) * 0.4;
-        if (bScore !== aScore) return bScore - aScore;
-        return b.output_w - a.output_w;
-      });
-    }
-    return sorted;
-  }
-
-  function pickRanked(candidates, usecases) {
-    if (!usecases.length) {
-      return candidates.slice().sort(function (a, b) { return b.rating - a.rating; });
-    }
-    if (usecases.length === 1) {
-      return rankByUsecase(candidates, usecases[0]);
-    }
-    var rankMaps = usecases.map(function (uc) {
-      var ranked = rankByUsecase(candidates, uc);
-      var map = {};
-      ranked.forEach(function (item, i) { map[item.id] = i; });
-      return map;
-    });
-    var withAvgRank = candidates.map(function (item) {
-      var sum = rankMaps.reduce(function (acc, map) { return acc + map[item.id]; }, 0);
-      return { item: item, avgRank: sum / rankMaps.length };
-    });
-    withAvgRank.sort(function (a, b) { return a.avgRank - b.avgRank; });
-    return withAvgRank.map(function (x) { return x.item; });
-  }
+  function byRating(a, b) { return b.rating - a.rating; }
 
   function smallImageSrc(src) {
     return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
@@ -1170,8 +1087,14 @@ function initProductFinder() {
       ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="">'
       : "\u26A1";
     var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
-    var badgeHtml = item.is_top_rated
-      ? '<span class="top-rated-badge" title="' + (window.WB_TOP_RATED_LABEL || "Top Rated") + '"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.6 1.6 6.75L12 16.9l-6.2 3.31 1.6-6.75-5.2-4.6 6.9-.6z"></path></svg></span>'
+    var badgeLabels = {
+      top_rated: window.WB_TOP_RATED_LABEL || "Top Rated",
+      best_value: window.WB_BEST_VALUE_LABEL || "Best Value",
+      fastest_charge: window.WB_FASTEST_CHARGE_LABEL || "Fastest Charge",
+      lightest: window.WB_LIGHTEST_LABEL || "Lightest"
+    };
+    var badgeHtml = item.primary_badge
+      ? '<div class="product-badge-pill"><span class="badge-icon">' + item.primary_badge_emoji + '</span><span>' + badgeLabels[item.primary_badge] + '</span></div>'
       : "";
 
     // The whole card is one link to the review -- no separate "View
@@ -1188,27 +1111,38 @@ function initProductFinder() {
 
   function computeMatch() {
     var pool = window.WB_FINDER_INDEX.slice();
-
-    if (state.usage.length) {
-      var categories = state.usage.map(function (u) { return USAGE_CATEGORY[u]; });
-      pool = pool.filter(function (item) { return categories.indexOf(item.category) !== -1; });
-    }
-    if (!pool.length) return null;
-
     var usedFallback = false;
+
+    var usageFn = state.usage.length ? USAGE_FILTERS[state.usage[0]] : null;
+    var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
+
+    var afterUsage = usageFn ? pool.filter(usageFn) : pool;
+    if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+
+    var narrowed = afterUsage;
+    if (usecaseFn) {
+      var afterUsecase = afterUsage.filter(usecaseFn);
+      if (afterUsecase.length) {
+        narrowed = afterUsecase;
+      } else {
+        usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+      }
+    }
+
     if (state.budget.length) {
       var ranges = state.budget.map(function (b) { return BUDGET_RANGES[b]; });
-      var inBudget = pool.filter(function (item) {
+      var inBudget = narrowed.filter(function (item) {
         return ranges.some(function (r) { return item.price_eur >= r[0] && item.price_eur <= r[1]; });
       });
       if (inBudget.length) {
-        pool = inBudget;
+        narrowed = inBudget;
       } else {
         usedFallback = true; // no exact match in any selected range -- show the closest fit instead
       }
     }
 
-    return { best: pickRanked(pool, state.usecase)[0], usedFallback: usedFallback };
+    narrowed = narrowed.slice().sort(byRating);
+    return { best: narrowed[0], usedFallback: usedFallback };
   }
 
   function runMatch() {

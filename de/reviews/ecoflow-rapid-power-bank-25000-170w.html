@@ -13,6 +13,25 @@
       theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
     }
     document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
   }catch(e){}
 })();
 </script>
@@ -24,22 +43,22 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <meta name="theme-color" content="#e8a13d">
-<title>EcoFlow RAPID Power Bank (25,000mAh, 170W) Review | WattBench</title>
-<meta name="description" content="EcoFlow RAPID Power Bank (25,000mAh, 170W) review: 25,000mAh capacity, 170W output. Full specs, pros and cons, and who this power bank is actually for.">
+<title>EcoFlow RAPID Power Bank (25K, 170W) Review | WattBench</title>
+<meta name="description" content="EcoFlow RAPID Power Bank (25K, 170W) review: 25,000mAh capacity, 170W output. Full specs, pros and cons, and who this power bank is actually for.">
 <link rel="canonical" href="https://wattbench.eu/de/reviews/ecoflow-rapid-power-bank-25000-170w.html">
 <link rel="alternate" hreflang="en" href="https://wattbench.eu/reviews/ecoflow-rapid-power-bank-25000-170w.html">
 <link rel="alternate" hreflang="de" href="https://wattbench.eu/de/reviews/ecoflow-rapid-power-bank-25000-170w.html">
 <link rel="alternate" hreflang="x-default" href="https://wattbench.eu/reviews/ecoflow-rapid-power-bank-25000-170w.html">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="WattBench">
-<meta property="og:title" content="EcoFlow RAPID Power Bank (25,000mAh, 170W) Review | WattBench">
-<meta property="og:description" content="EcoFlow RAPID Power Bank (25,000mAh, 170W) review: 25,000mAh capacity, 170W output. Full specs, pros and cons, and who this power bank is actually for.">
+<meta property="og:title" content="EcoFlow RAPID Power Bank (25K, 170W) Review | WattBench">
+<meta property="og:description" content="EcoFlow RAPID Power Bank (25K, 170W) review: 25,000mAh capacity, 170W output. Full specs, pros and cons, and who this power bank is actually for.">
 <meta property="og:url" content="https://wattbench.eu/de/reviews/ecoflow-rapid-power-bank-25000-170w.html">
 <meta property="og:locale" content="de">
 <meta property="og:image" content="https://wattbench.eu/images/products/ecoflow-rapid-power-bank-25000-170w-1.webp">
 <meta property="og:image:width" content="1500">
 <meta property="og:image:height" content="1500">
-<meta property="og:image:alt" content="EcoFlow RAPID Power Bank (25,000mAh, 170W)">
+<meta property="og:image:alt" content="EcoFlow RAPID Power Bank (25K, 170W)">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://wattbench.eu/images/products/ecoflow-rapid-power-bank-25000-170w-1.webp">
 
@@ -47,21 +66,17 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../css/style.css">
-<style>
-:root{
---amber:#e8a13d;--amber-deep:#c17f22;}
-</style>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": "EcoFlow RAPID Power Bank (25,000mAh, 170W)",
+  "name": "EcoFlow RAPID Power Bank (25K, 170W)",
   "brand": {"@type":"Brand","name":"EcoFlow"},
   "description": "Die EcoFlow RAPID Powerbank (25.000mAh, 170W) liefert eine Gesamtausgangsleistung von 170W \u00fcber drei Ports, darunter zwei 140W USB-C-Anschl\u00fcsse. Mit flugfreundlichen 25.000mAh, ultraschnellem 140W Laden (0-50% in 20 Minuten) und smartem TFT-Bildschirm ist sie der ideale Begleiter f\u00fcr unterwegs.",
   "image": "https://wattbench.eu/images/products/ecoflow-rapid-power-bank-25000-170w-1.webp",
   "review": {
     "@type": "Review",
-    "reviewRating": {"@type":"Rating","ratingValue":"4.7","bestRating":"5"},
+    "reviewRating": {"@type":"Rating","ratingValue":"4.4","bestRating":"5"},
     "author": {"@type":"Organization","name":"WattBench"}
   },
   "offers": {"@type":"Offer","priceCurrency":"EUR","price":"89","availability":"https://schema.org/InStock"}
@@ -82,12 +97,14 @@
   "itemListElement": [
     {"@type":"ListItem","position":1,"name":"Startseite","item":"https://wattbench.eu/de/"},
     {"@type":"ListItem","position":2,"name":"Powerbanks","item":"https://wattbench.eu/de/reviews/index.html?category=power-banks"},
-    {"@type":"ListItem","position":3,"name":"EcoFlow RAPID Power Bank (25,000mAh, 170W)","item":"https://wattbench.eu/de/reviews/ecoflow-rapid-power-bank-25000-170w.html"}
+    {"@type":"ListItem","position":3,"name":"EcoFlow RAPID Power Bank (25K, 170W)","item":"https://wattbench.eu/de/reviews/ecoflow-rapid-power-bank-25000-170w.html"}
   ]
 }
 </script>
 </head>
 <body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
 
 <header class="site-header">
   <div class="wrap">
@@ -140,15 +157,7 @@
       <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
     </button>
   </div>
-  <div class="mobile-drawer-links">
-    <a href="../../de/index.html">Startseite</a>
-    <div class="mobile-drawer-group-label">Testberichte</div>
-    <a href="../../de/reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
-    <a href="../../de/reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
-    <a href="../../de/reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
-    <a href="../../de/guides/index.html">Kaufratgeber</a>
-  </div>
-  <div class="mobile-drawer-foot">
+  <div class="mobile-drawer-controls">
     <div class="lang-switch">
       <a href="../../reviews/ecoflow-rapid-power-bank-25000-170w.html" class=" lang-link" data-lang="en" hreflang="en">
         <span class="lang-flag">
@@ -169,6 +178,14 @@
       </span>
     </button>
   </div>
+  <div class="mobile-drawer-links">
+    <a href="../../de/index.html">Startseite</a>
+    <div class="mobile-drawer-group-label">Testberichte</div>
+    <a href="../../de/reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+    <a href="../../de/reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+    <a href="../../de/reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+    <a href="../../de/guides/index.html">Kaufratgeber</a>
+  </div>
 </nav>
 
 <div class="disclosure">
@@ -177,55 +194,21 @@
 
 <main>
 <div class="wrap">
-  <p class="breadcrumb"><a href="../../de/index.html">Startseite</a> / <a href="../../de/reviews/index.html?category=power-banks" style="color:#00e5ff;">Powerbanks</a> / EcoFlow RAPID Power Bank (25,000mAh, 170W)</p>
+  <p class="breadcrumb"><a href="../../de/index.html">Startseite</a> / <a href="../../de/reviews/index.html?category=power-banks" style="color:#00e5ff;">Powerbanks</a> / EcoFlow RAPID Power Bank (25K, 170W)</p>
 </div>
 
 <section class="section-tight">
   <div class="wrap review-layout">
     <article class="review-main article">
     <h1>
-      EcoFlow RAPID Power Bank (25,000mAh, 170W) <span class="h1-suffix">Test</span>
-      <span class="inline-rating">★★★★★ <span class="inline-rating-num">4.7/5</span></span>
+      EcoFlow RAPID Power Bank (25K, 170W) <span class="h1-suffix">Test</span>
+      <span class="inline-rating">★★★★☆ <span class="inline-rating-num">4.4/5</span></span>
     </h1>
     <div class="review-meta-row">
       <span>Powerbanks</span>
       <span>Leistungsstarke Reise-Powerbank</span>
       <span>~€89 (Gesch.)</span>
       <span>Getestet am 27. Juli 2026</span>
-      <span class="rubric-trigger-wrap">
-        <button type="button" class="rubric-trigger">Getestet nach Rubric v1.0</button>
-        <div class="rubric-popover" role="tooltip">
-          <button type="button" class="rubric-popover-close" aria-label="Schließen">✕</button>
-          <div class="rubric-popover-title">So setzt sich diese Bewertung zusammen</div>
-          <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Preis-Leistung</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:98%"></div></div>
-    <span class="rubric-bar-pct">4.9/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Leistung</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:92%"></div></div>
-    <span class="rubric-bar-pct">4.6/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portabilität</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:94%"></div></div>
-    <span class="rubric-bar-pct">4.7/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Ladegeschwindigkeit</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:96%"></div></div>
-    <span class="rubric-bar-pct">4.8/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Zuverlässigkeit</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
-    <span class="rubric-bar-pct">4.5/5</span>
-  </div>
-</div>
-        </div>
-      </span>
     </div>
 <p class="best-for-line"><strong>Am besten geeignet für:</strong> Gleichzeitiges Laden mehrerer Geräte, mobiles Arbeiten, flugtaugliche Laptop-Stromversorgung</p>    <div class="top-buy-row">
       <a class="top-buy-btn" href="https://link.amazon/B0iK8nzLX" rel="sponsored nofollow" target="_blank">
@@ -236,17 +219,21 @@
     </div>
 
     <div class="product-gallery review-photo" id="product-gallery">
+      <div class="product-badge-pill">
+        <span class="badge-icon">🏆</span>
+        <span>Bestbewertet</span>
+      </div>
       <div class="gallery-track">
         <div class="gallery-slide" data-full="../../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp" data-credit="ecoflow.com"><img src="../../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp"
      srcset="../../images/products/ecoflow-rapid-power-bank-25000-170w-1-sm.webp 480w, ../../images/products/ecoflow-rapid-power-bank-25000-170w-1-md.webp 900w, ../../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp 1600w"
      sizes="(max-width: 900px) 100vw, 720px"
-     alt="EcoFlow RAPID Power Bank (25,000mAh, 170W) — photo 1 of 2"
+     alt="EcoFlow RAPID Power Bank (25K, 170W) — photo 1 of 2"
      loading="eager"
 fetchpriority="high"></div>
         <div class="gallery-slide" data-full="../../images/products/ecoflow-rapid-power-bank-25000-170w-2.webp" data-credit=""><img src="../../images/products/ecoflow-rapid-power-bank-25000-170w-2.webp"
      srcset="../../images/products/ecoflow-rapid-power-bank-25000-170w-2-sm.webp 480w, ../../images/products/ecoflow-rapid-power-bank-25000-170w-2-md.webp 900w, ../../images/products/ecoflow-rapid-power-bank-25000-170w-2.webp 1600w"
      sizes="(max-width: 900px) 100vw, 720px"
-     alt="EcoFlow RAPID Power Bank (25,000mAh, 170W) — photo 2 of 2"
+     alt="EcoFlow RAPID Power Bank (25K, 170W) — photo 2 of 2"
      loading="lazy"
 ></div>
       </div>
@@ -263,11 +250,12 @@ fetchpriority="high"></div>
 
     <div class="spec-strip">
       <div class="spec-strip-item"><strong>Kapazität</strong> 25,000 mAh</div>
-      <div class="spec-strip-item"><strong>Dauerhafte AC-Ausgangsleistung</strong> 170 W (140W max single port)</div>
+      <div class="spec-strip-item"><strong>Gesamtausgang</strong> 170 W (140W max single port)</div>
       <div class="spec-strip-item"><strong>Akku-Chemie</strong> Ternary Lithium</div>
       <div class="spec-strip-item"><strong>Lebensdauer (Zyklen)</strong> 300 to 80%</div>
+      <div class="spec-strip-item"><strong>Gesamteingang</strong> 140 W</div>
       <div class="spec-strip-item"><strong>Gewicht</strong> 565 g</div>
-      <div class="spec-strip-item"><strong>AC-Ladezeit 0–80%</strong> 0 to 50% in approx. 20 min (140W input)</div>
+      <div class="spec-strip-item"><strong>Ladezeit 0–100%</strong> 20 min</div>
       <div class="spec-strip-item"><strong>Garantie</strong> 2 Jahre</div>
     </div>
 
@@ -317,6 +305,49 @@ fetchpriority="high"></div>
     </article>
 
     <aside class="review-sidebar">
+      <div class="section-head"><div class="eyebrow">Getestet nach Rubric v1.5</div><h2>So setzt sich diese Bewertung zusammen</h2></div>
+      <div class="rubric-static-block">
+        <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis-Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladegeschwindigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+        <div class="rubric-total-line">
+          <span class="rubric-total-label">Gesamtbewertung</span>
+          <span class="rubric-total-stars">★★★★☆</span>
+          <span class="rubric-total-score">4.4/5</span>
+        </div>
+        <div class="rubric-explainer-tabs">
+          <button type="button" class="rubric-explainer-tab active" data-explain="Preis-Leistung vergleicht den Preis mit der tatsächlichen Leistungsfähigkeit — Kapazität und Ausgangsleistung zusammen bei Stationen und Powerbanks, oder Ein- und Ausgangsleistung zusammen bei Ladegeräten — nicht den Preis allein.">Preis-Leistung</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Leistung spiegelt echte Leistungsfähigkeit wider, nicht nur eine große Zahl — Kapazität und Ausgangsleistung zusammen bei Stationen und Powerbanks, damit ein riesiger Akku ohne echte Wattzahl nicht als leistungsstark gilt. Bei Ladegeräten ist es einfach die höchste Ausgangsleistung seiner Kategorie.">Leistung</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Portabilität bewertet das Gewicht im Vergleich zum Rest seiner Kategorie, das leichteste zuerst. Bei Ladegeräten ist es das Gewicht im Verhältnis zur Ausgangsleistung, damit ein kleines Ladegerät ohne viel Leistung nicht automatisch gewinnt, nur weil es winzig ist.">Portabilität</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Ladegeschwindigkeit misst, wie schnell ein Akku tatsächlich im Verhältnis zu seiner Größe lädt, nicht nur die reine Minutenzahl — ein großer Akku, der in ähnlicher Zeit wie ein kleiner lädt, gilt daher zu Recht als schneller. Bei Ladegeräten wird daraus Effizienz.">Ladegeschwindigkeit</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Zuverlässigkeit basiert auf der Garantiedauer, bewertet im Vergleich zum Rest seiner Kategorie — je länger die Abdeckung, desto höher die Bewertung.">Zuverlässigkeit</button>
+        </div>
+        <p class="rubric-value-explainer" id="rubric-explainer-text">Preis-Leistung vergleicht den Preis mit der tatsächlichen Leistungsfähigkeit — Kapazität und Ausgangsleistung zusammen bei Stationen und Powerbanks, oder Ein- und Ausgangsleistung zusammen bei Ladegeräten — nicht den Preis allein.</p>
+      </div>
       <div class="section-head"><div class="eyebrow">Vergleichen</div><h2>Ähnliche Produkte</h2></div>
       <div class="sidebar-card">
         <div class="sidebar-card-photo"><img src="../../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp"
@@ -333,6 +364,20 @@ fetchpriority="high"></div>
         </div>
       </div>
       <div class="sidebar-card">
+        <div class="sidebar-card-photo"><img src="../../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp"
+     srcset="../../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-sm.webp 480w, ../../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-md.webp 900w, ../../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp 1600w"
+     sizes="64px"
+     alt="UGREEN Nexode Pro (25K, 200W)"
+     loading="lazy"
+></div>
+        <div class="sidebar-card-text">
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (25K, 200W)</h3>
+          <p class="desc desc-fade">Die UGREEN Nexode Pro Powerbank kombiniert eine Kapazität von 25000 mAh mit einer Gesamtleistung von 200W, bietet Unterstützung für PD 3.1 und verfügt über ein intelligentes TFT-Display.</p>
+          <a class="sidebar-card-link" href="../../de/reviews/ugreen-nexode-pro-powerbank-25000-200w.html">Ansehen →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
         <div class="sidebar-card-photo"><img src="../../images/products/anker-powerbank-a1695-1.webp"
      srcset="../../images/products/anker-powerbank-a1695-1-sm.webp 480w, ../../images/products/anker-powerbank-a1695-1-md.webp 900w, ../../images/products/anker-powerbank-a1695-1.webp 1600w"
      sizes="64px"
@@ -346,20 +391,6 @@ fetchpriority="high"></div>
           <a class="sidebar-card-link" href="../../de/reviews/anker-powerbank-a1695-165w.html">Ansehen →</a>
         </div>
       </div>
-      <div class="sidebar-card">
-        <div class="sidebar-card-photo"><img src="../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp"
-     srcset="../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-sm.webp 480w, ../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-md.webp 900w, ../../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp 1600w"
-     sizes="64px"
-     alt="EcoFlow RAPID Pro Power Bank 300W"
-     loading="lazy"
-></div>
-        <div class="sidebar-card-text">
-          <span class="brand">EcoFlow</span>
-          <h3>RAPID Pro Power Bank 300W</h3>
-          <p class="desc desc-fade">Die EcoFlow RAPID Pro Powerbank (27.650mAh, 300W) liefert gewaltige 300W Gesamtausgangsleistung über vier USB-C-Ports, darunter zwei 140W-Anschlüsse und ein integriertes 140W-Einziehkabel. Mit maximaler flugkonformer 99.54Wh Kapazität, einer rasanten Ladezeit von 20 Minuten auf 80% und modulares Design setzt sie neue Maßstäbe.</p>
-          <a class="sidebar-card-link" href="../../de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html">Ansehen →</a>
-        </div>
-      </div>
     </aside>
   </div>
 </section>
@@ -370,7 +401,7 @@ fetchpriority="high"></div>
   <div class="wrap">
     <div class="footer-brand">
       <a href="../../de/index.html" class="logo">WattBench</a>
-      <p class="fine">WattBench ist eine Testseite für Power-Geräte — darunter tragbare Powerstations, Powerbanks und Ladegeräte. Wir bewerten jedes Gerät nach unserem klaren Rubric-1.0-Framework: keine überkomplizierte Methodik, nur klare und ehrliche Daten.</p>
+      <p class="fine">WattBench ist eine Testseite für Power-Geräte — darunter tragbare Powerstations, Powerbanks und Ladegeräte. Wir bewerten jedes Gerät nach unserem klaren Rubric-v1.5-Framework: keine überkomplizierte Methodik, nur klare und ehrliche Daten. Wir hoffen, du findest das passende Gerät für deine Ansprüche! Wir erhalten möglicherweise eine Provision für Käufe über Links auf dieser Website.</p>
     </div>
     <div>
       <h4>Entdecken</h4>
@@ -394,12 +425,12 @@ fetchpriority="high"></div>
 <script>
   window.WB_LOCALE = "de";
   window.WB_ROOT = "../../";
-  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "DJI Power 1000", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 4.2, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 4.3, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 4.6, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 4.6, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 4.2, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Ladegeräte", "url": "de/reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.4, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25,000mAh, 170W)", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.7, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 4.5, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.7, "accent": "#a855f7"}];
+  window.WB_SEARCH_INDEX = [{"title": "Anker F3800", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-f3800.html", "type": "review", "rating": 3.6, "accent": "#a855f7"}, {"title": "DJI Power 1000 V2", "subtitle": "Powerstations", "url": "de/reviews/dji-power-1000.html", "type": "review", "rating": 4.4, "accent": "#a855f7"}, {"title": "EcoFlow DELTA Pro 3", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-pro-3.html", "type": "review", "rating": 3.8, "accent": "#a855f7"}, {"title": "Anker A1695", "subtitle": "Powerbanks", "url": "de/reviews/anker-powerbank-a1695-165w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Nano 65W", "subtitle": "Ladegeräte", "url": "de/reviews/anker-nano-65w-3-port.html", "type": "review", "rating": 4.2, "accent": "#00d98b"}, {"title": "Anker SOLIX C1000 Gen 2", "subtitle": "Powerstations", "url": "de/reviews/anker-solix-c1000-gen-2.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "Anker Prime Power Bank (26K, 300W)", "subtitle": "Powerbanks", "url": "de/reviews/anker-prime-powerbank-26k-300w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}, {"title": "Anker Prime Charger (160W, 3 Ports)", "subtitle": "Ladegeräte", "url": "de/reviews/anker-prime-charger-160w-3-port.html", "type": "review", "rating": 4.3, "accent": "#00d98b"}, {"title": "Jackery Explorer 300D", "subtitle": "Powerstations", "url": "de/reviews/jackery-explorer-300d.html", "type": "review", "rating": 3.4, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (20000mAh, 165W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "UGREEN Nexode 45W", "subtitle": "Ladegeräte", "url": "de/reviews/ugreen-nexode-45w-retractable-cable-charger.html", "type": "review", "rating": 4.5, "accent": "#00d98b"}, {"title": "EcoFlow DELTA 3 Series", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-delta-3.html", "type": "review", "rating": 3.3, "accent": "#a855f7"}, {"title": "EcoFlow RIVER 2 Max", "subtitle": "Powerstations", "url": "de/reviews/ecoflow-river-2-max.html", "type": "review", "rating": 3.0, "accent": "#a855f7"}, {"title": "BLUETTI Elite 100 V2", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-100-v2.html", "type": "review", "rating": 3.7, "accent": "#a855f7"}, {"title": "EcoFlow RAPID Pro Power Bank 300W", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-pro-power-bank-27650-300w.html", "type": "review", "rating": 3.9, "accent": "#00e5ff"}, {"title": "EcoFlow RAPID Pro Desktop Charger (320W)", "subtitle": "Ladegeräte", "url": "de/reviews/ecoflow-rapid-pro-desktop-charger-320w.html", "type": "review", "rating": 4.6, "accent": "#00d98b"}, {"title": "EcoFlow RAPID Power Bank (25K, 170W)", "subtitle": "Powerbanks", "url": "de/reviews/ecoflow-rapid-power-bank-25000-170w.html", "type": "review", "rating": 4.4, "accent": "#00e5ff"}, {"title": "BLUETTI Elite 10 Mini", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-10-mini-portable-power-station.html", "type": "review", "rating": 2.9, "accent": "#a855f7"}, {"title": "BLUETTI Elite 300", "subtitle": "Powerstations", "url": "de/reviews/bluetti-elite-300-portable-power-station.html", "type": "review", "rating": 4.0, "accent": "#a855f7"}, {"title": "UGREEN Nexode Pro (25K, 200W)", "subtitle": "Powerbanks", "url": "de/reviews/ugreen-nexode-pro-powerbank-25000-200w.html", "type": "review", "rating": 3.8, "accent": "#00e5ff"}];
   window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
   window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
   window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";
   window.WB_SEARCH_RESULTS_COUNT = "{count} Ergebnisse";
-  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Powerbanks, Stationen oder Marken suchen...";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Suchen...";
   window.WB_SEARCH_PLACEHOLDER_FILTERED = "Suche innerhalb {category}...";
   window.WB_SEARCH_PREFIX = "Suche";
   window.WB_THEME_LABELS = { dark: "\u263d DUNKEL", light: "\u2600 HELL" };
