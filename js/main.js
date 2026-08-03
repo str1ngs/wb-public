@@ -171,19 +171,39 @@ function showLanguageBanner(langCode, text) {
 
 function initSiteSearch() {
   var input = document.querySelector(".site-search-input");
-  if (!input || !window.WB_SEARCH_INDEX) return;
+  if (!input) return;
   var resultsBox = document.querySelector(".site-search-results");
   var button = document.querySelector(".site-search-btn");
   var chip = document.getElementById("search-cat-chip");
   var chipLabel = chip ? chip.querySelector(".chip-label") : null;
   var chipRemove = chip ? chip.querySelector(".chip-remove") : null;
-  var data = window.WB_SEARCH_INDEX; // embedded at build time -- no fetch, works over file:// too
-  var categories = window.WB_CATEGORIES || [];
+  var categories = window.WB_CATEGORIES || []; // tiny (one row per category) -- stays inline, no reason to fetch this separately
   var activeCategory = null; // the locked chip, if any -- {id, label, accent, icon}
 
   var VISIBLE_ROWS = 5;
   var RENDER_CAP = 20; // plenty for this catalog size; scroll handles the rest
   var MIN_QUERY_LENGTH = 2;
+
+  // The full product index used to be embedded inline in EVERY page's
+  // HTML (window.WB_SEARCH_INDEX) -- meaning every visitor downloaded
+  // the whole catalog's search data on every single page load, whether
+  // they ever touched search or not, and that payload only grows as the
+  // catalog does. Fetched lazily now instead -- on first focus, not on
+  // page load -- same principle as the /reviews/ hub's search. One real
+  // trade-off, not a bug if you see it: fetch() is blocked under
+  // file://, so this specifically no longer works opening a page
+  // straight from disk. Only works served over real HTTP -- tools/
+  // start.py's local server, or the live deployed site.
+  var searchData = null;
+  var indexPromise = null;
+  function loadIndex() {
+    if (indexPromise) return indexPromise;
+    indexPromise = fetch(window.WB_ROOT + "search-index.json")
+      .then(function (r) { return r.json(); })
+      .then(function (data) { searchData = data; return data; })
+      .catch(function () { searchData = []; return searchData; });
+    return indexPromise;
+  }
 
   var CAT_ICONS = {
     bolt: '<path d="M13 2 4 14h6l-1 8 9-12h-6z"></path>',
@@ -246,7 +266,10 @@ function initSiteSearch() {
   // Default state (nothing typed, no category chip): surface the 3
   // categories rather than a generic "recent searches" list, since that's
   // the whole shape of this catalog -- picking a category is almost
-  // always the first real move a visitor makes here.
+  // always the first real move a visitor makes here. Doesn't need
+  // searchData at all -- categories (WB_CATEGORIES) are already available,
+  // so this renders instantly regardless of whether the index fetch below
+  // has landed yet.
   function renderSuggested() {
     if (!categories.length) { resultsBox.classList.remove("open"); return; }
     var heading = '<div class="site-search-heading">' + (window.WB_SEARCH_SUGGESTED || "Suggested Categories") + '</div>';
@@ -320,30 +343,36 @@ function initSiteSearch() {
     // small and an empty query there just means "show the whole category".
     if (!activeCategory && query.length < MIN_QUERY_LENGTH) { renderSuggested(); return; }
 
-    var pool = activeCategory
-      ? data.filter(function (item) { return item.subtitle === activeCategory.label; })
-      : data;
+    // Waits on the lazy-loaded index rather than reading an already-
+    // embedded global -- in practice this resolves near-instantly for
+    // anyone who actually types something, since loadIndex() already
+    // started on focus, well before the debounced keystroke gets here.
+    loadIndex().then(function (data) {
+      var pool = activeCategory
+        ? data.filter(function (item) { return item.subtitle === activeCategory.label; })
+        : data;
 
-    var matches = query
-      ? pool.filter(function (item) {
-          return item.title.toLowerCase().indexOf(query) !== -1 || item.subtitle.toLowerCase().indexOf(query) !== -1;
-        })
-      : pool;
+      var matches = query
+        ? pool.filter(function (item) {
+            return item.title.toLowerCase().indexOf(query) !== -1 || item.subtitle.toLowerCase().indexOf(query) !== -1;
+          })
+        : pool;
 
-    // rank matches where the title starts with the query above ones where
-    // the query just appears somewhere -- otherwise "anker" with a dozen
-    // Anker products returns an arbitrary-looking order
-    if (query) {
-      matches.sort(function (a, b) {
-        var aStarts = a.title.toLowerCase().indexOf(query) === 0 ? 0 : 1;
-        var bStarts = b.title.toLowerCase().indexOf(query) === 0 ? 0 : 1;
-        if (aStarts !== bStarts) return aStarts - bStarts;
-        return a.title.localeCompare(b.title);
-      });
-    } else {
-      matches.sort(function (a, b) { return a.title.localeCompare(b.title); });
-    }
-    render(matches, query);
+      // rank matches where the title starts with the query above ones where
+      // the query just appears somewhere -- otherwise "anker" with a dozen
+      // Anker products returns an arbitrary-looking order
+      if (query) {
+        matches.sort(function (a, b) {
+          var aStarts = a.title.toLowerCase().indexOf(query) === 0 ? 0 : 1;
+          var bStarts = b.title.toLowerCase().indexOf(query) === 0 ? 0 : 1;
+          if (aStarts !== bStarts) return aStarts - bStarts;
+          return a.title.localeCompare(b.title);
+        });
+      } else {
+        matches.sort(function (a, b) { return a.title.localeCompare(b.title); });
+      }
+      render(matches, query);
+    });
   }
 
   var debounceTimer = null;
@@ -353,6 +382,7 @@ function initSiteSearch() {
   });
 
   input.addEventListener("focus", function () {
+    loadIndex(); // start the fetch now, so it's ready (or close to it) by the time typing or a category click actually needs it
     if (input.value.trim() || activeCategory) runSearch(input.value);
     else renderSuggested();
   });
@@ -385,37 +415,28 @@ function initReviewsFilter() {
   var grid = document.getElementById("review-grid");
   if (!grid) return; // not on the all-reviews page
 
+  var catalogGrid = document.getElementById("catalog-results-grid");
+  var paginationEl = document.getElementById("review-pagination");
   var cards = Array.prototype.slice.call(grid.querySelectorAll(".review-card"));
   var pills = Array.prototype.slice.call(document.querySelectorAll(".filter-pill"));
   var sortSelect = document.getElementById("review-sort");
-  var paginationEl = document.getElementById("review-pagination");
   var countLabel = document.querySelector(".review-count");
   var emptyMsg = document.querySelector(".review-empty");
   var strings = window.WB_REVIEWS_STRINGS || { showingCount: "Showing {shown} of {total}", noMatches: "No matches." };
 
-  var PAGE_SIZE = 9;
-  var state = { category: "all", sort: "recent", page: 1, query: "" };
-  var searchInput = document.querySelector(".page-search-input");
-  var searchBtn = document.querySelector(".page-search-btn");
+  // "all" shows this page's own server-rendered cards (real pagination,
+  // nothing to fetch). Any specific category filters the WHOLE catalog
+  // via the lazily-fetched index below, not just whatever happens to be
+  // on this one page -- a visitor picking "Chargers" expects every
+  // charger, not just the ones that landed on this particular page by
+  // chance of sort order. Sort still applies either way, just against
+  // whichever set is currently showing.
+  var state = { category: "all", sort: "recent" };
 
-  // Honor ?category=<id> and ?q=<text> in the URL -- the homepage search
-  // box sends people here with one or both set, so this page needs to
-  // pick up right where that search left off instead of showing everything.
-  try {
-    var params = new URLSearchParams(window.location.search);
-    var requestedCat = params.get("category");
-    if (requestedCat && pills.some(function (p) { return p.getAttribute("data-filter-category") === requestedCat; })) {
-      state.category = requestedCat;
-      pills.forEach(function (p) {
-        p.classList.toggle("active", p.getAttribute("data-filter-category") === requestedCat);
-      });
-    }
-    var requestedQuery = params.get("q");
-    if (requestedQuery) {
-      state.query = requestedQuery.trim().toLowerCase();
-      if (searchInput) searchInput.value = requestedQuery;
-    }
-  } catch (e) {}
+  var BADGE_LABELS = {
+    top_rated: window.WB_TOP_RATED_LABEL, best_value: window.WB_BEST_VALUE_LABEL,
+    fastest_charge: window.WB_FASTEST_CHARGE_LABEL, lightest: window.WB_LIGHTEST_LABEL,
+  };
 
   function sortFn(a, b) {
     var av = a.dataset, bv = b.dataset;
@@ -428,66 +449,134 @@ function initReviewsFilter() {
     }
   }
 
-  function renderPagination(totalPages) {
-    if (!paginationEl) return;
-    if (totalPages <= 1) { paginationEl.innerHTML = ""; return; }
-    var html = '<button type="button" class="wb-page-btn wb-page-arrow" data-page="' + (state.page - 1) + '"' +
-      (state.page <= 1 ? ' disabled' : '') + ' aria-label="Previous">\u2039</button>';
-    for (var i = 1; i <= totalPages; i++) {
-      html += '<button type="button" class="wb-page-btn' + (i === state.page ? ' active' : '') + '" data-page="' + i + '">' + i + '</button>';
-    }
-    html += '<button type="button" class="wb-page-btn wb-page-arrow" data-page="' + (state.page + 1) + '"' +
-      (state.page >= totalPages ? ' disabled' : '') + ' aria-label="Next">\u203a</button>';
-    paginationEl.innerHTML = html;
+  function showPageView() {
+    catalogGrid.hidden = true;
+    grid.hidden = false;
+    if (paginationEl) paginationEl.hidden = false;
 
-    paginationEl.querySelectorAll("button[data-page]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        if (btn.hasAttribute("disabled")) return;
-        state.page = parseInt(btn.getAttribute("data-page"), 10);
-        apply();
-        requestAnimationFrame(function () {
-          grid.scrollIntoView({ behavior: "smooth", block: "start" });
-        });
-      });
-    });
-  }
-
-  function apply() {
-    var matching = cards.filter(function (c) {
-      var inCategory = state.category === "all" || c.dataset.category === state.category;
-      var inQuery = !state.query || c.dataset.title.indexOf(state.query) !== -1;
-      return inCategory && inQuery;
-    });
-    matching.sort(sortFn);
-
-    // reorder the actual DOM nodes to match sort order
-    matching.forEach(function (c) { grid.appendChild(c); });
-
-    var totalPages = Math.max(1, Math.ceil(matching.length / PAGE_SIZE));
-    if (state.page > totalPages) state.page = totalPages;
-    var start = (state.page - 1) * PAGE_SIZE;
-    var end = start + PAGE_SIZE;
-
-    cards.forEach(function (c) { c.hidden = true; });
-    matching.forEach(function (c, i) {
-      if (i >= start && i < end) c.hidden = false;
-    });
+    var sorted = cards.slice().sort(sortFn);
+    sorted.forEach(function (c) { grid.appendChild(c); }); // reorder DOM to match sort order
 
     if (countLabel) {
+      countLabel.textContent = strings.showingCount.replace("{shown}", cards.length).replace("{total}", cards.length);
+    }
+    if (emptyMsg) emptyMsg.hidden = true; // "all" on a real page always has at least one card, or the page wouldn't exist
+  }
+
+  // ---- catalog-wide index (shared by category filtering and search --
+  // one fetch covers both, so a visitor who filters by category and
+  // then searches, or vice versa, only ever pays for the request once) ----
+  var catalogIndex = null;
+  var indexPromise = null;
+
+  function loadCatalogIndex() {
+    if (indexPromise) return indexPromise;
+    indexPromise = fetch(window.WB_ROOT + "reviews-catalog.json")
+      .then(function (r) { return r.json(); })
+      .then(function (data) { catalogIndex = data; return data; })
+      .catch(function () { catalogIndex = []; return catalogIndex; });
+    return indexPromise;
+  }
+
+  function catalogSortFn(a, b) {
+    switch (state.sort) {
+      case "price-low": return (a.price_eur || 0) - (b.price_eur || 0);
+      case "price-high": return (b.price_eur || 0) - (a.price_eur || 0);
+      case "rating": return (b.rating || 0) - (a.rating || 0);
+      case "recent":
+      default: return (a.date_added || "") < (b.date_added || "") ? 1 : -1;
+    }
+  }
+
+  // Deliberately simpler than the server-rendered cards -- no buy
+  // buttons (replicating brand_affiliate_url()'s Awin/locale logic
+  // client-side isn't worth it for a card whose whole job is "click
+  // through to the real review page," where those buttons already are).
+  function renderCatalogCard(item) {
+    var photoInner = item.image
+      ? '<img src="' + window.WB_ROOT + item.image + '" alt="' + item.brand + ' ' + item.model + '" loading="lazy">'
+      : '<span class="bolt-mark">\u26A1</span>' + item.brand + ' ' + item.model;
+    var photoClass = "product-photo" + (item.image ? "" : " placeholder");
+    var badgeHtml = "";
+    if (item.primary_badge && BADGE_LABELS[item.primary_badge]) {
+      badgeHtml = '<div class="product-badge-pill"><span class="badge-icon">' + (item.primary_badge_emoji || "") + '</span><span>' + BADGE_LABELS[item.primary_badge] + '</span></div>';
+    }
+    var specs = [];
+    if (item.capacity_wh) specs.push('<span><strong>' + item.capacity_wh.toLocaleString() + '</strong> Wh</span>');
+    if (item.capacity_mah) specs.push('<span><strong>' + item.capacity_mah.toLocaleString() + '</strong> mAh</span>');
+    if (item.total_output_w) specs.push('<span><strong>' + item.total_output_w.toLocaleString() + '</strong> W</span>');
+    if (item.weight_display) specs.push('<span><strong>' + item.weight_display + '</strong></span>');
+
+    return '<div class="card review-card" style="--cat-accent:' + (item.accent || "") + ';">' +
+      '<a href="' + window.WB_ROOT + item.url + '" class="card-body-link">' +
+      '<div class="' + photoClass + '">' + badgeHtml + photoInner + '</div>' +
+      '<span class="brand">' + item.brand + '</span>' +
+      '<h3>' + item.model + '</h3>' +
+      '<div class="specrow"><span><strong>' + item.rating + '</strong>/5</span>' + specs.join("") + '</div>' +
+      (item.summary ? '<p class="desc desc-fade">' + item.summary + '</p>' : "") +
+      '<span class="price">~\u20AC' + (item.price_eur != null ? item.price_eur.toLocaleString() : "") + ' <span class="price-est">(' + (window.WB_EST_LABEL || "Est.") + ')</span></span>' +
+      '</a></div>';
+  }
+
+  function showCatalogView() {
+    if (!catalogIndex) return; // still loading -- the .then() chain that triggered this re-calls once it lands
+
+    grid.hidden = true;
+    catalogGrid.hidden = false;
+    if (paginationEl) paginationEl.hidden = true; // this view isn't paginated the same way -- shows every match at once
+
+    var matching = state.category === "all"
+      ? catalogIndex.slice()
+      : catalogIndex.filter(function (item) { return item.category === state.category; });
+    matching.sort(catalogSortFn);
+
+    catalogGrid.innerHTML = matching.map(renderCatalogCard).join("");
+    if (countLabel) {
       countLabel.textContent = matching.length
-        ? strings.showingCount.replace("{shown}", Math.min(end, matching.length) - start).replace("{total}", matching.length)
+        ? strings.showingCount.replace("{shown}", matching.length).replace("{total}", matching.length)
         : "";
     }
     if (emptyMsg) emptyMsg.hidden = matching.length !== 0;
-    renderPagination(totalPages);
   }
+
+  function apply() {
+    // The server-rendered page view is only correct for the true default
+    // state -- "all" category AND "recent" sort, which is what the page
+    // was actually built and sorted as. Anything else -- a category
+    // picked, or just the sort order changed while still on "all" -- has
+    // to mean "sort/filter the whole catalog," not "re-sort this page's
+    // 12 products," since that's what a sort dropdown reasonably implies:
+    // picking "cheapest first" should surface the cheapest thing in the
+    // whole catalog, not just the cheapest among whatever happened to
+    // land on this particular page.
+    if (state.category === "all" && state.sort === "recent") {
+      showPageView();
+    } else {
+      loadCatalogIndex().then(showCatalogView);
+    }
+  }
+
+  // Honor ?category=<id> in the URL -- the homepage search box can land
+  // people here with a category pre-selected. ?q= is handled further
+  // down (see the search section), since query text searches the whole
+  // catalog via the same lazily-fetched index, not this page alone.
+  try {
+    var params = new URLSearchParams(window.location.search);
+    var requestedCat = params.get("category");
+    if (requestedCat && pills.some(function (p) { return p.getAttribute("data-filter-category") === requestedCat; })) {
+      state.category = requestedCat;
+      pills.forEach(function (p) {
+        p.classList.toggle("active", p.getAttribute("data-filter-category") === requestedCat);
+      });
+    }
+  } catch (e) {}
 
   function updatePlaceholder() {
     if (!searchInput) return;
     var active = pills.filter(function (p) { return p.classList.contains("active"); })[0];
     var label = active ? active.textContent.trim() : "";
     var prefix = window.WB_SEARCH_PREFIX || "Search";
-    searchInput.placeholder = label ? prefix + " " + label : prefix + "...";
+    searchInput.placeholder = label ? prefix + " " + label + "\u2026" : prefix + "\u2026";
   }
   updatePlaceholder();
 
@@ -496,11 +585,78 @@ function initReviewsFilter() {
       pills.forEach(function (p) { p.classList.remove("active"); });
       pill.classList.add("active");
       state.category = pill.getAttribute("data-filter-category");
-      state.page = 1;
       apply();
       updatePlaceholder();
     });
   });
+
+  if (sortSelect) {
+    sortSelect.addEventListener("change", function () {
+      state.sort = sortSelect.value;
+      apply();
+    });
+  }
+
+  // ---- catalog-wide text search (same lazily-fetched index as category
+  // filtering above -- one fetch, shared). Fetched exactly once, on
+  // first focus (never on page load, so a visitor who never touches
+  // either feature never pays for the request), then renders live
+  // matches from the ENTIRE catalog into a dropdown -- same visual
+  // pattern and CSS classes as the header search (initSiteSearch above).
+  var searchInput = document.querySelector(".page-search-input");
+  var searchBtn = document.querySelector(".page-search-btn");
+  var resultsBox = document.querySelector(".page-search-results");
+  var MIN_QUERY_LENGTH = 2;
+  var RENDER_CAP = 20;
+
+  function ratingBadge(rating) {
+    if (rating === undefined || rating === null) return "";
+    return '<span class="search-rating-badge">\u2605 ' + rating + '</span>';
+  }
+
+  function renderCatalogResults(query) {
+    if (!resultsBox) return;
+    if (!query || query.length < MIN_QUERY_LENGTH) { resultsBox.classList.remove("open"); return; }
+    if (!catalogIndex) return; // still loading -- the .then() chain that called this re-renders once it lands
+
+    var q = query.toLowerCase();
+    var matches = catalogIndex.filter(function (item) {
+      var title = item.brand + " " + item.model;
+      return title.toLowerCase().indexOf(q) !== -1;
+    });
+    // Same "starts with the query" ranking as the header search, so
+    // typing "anker" with a dozen Anker products doesn't return an
+    // arbitrary-looking order.
+    matches.sort(function (a, b) {
+      var aTitle = (a.brand + " " + a.model).toLowerCase();
+      var bTitle = (b.brand + " " + b.model).toLowerCase();
+      var aStarts = aTitle.indexOf(q) === 0 ? 0 : 1;
+      var bStarts = bTitle.indexOf(q) === 0 ? 0 : 1;
+      if (aStarts !== bStarts) return aStarts - bStarts;
+      return aTitle.localeCompare(bTitle);
+    });
+
+    if (!matches.length) {
+      resultsBox.innerHTML = '<div class="site-search-empty">' + (window.WB_SEARCH_NO_RESULTS || "No results found.") + '</div>';
+      resultsBox.classList.add("open");
+      return;
+    }
+    var countHeading = '<div class="site-search-heading">' +
+      (window.WB_SEARCH_RESULTS_COUNT || "{count} results").replace("{count}", matches.length) +
+      '</div>';
+    var rows = matches.slice(0, RENDER_CAP).map(function (item) {
+      var accentStyle = item.accent ? ' style="--row-accent:' + item.accent + ';"' : "";
+      return '<a class="site-search-result" href="' + window.WB_ROOT + item.url + '"' + accentStyle + '>' +
+        '<span class="search-result-text">' +
+        '<span class="r-title">' + item.brand + ' ' + item.model + '</span>' +
+        '<span class="r-subtitle">' + item.category_label + '</span>' +
+        '</span>' +
+        ratingBadge(item.rating) +
+        '</a>';
+    }).join("");
+    resultsBox.innerHTML = countHeading + '<div class="site-search-list">' + rows + '</div>';
+    resultsBox.classList.add("open");
+  }
 
   var SEARCH_GLASS_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>';
   var CLEAR_X_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
@@ -513,14 +669,15 @@ function initReviewsFilter() {
   }
 
   if (searchInput) {
+    searchInput.addEventListener("focus", function () { loadCatalogIndex(); }, { once: true });
+
     var searchDebounce = null;
     searchInput.addEventListener("input", function () {
       updateSearchBtn();
       clearTimeout(searchDebounce);
+      var query = searchInput.value.trim();
       searchDebounce = setTimeout(function () {
-        state.query = searchInput.value.trim().toLowerCase();
-        state.page = 1;
-        apply();
+        loadCatalogIndex().then(function () { renderCatalogResults(query); });
       }, 150);
     });
     searchInput.addEventListener("keydown", function (e) {
@@ -533,22 +690,28 @@ function initReviewsFilter() {
       if (!searchInput) return;
       if (searchBtn.classList.contains("is-clear")) {
         searchInput.value = "";
-        state.query = "";
-        state.page = 1;
-        apply();
+        if (resultsBox) resultsBox.classList.remove("open");
         updateSearchBtn();
       }
       searchInput.focus();
     });
   }
+  document.addEventListener("click", function (e) {
+    if (resultsBox && !e.target.closest(".page-search")) resultsBox.classList.remove("open");
+  });
 
-  if (sortSelect) {
-    sortSelect.addEventListener("change", function () {
-      state.sort = sortSelect.value;
-      state.page = 1;
-      apply();
-    });
-  }
+  // ?q=<text> in the URL -- the homepage search can land people here
+  // with a query already typed. Pre-fills the box AND immediately shows
+  // catalog-wide matches, fetching the index right away rather than
+  // waiting for a focus event that already effectively just happened.
+  try {
+    var qParam = new URLSearchParams(window.location.search).get("q");
+    if (qParam && searchInput) {
+      searchInput.value = qParam;
+      updateSearchBtn();
+      loadCatalogIndex().then(function () { renderCatalogResults(qParam); });
+    }
+  } catch (e) {}
 
   apply();
 }

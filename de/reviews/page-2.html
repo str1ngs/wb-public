@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='impact-site-verification' value='29317810-86b0-4edf-892f-fc8d6b93c100'>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e8a13d">
+<title>All Reviews — Page 2 of 3 | WattBench</title>
+<meta name="description" content="Every power station, power bank, and charger we've reviewed in one place -- filter by category, sort by price or recency.">
+<link rel="canonical" href="https://wattbench.eu/de/reviews/page-2.html">
+<link rel="alternate" hreflang="en" href="https://wattbench.eu/reviews/page-2.html">
+<link rel="alternate" hreflang="de" href="https://wattbench.eu/de/reviews/page-2.html">
+<link rel="alternate" hreflang="x-default" href="https://wattbench.eu/reviews/page-2.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WattBench">
+<meta property="og:title" content="All Reviews — Page 2 of 3 | WattBench">
+<meta property="og:description" content="Every power station, power bank, and charger we've reviewed in one place -- filter by category, sort by price or recency.">
+<meta property="og:url" content="https://wattbench.eu/de/reviews/page-2.html">
+<meta property="og:locale" content="de">
+<meta property="og:image" content="https://wattbench.eu/images/pages/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WattBench — Daten statt Werbung">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wattbench.eu/images/pages/og-cover.jpg">
+
+<link rel="preload" href="../../Fonts/SourceSans3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../Fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../css/style.css?v=0.3.1">
+<style>
+
+html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Startseite","item":"https://wattbench.eu/de/"},
+    {"@type":"ListItem","position":2,"name":"Alle Bewertungen","item":"https://wattbench.eu/de/reviews/page-2.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <a href="../../de/index.html" class="logo">WattBench<small>Daten statt Werbung</small></a>
+    <nav class="main-nav">
+      <a href="../../de/index.html">Startseite</a>
+      <div class="nav-dropdown">
+        <a href="../../de/reviews/index.html" class="nav-dropdown-toggle active">Bewertungen</a>
+        <div class="nav-dropdown-menu">
+          <a href="../../de/reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+          <a href="../../de/reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+          <a href="../../de/reviews/index.html?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+        </div>
+      </div>
+      <a href="../../de/guides/index.html">Kaufratgeber</a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../../reviews/page-2.html" class=" lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../../de/reviews/page-2.html" class="active lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Bewertungen">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-controls">
+    <div class="lang-switch">
+      <a href="../../reviews/page-2.html" class=" lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../../de/reviews/page-2.html" class="active lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../../de/index.html">Startseite</a>
+    <div class="mobile-drawer-group-label">Bewertungen</div>
+    <a href="../../de/reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+    <a href="../../de/reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+    <a href="../../de/reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+    <a href="../../de/guides/index.html">Kaufratgeber</a>
+  </div>
+</nav>
+
+<div class="disclosure">
+  Diese Website erhält Provisionen für qualifizierte Käufe über Affiliate-Links. <a href="../../de/affiliate-disclosure.html">Vollständige Offenlegung</a>.
+</div>
+
+<main>
+<div class="wrap"><p class="breadcrumb"><a href="../../de/index.html">Startseite</a> / Alle Bewertungen</p></div>
+
+<section class="section-tight">
+  <div class="wrap">
+    <h1>Alle Bewertungen</h1>
+    <p class="lede">Jedes Produkt, das wir bewertet haben — filterbar nach Kategorie, sortierbar nach Preis oder Aktualität.</p>
+
+    <div class="hero-search page-search">
+      <div class="hero-search-box page-search-box">
+        <input type="search" class="page-search-input hero-search-input" placeholder="Suchen..." aria-label="Suchen...">
+      </div>
+      <button type="button" class="hero-search-btn page-search-btn" aria-label="Suchen...">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+      </button>
+      <div class="site-search-results page-search-results"></div>
+    </div>
+
+    <div class="review-filters">
+      <div class="filter-pills" role="group" aria-label="Bewertungen">
+        <button type="button" class="filter-pill active" data-filter-category="all">Alle</button>
+        <button type="button" class="filter-pill" data-filter-category="power-stations" style="--pill-accent: #a855f7;">Powerstations</button>
+        <button type="button" class="filter-pill" data-filter-category="power-banks" style="--pill-accent: #00e5ff;">Powerbanks</button>
+        <button type="button" class="filter-pill" data-filter-category="chargers" style="--pill-accent: #00d98b;">Ladegeräte</button>
+      </div>
+      <div class="sort-control">
+        <label for="review-sort">Sortieren nach</label>
+        <select id="review-sort">
+          <option value="recent">Kürzlich hinzugefügt</option>
+          <option value="price-low">Preis: aufsteigend</option>
+          <option value="price-high">Preis: absteigend</option>
+          <option value="rating">Bestbewertet</option>
+        </select>
+      </div>
+    </div>
+
+    <p class="review-count"></p>
+
+    <script>
+      window.WB_REVIEWS_STRINGS = {
+        showingCount: "{shown} von {total} angezeigt",
+        noMatches: "Keine Ergebnisse"
+      };
+    </script>
+
+    <div class="grid cols-3" id="review-grid">
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="2800"
+           data-date="2026-07-26"
+           data-rating="3.8"
+           data-title="ecoflow delta pro 3">
+        <a href="../../de/reviews/ecoflow-delta-pro-3.html" class="card-body-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">🏆</span>
+              <span>Bestbewertet</span>
+            </div>
+            <img src="../../images/products/ecoflow-delta-pro-3-1.webp"
+     srcset="../../images/products/ecoflow-delta-pro-3-1-sm.webp 480w, ../../images/products/ecoflow-delta-pro-3-1-md.webp 900w, ../../images/products/ecoflow-delta-pro-3-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow DELTA Pro 3 - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">EcoFlow</span>
+          <h3>DELTA Pro 3</h3>
+          <div class="specrow">
+            <span><strong>3.8</strong>/5</span>
+            <span><strong>4,096</strong> Wh</span>
+            <span><strong>4,000</strong> W</span>
+            <span><strong>51.5 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die DELTA Pro 3 vereint 4.096Wh LFP-Kapazität und einen Wechselrichter mit 4.000W Dauerleistung in zwei Spannungsebenen in einem einzigen fahrbaren Gehäuse — und punktet mit der schnellsten Vollladung ihrer Klasse dank EcoFlows X-Stream-Schnelllladetechnologie.</p>
+          <span class="price">~€2,800 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4wgEt96" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=51793&awinaffid=2996599&ued=https%3A%2F%2Fde.ecoflow.com%2Fproducts%2Fdelta-pro-3-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Prüfen bei EcoFlow</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="400"
+           data-date="2026-07-26"
+           data-rating="2.9"
+           data-title="ecoflow river 2 max 500w">
+        <a href="../../de/reviews/ecoflow-river-2-max.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/ecoflow-river-2-max-1.webp"
+     srcset="../../images/products/ecoflow-river-2-max-1-sm.webp 480w, ../../images/products/ecoflow-river-2-max-1-md.webp 900w, ../../images/products/ecoflow-river-2-max-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow RIVER 2 Max 500W - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">EcoFlow</span>
+          <h3>RIVER 2 Max 500W</h3>
+          <div class="specrow">
+            <span><strong>2.9</strong>/5</span>
+            <span><strong>512</strong> Wh</span>
+            <span><strong>500</strong> W</span>
+            <span><strong>6.1 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die EcoFlow RIVER 2 Max ist eine portable 512Wh Powerstation mit nur 6,1 kg Gewicht und einer ultraschnellen AC-Ladezeit von nur 60 Minuten. Ausgestattet mit einem langlebigen LFP-Akku für über 3.000 Zyklen, 500W Dauerleistung (erweiterbar auf 1000W) und App-Steuerung bietet sie maximale Flexibilität unterwegs.</p>
+          <span class="price">~€400 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B08eWZ8Hf" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=51793&awinaffid=2996599&ued=https%3A%2F%2Fde.ecoflow.com%2Fproducts%2Friver-2-max-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Prüfen bei EcoFlow</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="699"
+           data-date="2026-07-26"
+           data-rating="3.2"
+           data-title="bluetti elite 100 v2">
+        <a href="../../de/reviews/bluetti-elite-100-v2.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/bluetti-elite-100-v2-1.webp"
+     srcset="../../images/products/bluetti-elite-100-v2-1-sm.webp 480w, ../../images/products/bluetti-elite-100-v2-1-md.webp 900w, ../../images/products/bluetti-elite-100-v2-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Elite 100 V2 - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">BLUETTI</span>
+          <h3>Elite 100 V2</h3>
+          <div class="specrow">
+            <span><strong>3.2</strong>/5</span>
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>1,800</strong> W</span>
+            <span><strong>11.5 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die BLUETTI Elite 100 V2 ist eine ultraleichte 1024Wh Powerstation mit nur 11,5 kg Gewicht und einem kompakten 17L-Design. Mit 1800W Ausgangsleistung (2700W Lifting Power), schnellem 1200W AC TurboBoost, starkem 1000W Solareingang und einer nahtlosen 10ms USV-Notstromfunktion bietet sie erstklassige Energie für unterwegs und zu Hause.</p>
+          <span class="price">~€699 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0j2WbTQQ" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+          <a href="https://de.bluettipower.eu/products/elite-100-v2-tragbare-powerstation" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Prüfen bei BLUETTI</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="651"
+           data-date="2026-07-25"
+           data-rating="3.2"
+           data-title="ecoflow delta 3 series 1800w">
+        <a href="../../de/reviews/ecoflow-delta-3.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/ecoflow-delta-3-2.webp"
+     srcset="../../images/products/ecoflow-delta-3-2-sm.webp 480w, ../../images/products/ecoflow-delta-3-2-md.webp 900w, ../../images/products/ecoflow-delta-3-2.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow DELTA 3 Series 1800W - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">EcoFlow</span>
+          <h3>DELTA 3 Series 1800W</h3>
+          <div class="specrow">
+            <span><strong>3.2</strong>/5</span>
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>1,800</strong> W</span>
+            <span><strong>12.5 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die EcoFlow DELTA 3 ist eine leistungsstarke 1024Wh Powerstation mit ultraschneller X-Stream Schnellladefunktion von 0 auf 100% in nur 56 Minuten. Mit 1800W Ausgangsleistung (2400W / 3600W X-Boost), 11 Anschlüssen, flüsterleisem 30dB Betrieb und modularer Erweiterbarkeit bis 5 kWh ist sie der ideale Begleiter für Notfälle und Outdoor-Abenteuer.</p>
+          <span class="price">~€651 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0igTU0QU" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=51793&awinaffid=2996599&ued=https%3A%2F%2Fde.ecoflow.com%2Fproducts%2Fdelta-3-series-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Prüfen bei EcoFlow</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="800"
+           data-date="2026-07-22"
+           data-rating="3.2"
+           data-title="anker solix c1000 gen 2">
+        <a href="../../de/reviews/anker-solix-c1000-gen-2.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/anker-solix-c1000-gen-2-1.webp"
+     srcset="../../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker SOLIX C1000 Gen 2 - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Anker</span>
+          <h3>SOLIX C1000 Gen 2</h3>
+          <div class="specrow">
+            <span><strong>3.2</strong>/5</span>
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>2,000</strong> W</span>
+            <span><strong>11.3 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die Anker SOLIX C1000 Gen 2 vereint 1.024Wh LiFePO4-Kapazität und robuste 2.000W Ausgangsleistung (3.000W Spitzenleistung) in einem Gehäuse, das 14% kleiner und 11% leichter als vergleichbare Modelle ist. Ausgestattet mit HyperFlash-Technologie für eine ultraschnelle Aufladung in 49 Minuten und intelligenter App-Steuerung mit TOU-Modus (Time-of-Use), dient sie als zuverlässige und langlebige Stromquelle.</p>
+          <span class="price">~€800 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4frJF2J" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="209"
+           data-date="2026-07-22"
+           data-rating="3.3"
+           data-title="anker prime power bank (26k, 300w)">
+        <a href="../../de/reviews/anker-prime-powerbank-26k-300w.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/anker-prime-powerbank-26k-300w-1.webp"
+     srcset="../../images/products/anker-prime-powerbank-26k-300w-1-sm.webp 480w, ../../images/products/anker-prime-powerbank-26k-300w-1-md.webp 900w, ../../images/products/anker-prime-powerbank-26k-300w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker Prime Power Bank (26K, 300W) - Powerbanks review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Anker</span>
+          <h3>Prime Power Bank (26K, 300W)</h3>
+          <div class="specrow">
+            <span><strong>3.3</strong>/5</span>
+            <span><strong>26,250</strong> mAh</span>
+            <span><strong>300</strong> W</span>
+            <span><strong>600 g</strong></span>
+          </div>
+          <p class="desc desc-fade">Die Anker Prime Powerbank (26K, 300W) liefert gewaltige 300W Gesamtausgangsleistung über zwei USB-C- und einen USB-A-Anschluss und treibt damit zwei Laptops gleichzeitig an. Mit 99.75Wh (26.250mAh) TSA-konformer Kapazität unterstützt sie blitzschnelles Laden mit 140W an einem Port und eine Rekord-Wiederaufladung mit 250W Dual-Eingang in nur 39 Minuten.</p>
+          <span class="price">~€209 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4yAH9zW" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00d98b;"
+           data-category="chargers"
+           data-price="108"
+           data-date="2026-07-22"
+           data-rating="4.1"
+           data-title="anker prime charger 160w">
+        <a href="../../de/reviews/anker-prime-charger-160w-3-port.html" class="card-body-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">⚡</span>
+              <span>Schnellste Ladung</span>
+            </div>
+            <img src="../../images/products/anker-prime-charger-160w-3-port-1.webp"
+     srcset="../../images/products/anker-prime-charger-160w-3-port-1-sm.webp 480w, ../../images/products/anker-prime-charger-160w-3-port-1-md.webp 900w, ../../images/products/anker-prime-charger-160w-3-port-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker Prime Charger 160W - Ladegeräte review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Anker</span>
+          <h3>Prime Charger 160W</h3>
+          <div class="specrow">
+            <span><strong>4.1</strong>/5</span>
+            <span><strong>160</strong> W</span>
+            <span><strong>221 g</strong></span>
+          </div>
+          <p class="desc desc-fade">Das Anker Prime Ladegerät (160W, 3 Ports) vereint extreme Leistungsdichte in einem Gehäuse so kompakt wie ein AirPods Pro-Case. Mit konstanten 140W Einzelausgangsleistung und PowerIQ 5.0 versorgt es MacBook Pro, iPad und Smartphone gleichzeitig, während GaN-Technologie für effiziente Kühlung sorgt.</p>
+          <span class="price">~€108 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4wW4fj5" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="186"
+           data-date="2026-07-22"
+           data-rating="3.6"
+           data-title="jackery explorer 300d">
+        <a href="../../de/reviews/jackery-explorer-300d.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/jackery-explorer-300d-1.webp"
+     srcset="../../images/products/jackery-explorer-300d-1-sm.webp 480w, ../../images/products/jackery-explorer-300d-1-md.webp 900w, ../../images/products/jackery-explorer-300d-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Jackery Explorer 300D - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Jackery</span>
+          <h3>Explorer 300D</h3>
+          <div class="specrow">
+            <span><strong>3.6</strong>/5</span>
+            <span><strong>288</strong> Wh</span>
+            <span><strong>300</strong> W</span>
+            <span><strong>2.5 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die Jackery Explorer 300D ist eine ultraleichte 288Wh Powerstation mit nur 2,5 kg Gewicht und schlankem Hochformat. Ausgestattet mit einem integrierten 140W USB-C-Kabel als Tragegriff, starken 140W USB-C-Ausgängen und herausragender Energieeffizienz ist sie der perfekte Begleiter für Outdoor-Abenteuer und Solar-Enthusiasten.</p>
+          <span class="price">~€186 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4wg506p" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="90"
+           data-date="2026-07-22"
+           data-rating="3.5"
+           data-title="ugreen nexode pro (20k mah, 165w)">
+        <a href="../../de/reviews/ugreen-nexode-pro-power-bank-20000-165w.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp"
+     srcset="../../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-sm.webp 480w, ../../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-md.webp 900w, ../../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="UGREEN Nexode Pro (20K mAh, 165W) - Powerbanks review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (20K mAh, 165W)</h3>
+          <div class="specrow">
+            <span><strong>3.5</strong>/5</span>
+            <span><strong>20,000</strong> mAh</span>
+            <span><strong>165</strong> W</span>
+            <span><strong>550 g</strong></span>
+          </div>
+          <p class="desc desc-fade">Die UGREEN Nexode Pro Powerbank (20.000mAh, 165W) besitzt ein cleveres, einziehbares 65cm-Kabel mit 5 Längeneinstellungen und macht separate Kabel überflüssig. Mit bis zu 165W Gesamtausgangsleistung (100W + 65W simultan für Laptops) und einem scharfen TFT-Display bietet sie maximale Flexibilität unterwegs.</p>
+          <span class="price">~€90 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4gSpVYz" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="1000"
+           data-date="2026-07-21"
+           data-rating="2.7"
+           data-title="dji power 1000 v2">
+        <a href="../../de/reviews/dji-power-1000.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/categories/power-stations.webp"
+     srcset="../../images/categories/power-stations-sm.webp 480w, ../../images/categories/power-stations-md.webp 900w, ../../images/categories/power-stations.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="DJI Power 1000 V2 - Powerstations review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">DJI</span>
+          <h3>Power 1000 V2</h3>
+          <div class="specrow">
+            <span><strong>2.7</strong>/5</span>
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>2,600</strong> W</span>
+            <span><strong>14.0 kg</strong></span>
+          </div>
+          <p class="desc desc-fade">Die DJI Power 1000 bringt DJIs bekannte technische Präzision in den Markt der tragbaren Powerstations. Mit 1.024Wh Kapazität und starken 2.200W Ausgangsleistung bewältigt sie anspruchsvolles Outdoor-Equipment, schnelles Laden von Drohnenakkus und wichtige Haushaltsgeräte bei kurzen Stromausfällen.</p>
+          <span class="price">~€1,000 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4hpKsE1" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="100"
+           data-date="2026-07-21"
+           data-rating="3.4"
+           data-title="anker a1695">
+        <a href="../../de/reviews/anker-powerbank-a1695-165w.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/anker-powerbank-a1695-1.webp"
+     srcset="../../images/products/anker-powerbank-a1695-1-sm.webp 480w, ../../images/products/anker-powerbank-a1695-1-md.webp 900w, ../../images/products/anker-powerbank-a1695-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker A1695 - Powerbanks review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Anker</span>
+          <h3>A1695</h3>
+          <div class="specrow">
+            <span><strong>3.4</strong>/5</span>
+            <span><strong>25,000</strong> mAh</span>
+            <span><strong>165</strong> W</span>
+            <span><strong>595 g</strong></span>
+          </div>
+          <p class="desc desc-fade">Die Anker Laptop Power Bank (25K, 165W) ist ein leistungsstarkes tragbares Ladegerät, das die Lücke zwischen handlicher Bequemlichkeit und Leistung auf Workstation-Niveau schließt. Mit einer massiven Kapazität von 25.000 mAh (ca. 90 Wh) und einer maximalen Ausgangsleistung von 165 W über integrierte und einziehbare Kabel liefert sie reichlich Energie für stromhungrige Laptops und Zubehör, ohne die Freigrenzen für das Handgepäck im Flugzeug zu überschreiten.</p>
+          <span class="price">~€100 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/4pwUCEZ" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00d98b;"
+           data-category="chargers"
+           data-price="40"
+           data-date="2026-07-21"
+           data-rating="3.9"
+           data-title="anker nano 65w">
+        <a href="../../de/reviews/anker-nano-65w-3-port.html" class="card-body-link">
+          <div class="product-photo">
+            <img src="../../images/products/anker-nano-65w-3-port-1.webp"
+     srcset="../../images/products/anker-nano-65w-3-port-1-sm.webp 480w, ../../images/products/anker-nano-65w-3-port-1-md.webp 900w, ../../images/products/anker-nano-65w-3-port-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker Nano 65W - Ladegeräte review"
+     loading="lazy"
+>
+          </div>
+          <span class="brand">Anker</span>
+          <h3>Nano 65W</h3>
+          <div class="specrow">
+            <span><strong>3.9</strong>/5</span>
+            <span><strong>70</strong> W</span>
+            <span><strong>120 g</strong></span>
+          </div>
+          <p class="desc desc-fade">Das Anker Nano Ladegerät (65W, 3 Ports) liefert echte 65W Leistung über seine einzelnen USB-C-Anschlüsse – genug, um ein 14-Zoll MacBook Pro in nur 35 Minuten von 0 auf 50% zu laden. Ausgestattet mit GaN II Technologie, vereint es starke Leistung in einem 41% kleineren Format als Standard-65W-Netzteile.</p>
+          <span class="price">~€40 <span class="price-est">(Gesch.)</span></span>
+        </a>
+        <div class="card-buy-row">
+          <a href="https://amzn.to/3TdzMyq" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Bei Amazon prüfen</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid cols-3" id="catalog-results-grid" hidden></div>
+
+    <p class="review-empty" hidden>Keine Ergebnisse</p>
+
+    <nav class="review-pagination" id="review-pagination" aria-label="Alle Bewertungen">
+      <a class="wb-page-btn wb-page-arrow" href="../../de/reviews/index.html" aria-label="Previous">&lsaquo;</a>
+      <a class="wb-page-btn" href="../../de/reviews/index.html">1</a>
+      <span class="wb-page-btn active" aria-current="page">2</span>
+      <a class="wb-page-btn" href="../../de/reviews/page-3.html">3</a>
+      <a class="wb-page-btn wb-page-arrow" href="../../de/reviews/page-3.html" aria-label="Next">&rsaquo;</a>
+    </nav>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../../de/index.html" class="logo">WattBench</a>
+      <p class="fine">WattBench ist eine Bewertungs-Engine für Power-Geräte — darunter tragbare Powerstations, Powerbanks und Ladegeräte.</p>
+    </div>
+    <div>
+      <h4>Entdecken</h4>
+      <a href="../../de/reviews/index.html?category=power-stations">Powerstations</a>
+      <a href="../../de/reviews/index.html?category=power-banks">Powerbanks</a>
+      <a href="../../de/reviews/index.html?category=chargers">Ladegeräte</a>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <a href="../../de/about.html">Über uns</a>
+      <a href="../../de/affiliate-disclosure.html">Affiliate-Offenlegung</a>
+      <a href="../../de/privacy-policy.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. Alle Produktnamen und Marken gehören ihren jeweiligen Eigentümern.</span>
+    <span>Spezifikationen geprüft im Juli 2026 • v0.3.1</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "de";
+  window.WB_ROOT = "../../";
+  window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
+  window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
+  window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} Ergebnisse";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Suchen...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Suche innerhalb {category}...";
+  window.WB_SEARCH_PREFIX = "Suche";
+  window.WB_THEME_LABELS = { dark: "\u263d DUNKEL", light: "\u2600 HELL" };
+  window.WB_ALT_LINKS = { "en": "../../reviews/page-2.html", "de": "../../de/reviews/page-2.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Powerstations", accent: "#a855f7", icon: "bolt", url: "../../de/reviews/index.html?category=power-stations" }, { id: "power-banks", label: "Powerbanks", accent: "#00e5ff", icon: "battery", url: "../../de/reviews/index.html?category=power-banks" }, { id: "chargers", label: "Ladeger\u00e4te", accent: "#00d98b", icon: "plug", url: "../../de/reviews/index.html?category=chargers" }];
+</script>
+<script src="../../js/main.js?v=0.3.1"></script>
+</body>
+</html>
