@@ -431,7 +431,7 @@ function initReviewsFilter() {
   // charger, not just the ones that landed on this particular page by
   // chance of sort order. Sort still applies either way, just against
   // whichever set is currently showing.
-  var state = { category: "all", sort: "recent" };
+  var state = { category: "all", sort: "recent", catalogPage: 1 };
 
   var BADGE_LABELS = {
     top_rated: window.WB_TOP_RATED_LABEL, best_value: window.WB_BEST_VALUE_LABEL,
@@ -458,7 +458,8 @@ function initReviewsFilter() {
     sorted.forEach(function (c) { grid.appendChild(c); }); // reorder DOM to match sort order
 
     if (countLabel) {
-      countLabel.textContent = strings.showingCount.replace("{shown}", cards.length).replace("{total}", cards.length);
+      var pageTotal = (typeof window.WB_TOTAL_REVIEWS === "number") ? window.WB_TOTAL_REVIEWS : cards.length;
+      countLabel.textContent = strings.showingCount.replace("{shown}", cards.length).replace("{total}", pageTotal);
     }
     if (emptyMsg) emptyMsg.hidden = true; // "all" on a real page always has at least one card, or the page wouldn't exist
   }
@@ -507,15 +508,103 @@ function initReviewsFilter() {
     if (item.total_output_w) specs.push('<span><strong>' + item.total_output_w.toLocaleString() + '</strong> W</span>');
     if (item.weight_display) specs.push('<span><strong>' + item.weight_display + '</strong></span>');
 
+    // Score breakdown bars, matching product_rubric_viz() in
+    // _macros.html (used server-side for this same card elsewhere) --
+    // reimplemented here since a client-side render can't call a Jinja
+    // macro. Only renders if all five sub-scores are actually present
+    // on this item; falls back to the plain summary text otherwise,
+    // same graceful-degradation pattern as WB_TOTAL_REVIEWS elsewhere
+    // in this file, rather than rendering broken/undefined bars if
+    // reviews-catalog.json doesn't carry these fields yet.
+    var RUBRIC_ROWS = [
+      ["value", window.WB_RUBRIC_VALUE_LABEL],
+      ["power", window.WB_RUBRIC_POWER_LABEL],
+      ["portability", window.WB_RUBRIC_PORTABILITY_LABEL],
+      ["charge_speed", item.category === "chargers" ? window.WB_RUBRIC_EFFICIENCY_LABEL : window.WB_RUBRIC_CHARGE_SPEED_LABEL],
+      ["reliability", window.WB_RUBRIC_RELIABILITY_LABEL],
+    ];
+    var hasAllScores = RUBRIC_ROWS.every(function (row) { return typeof item[row[0]] === "number"; });
+    var middleBlockHtml;
+    if (hasAllScores) {
+      middleBlockHtml = '<div class="card-rubric-block"><div class="rubric-viz">' +
+        RUBRIC_ROWS.map(function (row) {
+          var key = row[0], label = row[1] || key;
+          var score = item[key];
+          var pct = Math.round((score / 5) * 100);
+          return '<div class="rubric-bar-row">' +
+            '<span class="rubric-bar-label">' + label + '</span>' +
+            '<div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:' + pct + '%"></div></div>' +
+            '<span class="rubric-bar-pct">' + score + '/5</span>' +
+            '</div>';
+        }).join("") +
+        '</div></div>';
+    } else {
+      middleBlockHtml = item.summary ? '<p class="desc desc-fade">' + item.summary + '</p>' : "";
+    }
+
+    // Buy buttons -- only if build.py has already resolved these URLs
+    // server-side into reviews-catalog.json (item.amazon_url,
+    // item.brand_buy_url with a brand_buy_label for the button text).
+    // Deliberately not replicating brand_affiliate_url()'s Awin
+    // merchant-ID/publisher-ID lookup logic client-side -- that's real
+    // business logic that belongs in one place (build.py), not
+    // duplicated and kept in sync by hand in two languages. Omitted
+    // entirely, gracefully, if those fields aren't present yet, same
+    // pattern as the rubric bars above.
+    var buyButtonsHtml = "";
+    if (item.amazon_url || item.brand_buy_url) {
+      buyButtonsHtml = '<div class="card-buy-row">' +
+        (item.amazon_url ? '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Check on Amazon") + '</a>' : "") +
+        (item.brand_buy_url ? '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">' + (item.brand_buy_label || ((window.WB_BUY_DIRECT_LABEL || "Check on") + " " + item.brand)) + '</a>' : "") +
+        '</div>';
+    }
+
     return '<div class="card review-card" style="--cat-accent:' + (item.accent || "") + ';">' +
-      '<a href="' + window.WB_ROOT + item.url + '" class="card-body-link">' +
+      '<div class="card-content">' +
+      '<a href="' + window.WB_ROOT + item.url + '" class="card-photo-link">' +
       '<div class="' + photoClass + '">' + badgeHtml + photoInner + '</div>' +
+      '</a>' +
       '<span class="brand">' + item.brand + '</span>' +
       '<h3>' + item.model + '</h3>' +
       '<div class="specrow"><span><strong>' + item.rating + '</strong>/5</span>' + specs.join("") + '</div>' +
-      (item.summary ? '<p class="desc desc-fade">' + item.summary + '</p>' : "") +
+      middleBlockHtml +
       '<span class="price">~\u20AC' + (item.price_eur != null ? item.price_eur.toLocaleString() : "") + ' <span class="price-est">(' + (window.WB_EST_LABEL || "Est.") + ')</span></span>' +
-      '</a></div>';
+      '</div>' + buyButtonsHtml + '</div>';
+  }
+
+  // Matches REVIEWS_PER_PAGE in build.py -- same page size client-side so
+  // the catalog-wide view paginates the same way the server-rendered one
+  // does, rather than dumping every match into one unpaginated page.
+  var CATALOG_PAGE_SIZE = 12;
+
+  function renderCatalogPagination(totalItems, currentPage) {
+    var nav = document.getElementById("catalog-pagination");
+    if (!nav) return;
+    var totalPages = Math.ceil(totalItems / CATALOG_PAGE_SIZE);
+    if (totalPages <= 1) { nav.hidden = true; nav.innerHTML = ""; return; }
+
+    var html = "";
+    html += currentPage > 1
+      ? '<button type="button" class="wb-page-btn wb-page-arrow" data-catalog-page="' + (currentPage - 1) + '" aria-label="Previous">\u2039</button>'
+      : '<span class="wb-page-btn wb-page-arrow" aria-disabled="true">\u2039</span>';
+    for (var i = 1; i <= totalPages; i++) {
+      html += i === currentPage
+        ? '<span class="wb-page-btn active" aria-current="page">' + i + "</span>"
+        : '<button type="button" class="wb-page-btn" data-catalog-page="' + i + '">' + i + "</button>";
+    }
+    html += currentPage < totalPages
+      ? '<button type="button" class="wb-page-btn wb-page-arrow" data-catalog-page="' + (currentPage + 1) + '" aria-label="Next">\u203A</button>'
+      : '<span class="wb-page-btn wb-page-arrow" aria-disabled="true">\u203A</span>';
+    nav.innerHTML = html;
+    nav.hidden = false;
+
+    Array.prototype.slice.call(nav.querySelectorAll("[data-catalog-page]")).forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        state.catalogPage = parseInt(btn.getAttribute("data-catalog-page"), 10);
+        showCatalogView();
+        nav.closest("section").scrollIntoView({ block: "start", behavior: "smooth" });
+      });
+    });
   }
 
   function showCatalogView() {
@@ -523,20 +612,27 @@ function initReviewsFilter() {
 
     grid.hidden = true;
     catalogGrid.hidden = false;
-    if (paginationEl) paginationEl.hidden = true; // this view isn't paginated the same way -- shows every match at once
+    if (paginationEl) paginationEl.hidden = true; // the server-rendered nav is for the page view specifically; the catalog view gets its own, below
 
     var matching = state.category === "all"
       ? catalogIndex.slice()
       : catalogIndex.filter(function (item) { return item.category === state.category; });
     matching.sort(catalogSortFn);
 
-    catalogGrid.innerHTML = matching.map(renderCatalogCard).join("");
+    var totalPages = Math.max(1, Math.ceil(matching.length / CATALOG_PAGE_SIZE));
+    if (state.catalogPage > totalPages) state.catalogPage = totalPages;
+    if (state.catalogPage < 1) state.catalogPage = 1;
+    var pageStart = (state.catalogPage - 1) * CATALOG_PAGE_SIZE;
+    var pageItems = matching.slice(pageStart, pageStart + CATALOG_PAGE_SIZE);
+
+    catalogGrid.innerHTML = pageItems.map(renderCatalogCard).join("");
     if (countLabel) {
       countLabel.textContent = matching.length
-        ? strings.showingCount.replace("{shown}", matching.length).replace("{total}", matching.length)
+        ? strings.showingCount.replace("{shown}", pageItems.length).replace("{total}", matching.length)
         : "";
     }
     if (emptyMsg) emptyMsg.hidden = matching.length !== 0;
+    renderCatalogPagination(matching.length, state.catalogPage);
   }
 
   function apply() {
@@ -585,6 +681,7 @@ function initReviewsFilter() {
       pills.forEach(function (p) { p.classList.remove("active"); });
       pill.classList.add("active");
       state.category = pill.getAttribute("data-filter-category");
+      state.catalogPage = 1;
       apply();
       updatePlaceholder();
     });
@@ -593,6 +690,7 @@ function initReviewsFilter() {
   if (sortSelect) {
     sortSelect.addEventListener("change", function () {
       state.sort = sortSelect.value;
+      state.catalogPage = 1;
       apply();
     });
   }
@@ -1063,6 +1161,7 @@ function initProductFinder() {
         ? ("\u21BA " + window.WB_FINDER_RESET_LABEL)
         : (window.WB_FINDER_SUBMIT_LABEL || "Show My Match \u2192");
       submitBtn.classList.toggle("is-submit", !showingResult);
+      submitBtn.classList.toggle("is-reset", showingResult);
     }
     setPillsInteractive(!showingResult);
     if (!showingResult) updateSubmitAvailability(); // re-locks the button until a fresh selection is made -- this was the bug: Reset called this with showingResult=false but nothing re-evaluated .disabled, so the button stayed clickable from before Reset was pressed
@@ -1260,16 +1359,18 @@ function initProductFinder() {
       ? '<div class="product-badge-pill"><span class="badge-icon">' + item.primary_badge_emoji + '</span><span>' + badgeLabels[item.primary_badge] + '</span></div>'
       : "";
 
-    // The whole card is one link to the review -- no separate "View
-    // review" button needed. <a> can legally wrap block-level content
-    // (div/h4/p), so this is valid markup, not a div-in-a-link hack.
+    // Only the photo is the actual link now (matches the same pattern
+    // used for the homepage recent-cards) -- title/rating/description
+    // are plain text underneath, not part of any clickable area.
     bestEl.innerHTML =
-      '<a class="finder-best-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
-        '<div class="' + photoClass + '">' + badgeHtml + photoInner + "</div>" +
+      '<div class="finder-best-card">' +
+        '<a class="finder-best-photo-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
+          '<div class="' + photoClass + '">' + badgeHtml + photoInner + "</div>" +
+        "</a>" +
         "<h4>" + item.title + "</h4>" +
         '<p class="recent-card-stars">' + starString(item.rating) + ' <span>' + item.rating + "/5 \u00b7 ~\u20AC" + item.price_eur.toLocaleString() + "</span></p>" +
         '<p class="finder-mobile-best-desc">' + (item.summary || "") + "</p>" +
-      "</a>";
+      "</div>";
   }
 
   function computeMatch() {

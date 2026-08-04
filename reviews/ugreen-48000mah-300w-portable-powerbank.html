@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='impact-site-verification' value='29317810-86b0-4edf-892f-fc8d6b93c100'>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e8a13d">
+<title>UGREEN 48000mAh 300W Powerbank Review | WattBench</title>
+<meta name="description" content="UGREEN 48000mAh 300W Powerbank review: 48,000mAh capacity, 300W output. Full specs, pros and cons, and who this power bank is actually for.">
+<link rel="canonical" href="https://wattbench.eu/reviews/ugreen-48000mah-300w-portable-powerbank.html">
+<link rel="alternate" hreflang="en" href="https://wattbench.eu/reviews/ugreen-48000mah-300w-portable-powerbank.html">
+<link rel="alternate" hreflang="de" href="https://wattbench.eu/de/reviews/ugreen-48000mah-300w-portable-powerbank.html">
+<link rel="alternate" hreflang="x-default" href="https://wattbench.eu/reviews/ugreen-48000mah-300w-portable-powerbank.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WattBench">
+<meta property="og:title" content="UGREEN 48000mAh 300W Powerbank Review | WattBench">
+<meta property="og:description" content="UGREEN 48000mAh 300W Powerbank review: 48,000mAh capacity, 300W output. Full specs, pros and cons, and who this power bank is actually for.">
+<meta property="og:url" content="https://wattbench.eu/reviews/ugreen-48000mah-300w-portable-powerbank.html">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://wattbench.eu/images/products/ugreen-48000mah-300w-portable-powerbank-1.webp">
+<meta property="og:image:width" content="1080">
+<meta property="og:image:height" content="1080">
+<meta property="og:image:alt" content="UGREEN 48000mAh 300W Powerbank">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wattbench.eu/images/products/ugreen-48000mah-300w-portable-powerbank-1.webp">
+
+<link rel="preload" href="../Fonts/SourceSans3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../Fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/style.css?v=0.3.1">
+<style>
+
+html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "UGREEN 48000mAh 300W Powerbank",
+  "brand": {"@type":"Brand","name":"UGREEN"},
+  "description": "The UGREEN 48000mAh (153.6Wh) 300W Portable Powerbank is a high-capacity energy station featuring 5 versatile ports (3x USB-C, 2x USB-A), PD 3.1 140W bidirectional fast charging, durable LiFePO4 battery cells with 3,000 cycles, and a built-in multi-mode LED emergency light.",
+  "image": "https://wattbench.eu/images/products/ugreen-48000mah-300w-portable-powerbank-1.webp",
+  "review": {
+    "@type": "Review",
+    "reviewRating": {"@type":"Rating","ratingValue":"3.3","bestRating":"5"},
+    "author": {"@type":"Organization","name":"WattBench"}
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"How long does it take to recharge the power bank?","acceptedAnswer":{"@type":"Answer","text":"Using a 140W high-speed charger on the USB-C1 port, the power bank can be fully recharged in just 1.5 hours."}},    {"@type":"Question","name":"What is the total output capacity across all ports?","acceptedAnswer":{"@type":"Answer","text":"It delivers up to 300W of total combined output across its 5 ports (3 USB-C and 2 USB-A)."}},    {"@type":"Question","name":"What type of battery cells does it use?","acceptedAnswer":{"@type":"Answer","text":"It utilizes high-quality LiFePO4 cells, offering enhanced safety and a lifespan of over 3,000 cycles while retaining 80% capacity."}}  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://wattbench.eu/"},
+    {"@type":"ListItem","position":2,"name":"Power Banks","item":"https://wattbench.eu/reviews/index.html?category=power-banks"},
+    {"@type":"ListItem","position":3,"name":"UGREEN 48000mAh 300W Powerbank","item":"https://wattbench.eu/reviews/ugreen-48000mah-300w-portable-powerbank.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <a href="../index.html" class="logo">WattBench<small>Specs Over Spin</small></a>
+    <nav class="main-nav">
+      <a href="../index.html">Home</a>
+      <div class="nav-dropdown">
+        <a href="../reviews/index.html" class="nav-dropdown-toggle active">Reviews</a>
+        <div class="nav-dropdown-menu">
+          <a href="../reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+          <a href="../reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+          <a href="../reviews/index.html?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+        </div>
+      </div>
+      <a href="../guides/index.html">Buying Guide</a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../reviews/ugreen-48000mah-300w-portable-powerbank.html" class="active lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../de/reviews/ugreen-48000mah-300w-portable-powerbank.html" class=" lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DARK">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Reviews">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-controls">
+    <div class="lang-switch">
+      <a href="../reviews/ugreen-48000mah-300w-portable-powerbank.html" class="active lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../de/reviews/ugreen-48000mah-300w-portable-powerbank.html" class=" lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DARK">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../index.html">Home</a>
+    <div class="mobile-drawer-group-label">Reviews</div>
+    <a href="../reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+    <a href="../reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+    <a href="../reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+    <a href="../guides/index.html">Buying Guide</a>
+  </div>
+</nav>
+
+<div class="disclosure">
+  This site earns commission from qualifying purchases via affiliate links. <a href="../affiliate-disclosure.html">Full disclosure</a>.
+</div>
+
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="../index.html">Home</a> / <a href="../reviews/index.html?category=power-banks" style="color:#00e5ff;">Power Banks</a> / UGREEN 48000mAh 300W Powerbank</p>
+</div>
+
+<section class="section-tight">
+  <div class="wrap review-layout">
+    <article class="review-main article">
+    <h1>
+      UGREEN 48000mAh 300W Powerbank <span class="h1-suffix">Review</span>
+      <span class="inline-rating">★★★☆☆ <span class="inline-rating-num">3.3/5</span></span>
+    </h1>
+    <div class="review-meta-row">
+      <span>Power Banks</span>
+<span>High-End Multi-Port Desktop-Ladestation</span>      <span>~€129.99 (Est.)</span>
+      <span> August 4, 2026</span>
+<span>Updated August 4, 2026</span>    </div>
+<p class="best-for-line"><strong>Best for:</strong> Outdoor camping, extended off-grid power, emergency backup, charging multiple laptops and devices</p>    <div class="top-buy-row">
+      <a class="top-buy-btn" href="https://link.amazon/B0c9GV7Oc" rel="sponsored nofollow" target="_blank">
+        <span class="cart-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>
+        Check Price on Amazon
+      </a>
+    </div>
+
+    <div class="product-photo review-photo" id="product-gallery" data-full="../images/products/ugreen-48000mah-300w-portable-powerbank-1.webp">
+      <img src="../images/products/ugreen-48000mah-300w-portable-powerbank-1.webp"
+     srcset="../images/products/ugreen-48000mah-300w-portable-powerbank-1-sm.webp 480w, ../images/products/ugreen-48000mah-300w-portable-powerbank-1-md.webp 900w, ../images/products/ugreen-48000mah-300w-portable-powerbank-1.webp 1600w"
+     sizes="(max-width: 900px) 100vw, 720px"
+     alt="UGREEN 48000mAh 300W Powerbank — Power Banks review"
+     loading="eager"
+fetchpriority="high">
+      <button type="button" class="gallery-expand" aria-label="Expand image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m11-5v3a2 2 0 0 1-2 2h-3"></path></svg></button>
+    </div>
+
+    <div class="spec-strip">
+      <div class="spec-strip-item"><strong>Capacity</strong> 48,000 mAh</div>
+      <div class="spec-strip-item"><strong>Total Input</strong> 140 W</div>
+      <div class="spec-strip-item"><strong>Total Output</strong> 300 W (300W total max output across 5 ports, up to 140W single-port max on USB-C1)</div>
+      <div class="spec-strip-item"><strong>Battery chemistry</strong> LiFePO4</div>
+      <div class="spec-strip-item"><strong>Cycle life</strong> 3000 to 80%</div>
+      <div class="spec-strip-item"><strong>Weight</strong> 1.6 kg</div>
+      <div class="spec-strip-item"><strong>0–100% charge time</strong> 1.5 hours</div>
+      <div class="spec-strip-item"><strong>Warranty</strong> 2 years</div>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button type="button" class="lightbox-close" aria-label="Close">✕</button>
+      <button type="button" class="lightbox-arrow prev" data-dir="-1" aria-label="Previous photo">‹</button>
+      <img class="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="">
+      <button type="button" class="lightbox-arrow next" data-dir="1" aria-label="Next photo">›</button>
+      <div class="lightbox-counter"></div>
+      <p class="lightbox-credit"></p>
+    </div>
+
+    <p class="lede">The UGREEN 48000mAh (153.6Wh) 300W Portable Powerbank is a high-capacity energy station featuring 5 versatile ports (3x USB-C, 2x USB-A), PD 3.1 140W bidirectional fast charging, durable LiFePO4 battery cells with 3,000 cycles, and a built-in multi-mode LED emergency light.</p>
+
+    <h2>Who it's for</h2>
+    <p>Campers, digital nomads, and outdoor enthusiasts who need massive portable battery capacity to charge laptops, tablets, and phones simultaneously far from any wall outlet.</p>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h3>Strengths</h3>
+        <ul><li>Massive 48,000mAh (153.6Wh) capacity easily powers multiple devices across multiple days</li><li>Supports 140W PD 3.1 bidirectional fast charging, fully refueling the power bank in just 1.5 hours</li><li>Versatile 5-port configuration (3 USB-C, 2 USB-A) with up to 300W total output</li><li>Long-lasting LiFePO4 battery chemistry retains over 80% capacity after 3,000 charge cycles</li><li>Integrated 3-mode LED light provides reliable emergency illumination during outdoor activities</li></ul>
+      </div>
+      <div class="cons">
+        <h3>Trade-offs</h3>
+        <ul><li>Heavy at 1,637g, making it less suitable for light backpacking or pocket carry</li><li>Capacity under 160Wh is great for travel compliance but limits prolonged heavy appliance use</li></ul>
+      </div>
+    </div>
+
+    <h2>Charging and expansion</h2>
+    <p>Supports up to 140W rapid input via USB-C1 for a full recharge in 90 minutes, and delivers up to 140W max output on USB-C1 with 100W max on USB-C2/C3.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>How long does it take to recharge the power bank?</h3>
+    <p>Using a 140W high-speed charger on the USB-C1 port, the power bank can be fully recharged in just 1.5 hours.</p>
+    <h3>What is the total output capacity across all ports?</h3>
+    <p>It delivers up to 300W of total combined output across its 5 ports (3 USB-C and 2 USB-A).</p>
+    <h3>What type of battery cells does it use?</h3>
+    <p>It utilizes high-quality LiFePO4 cells, offering enhanced safety and a lifespan of over 3,000 cycles while retaining 80% capacity.</p>
+
+    <div class="callout" id="buy" style="--cat-accent: #00e5ff;">
+      <strong>Where to buy:</strong> Pricing fluctuates with manufacturer promotions. Check the current price and any active bundle discounts before purchasing.
+      <div class="callout-buy-row">
+        <a class="card-buy-btn" href="https://link.amazon/B0c9GV7Oc" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+      </div>
+    </div>
+    </article>
+
+    <aside class="review-sidebar">
+      <div class="section-head"><div class="eyebrow">Scored via Rubric v1.5</div><h2>How this score breaks down</h2></div>
+      <div class="rubric-static-block">
+        <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+        <div class="rubric-total-line">
+          <span class="rubric-total-label">Overall Score</span>
+          <span class="rubric-total-stars">★★★☆☆</span>
+          <span class="rubric-total-score">3.3/5</span>
+        </div>
+        <div class="rubric-explainer-tabs">
+          <button type="button" class="rubric-explainer-tab active" data-explain="Value compares price against real capability — capacity and power combined.">Value</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Power reflects its relationship to capacity — capacity, input, and output combined, so a huge battery that can't deliver or receive real wattage doesn't score as powerful. For chargers, it's simply the highest output in its category.">Power</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Portability ranks weight against the rest of its category, lightest first. For chargers, it's weight relative to output, so a small charger that can't deliver much doesn't automatically win just for being tiny.">Portability</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Charge Speed measures how fast a battery actually recharges relative to its size, not just raw minutes — so a big battery charging in a similar time to a small one is correctly recognized as charging faster. For chargers, this becomes Efficiency instead.">Charge Speed</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Reliability is based on warranty length, ranked against the rest of its category — the longer the coverage, the higher the score.">Reliability</button>
+        </div>
+        <p class="rubric-value-explainer" id="rubric-explainer-text">Value compares price against real capability — capacity and power combined.</p>
+      </div>
+      <div class="section-head"><div class="eyebrow">Compare</div><h2>Related products</h2></div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/anker-powerbank-a1695-165w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/anker-powerbank-a1695-1.webp"
+     srcset="../images/products/anker-powerbank-a1695-1-sm.webp 480w, ../images/products/anker-powerbank-a1695-1-md.webp 900w, ../images/products/anker-powerbank-a1695-1.webp 1600w"
+     sizes="64px"
+     alt="Anker A1695"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">Anker</span>
+          <h3>A1695</h3>
+          <p class="desc desc-fade">The Anker Laptop Power Bank (25K, 165W) is a heavy-duty portable charger that bridges the gap between pocket-sized convenience and workstation-grade power. Featuring 25,000mAh (approx. 90Wh) capacity and a 165W max output across built-in and retractable cables, it delivers some juice for power-hungry laptops and accessories without crossing airline carry-on limits.</p>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/ecoflow-rapid-pro-power-bank-27650-300w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp"
+     srcset="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp 1600w"
+     sizes="64px"
+     alt="EcoFlow RAPID Pro Power Bank 300W"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">EcoFlow</span>
+          <h3>RAPID Pro Power Bank 300W</h3>
+          <p class="desc desc-fade">The EcoFlow RAPID Pro Power Bank (27,650mAh, 300W) delivers a staggering 300W total output across four USB-C ports, featuring dual 140W single-port outputs and a 60cm retractable 140W built-in cable. Packed with an airline-compliant 99.54Wh capacity, a 20-minute 80% fast recharge via the 320W charging station, and modular magnetic cases, it represents the pinnacle of high-output travel charging.</p>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/ugreen-nexode-pro-power-bank-20000-165w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp"
+     srcset="../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-power-bank-20000-165w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-power-bank-20000-165w-1.webp 1600w"
+     sizes="64px"
+     alt="UGREEN Nexode Pro (20K mAh, 165W)"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (20K mAh, 165W)</h3>
+          <p class="desc desc-fade">The UGREEN Nexode Pro Power Bank (20,000mAh, 165W) features an innovative 65cm built-in roll-up cable, eliminating the need to carry separate wires. Delivering up to 165W total output across multiple ports (100W + 65W simultaneous dual-laptop charging), it combines high capacity with a sharp TFT display and robot status icons.</p>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../index.html" class="logo">WattBench</a>
+      <p class="fine">WattBench is a review site for power devices, including portable power stations, power banks, and chargers. We score every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="../reviews/index.html?category=power-stations">Power Stations</a>
+      <a href="../reviews/index.html?category=power-banks">Power Banks</a>
+      <a href="../reviews/index.html?category=chargers">Chargers</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="../about.html">About</a>
+      <a href="../affiliate-disclosure.html">Affiliate Disclosure</a>
+      <a href="../privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. All product names and trademarks belong to their respective owners.</span>
+    <span>v0.3.1</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "en";
+  window.WB_ROOT = "../";
+  window.WB_TOP_RATED_LABEL = "Top Rated";
+  window.WB_BEST_VALUE_LABEL = "Best Value";
+  window.WB_FASTEST_CHARGE_LABEL = "Fastest Charge";
+  window.WB_LIGHTEST_LABEL = "Lightest";
+  window.WB_EST_LABEL = "Est.";
+  window.WB_RUBRIC_VALUE_LABEL = "Value";
+  window.WB_RUBRIC_POWER_LABEL = "Power";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portability";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Charge Speed";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Efficiency";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Reliability";
+  window.WB_BUY_AMAZON_LABEL = "Check on Amazon";
+  window.WB_BUY_DIRECT_LABEL = "Check on";
+  window.WB_SEARCH_NO_RESULTS = "No results found.";
+  window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
+  window.WB_SEARCH_SUGGESTED = "Suggested Categories";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} results";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Search within {category}...";
+  window.WB_SEARCH_PREFIX = "Search";
+  window.WB_THEME_LABELS = { dark: "\u263d DARK", light: "\u2600 LIGHT" };
+  window.WB_ALT_LINKS = { "en": "../reviews/ugreen-48000mah-300w-portable-powerbank.html", "de": "../de/reviews/ugreen-48000mah-300w-portable-powerbank.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Power Stations", accent: "#a855f7", icon: "bolt", url: "../reviews/index.html?category=power-stations" }, { id: "power-banks", label: "Power Banks", accent: "#00e5ff", icon: "battery", url: "../reviews/index.html?category=power-banks" }, { id: "chargers", label: "Chargers", accent: "#00d98b", icon: "plug", url: "../reviews/index.html?category=chargers" }];
+</script>
+<script src="../js/main.js?v=0.3.1"></script>
+</body>
+</html>

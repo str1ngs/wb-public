@@ -76,7 +76,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   "@type": "BreadcrumbList",
   "itemListElement": [
     {"@type":"ListItem","position":1,"name":"Home","item":"https://wattbench.eu/"},
-    {"@type":"ListItem","position":2,"name":"All Ratings","item":"https://wattbench.eu/reviews/index.html"}
+    {"@type":"ListItem","position":2,"name":"All Reviews","item":"https://wattbench.eu/reviews/index.html"}
   ]
 }
 </script>
@@ -94,7 +94,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
     <nav class="main-nav">
       <a href="../index.html">Home</a>
       <div class="nav-dropdown">
-        <a href="../reviews/index.html" class="nav-dropdown-toggle active">Ratings</a>
+        <a href="../reviews/index.html" class="nav-dropdown-toggle active">Reviews</a>
         <div class="nav-dropdown-menu">
           <a href="../reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
           <a href="../reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
@@ -129,7 +129,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
 </header>
 
 <div class="menu-backdrop" id="menu-backdrop"></div>
-<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Ratings">
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Reviews">
   <div class="mobile-drawer-head">
     <span class="mobile-drawer-brand">WattBench</span>
     <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
@@ -159,7 +159,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   </div>
   <div class="mobile-drawer-links">
     <a href="../index.html">Home</a>
-    <div class="mobile-drawer-group-label">Ratings</div>
+    <div class="mobile-drawer-group-label">Reviews</div>
     <a href="../reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
     <a href="../reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
     <a href="../reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
@@ -172,12 +172,12 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
 </div>
 
 <main>
-<div class="wrap"><p class="breadcrumb"><a href="../index.html">Home</a> / All Ratings</p></div>
+<div class="wrap"><p class="breadcrumb"><a href="../index.html">Home</a> / All Reviews</p></div>
 
 <section class="section-tight">
   <div class="wrap">
-    <h1>All Ratings</h1>
-    <p class="lede">Every product we've rated, filterable by category, sortable by price or recency.</p>
+    <h1>All Reviews</h1>
+    <p class="lede">Every product we've reviewed, filterable by category, sortable by price or recency.</p>
 
     <div class="hero-search page-search">
       <div class="hero-search-box page-search-box">
@@ -190,7 +190,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
     </div>
 
     <div class="review-filters">
-      <div class="filter-pills" role="group" aria-label="Ratings">
+      <div class="filter-pills" role="group" aria-label="Reviews">
         <button type="button" class="filter-pill active" data-filter-category="all">All</button>
         <button type="button" class="filter-pill" data-filter-category="power-stations" style="--pill-accent: #a855f7;">Power Stations</button>
         <button type="button" class="filter-pill" data-filter-category="power-banks" style="--pill-accent: #00e5ff;">Power Banks</button>
@@ -214,21 +214,270 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
         showingCount: "Showing {shown} of {total}",
         noMatches: "No results"
       };
+      // Total catalog size (all products, not just this page's 12) so the
+      // "Showing X of Y" counter can report the real Y without fetching
+      // the whole catalog just to count it. Falls back to null if
+      // build.py doesn't pass total_products into this template's
+      // context yet -- main.js degrades to showing just the page count
+      // alone in that case, rather than a wrong or broken total.
+      window.WB_TOTAL_REVIEWS = null;
     </script>
 
     <div class="grid cols-3" id="review-grid">
       <div class="card review-card"
            style="--cat-accent: #00d98b;"
            data-category="chargers"
-           data-price="69"
-           data-date="2026-07-30"
-           data-rating="4.5"
-           data-title="ugreen nexode pro 160w">
-        <a href="../reviews/ugreen-nexode-pro-160w-usb-c-charger.html" class="card-body-link">
+           data-price="27"
+           data-date="2026-08-04"
+           data-rating="4.4"
+           data-title="ecoflow rapid pro 100w">
+        <div class="card-content">
+          <a href="../reviews/ecoflow-rapid-pro-charger-100w.html" class="card-photo-link">
           <div class="product-photo">
             <div class="product-badge-pill">
               <span class="badge-icon">🏆</span>
               <span>Top Rated</span>
+            </div>
+            <img src="../images/products/ecoflow-rapid-pro-charger-100w-1.webp"
+     srcset="../images/products/ecoflow-rapid-pro-charger-100w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-charger-100w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-charger-100w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow RAPID Pro 100W - Chargers review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">EcoFlow</span>
+          <h3>RAPID Pro 100W</h3>
+          <div class="specrow">
+            <span><strong>4.4</strong>/5</span>
+            <span><strong>100</strong> W</span>
+            <span><strong>185 g</strong></span>
+          </div>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Efficiency</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
+          <span class="price">~€27 <span class="price-est">(Est.)</span></span>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0batXeOs" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="129.99"
+           data-date="2026-08-04"
+           data-rating="3.3"
+           data-title="ugreen 48000mah 300w powerbank">
+        <div class="card-content">
+          <a href="../reviews/ugreen-48000mah-300w-portable-powerbank.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/ugreen-48000mah-300w-portable-powerbank-1.webp"
+     srcset="../images/products/ugreen-48000mah-300w-portable-powerbank-1-sm.webp 480w, ../images/products/ugreen-48000mah-300w-portable-powerbank-1-md.webp 900w, ../images/products/ugreen-48000mah-300w-portable-powerbank-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="UGREEN 48000mAh 300W Powerbank - Power Banks review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">UGREEN</span>
+          <h3>48000mAh 300W Powerbank</h3>
+          <div class="specrow">
+            <span><strong>3.3</strong>/5</span>
+            <span><strong>48,000</strong> mAh</span>
+            <span><strong>300</strong> W</span>
+            <span><strong>1.6 kg</strong></span>
+          </div>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
+          <span class="price">~€129.99 <span class="price-est">(Est.)</span></span>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B0c9GV7Oc" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="1999"
+           data-date="2026-08-04"
+           data-rating="3.2"
+           data-title="bluetti apex 300">
+        <div class="card-content">
+          <a href="../reviews/bluetti-apex-300-versatile-power-station.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/bluetti-apex-300-versatile-power-station-1.webp"
+     srcset="../images/products/bluetti-apex-300-versatile-power-station-1-sm.webp 480w, ../images/products/bluetti-apex-300-versatile-power-station-1-md.webp 900w, ../images/products/bluetti-apex-300-versatile-power-station-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Apex 300 - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">BLUETTI</span>
+          <h3>Apex 300</h3>
+          <div class="specrow">
+            <span><strong>3.2</strong>/5</span>
+            <span><strong>2,764.8</strong> Wh</span>
+            <span><strong>3,840</strong> W</span>
+            <span><strong>38.0 kg</strong></span>
+          </div>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div></div>
+          <span class="price">~€1,999 <span class="price-est">(Est.)</span></span>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B010wL1sR" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Fapex-300-home-battery-backup" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="1299"
+           data-date="2026-08-04"
+           data-rating="3.4"
+           data-title="bluetti elite 200 v2">
+        <div class="card-content">
+          <a href="../reviews/bluetti-elite-200-v2-portable-power-station.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/bluetti-elite-200-v2-portable-power-station-1.webp"
+     srcset="../images/products/bluetti-elite-200-v2-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-200-v2-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-200-v2-portable-power-station-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Elite 200 V2 - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">BLUETTI</span>
+          <h3>Elite 200 V2</h3>
+          <div class="specrow">
+            <span><strong>3.4</strong>/5</span>
+            <span><strong>2,073.6</strong> Wh</span>
+            <span><strong>2,600</strong> W</span>
+            <span><strong>24.2 kg</strong></span>
+          </div>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div></div>
+          <span class="price">~€1,299 <span class="price-est">(Est.)</span></span>
+        </div>
+        <div class="card-buy-row">
+          <a href="https://link.amazon/B06cDOUFc" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-200-v2-portable-power-station%3Fvariant%3D54935100227960" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00d98b;"
+           data-category="chargers"
+           data-price="69"
+           data-date="2026-07-30"
+           data-rating="4.3"
+           data-title="ugreen nexode pro 160w">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-pro-160w-usb-c-charger.html" class="card-photo-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">⚡</span>
+              <span>Fastest Charge</span>
             </div>
             <img src="../images/products/ugreen-nexode-pro-160w-usb-c-charger-1.webp"
      srcset="../images/products/ugreen-nexode-pro-160w-usb-c-charger-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-160w-usb-c-charger-1-md.webp 900w, ../images/products/ugreen-nexode-pro-160w-usb-c-charger-1.webp 1600w"
@@ -237,16 +486,43 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">UGREEN</span>
           <h3>Nexode Pro 160W</h3>
           <div class="specrow">
-            <span><strong>4.5</strong>/5</span>
+            <span><strong>4.3</strong>/5</span>
             <span><strong>160</strong> W</span>
             <span><strong>322 g</strong></span>
           </div>
-          <p class="desc desc-fade">The UGREEN Nexode Pro 160W 5-Port USB-C Charger features an intelligent smart display with touch control, a 360° rotating interface, and advanced GaN technologies. Delivering up to 140W from a single port and 160W total output across 5 ports, it provides rapid, real-time monitored charging for laptops, tablets, and phones.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Efficiency</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€69 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B06jESipg" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
@@ -256,9 +532,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="chargers"
            data-price="149"
            data-date="2026-07-30"
-           data-rating="4.2"
+           data-rating="4.0"
            data-title="ugreen nexode 300w 5-port charger">
-        <a href="../reviews/ugreen-nexode-300w-charger.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-300w-charger.html" class="card-photo-link">
           <div class="product-photo">
             <div class="product-badge-pill">
               <span class="badge-icon">⚡</span>
@@ -271,16 +548,43 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">UGREEN</span>
           <h3>Nexode 300W 5-Port Charger</h3>
           <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
+            <span><strong>4.0</strong>/5</span>
             <span><strong>300</strong> W</span>
             <span><strong>1.3 kg</strong></span>
           </div>
-          <p class="desc desc-fade">The UGREEN Nexode 300W Desktop Charger is a powerhouse 5-port charging station utilizing advanced GaN technology and PD 3.1 support. Delivering up to 140W from a single port and a massive 300W total output, it can simultaneously fast-charge up to three laptops along with tablets and smartphones.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Efficiency</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€149 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B04fqjqce" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
@@ -290,9 +594,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-banks"
            data-price="49"
            data-date="2026-07-29"
-           data-rating="4.0"
+           data-rating="3.8"
            data-title="ugreen nexode power bank (25k, 145w)">
-        <a href="../reviews/ugreen-nexode-power-bank-25000-145w.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-power-bank-25000-145w.html" class="card-photo-link">
           <div class="product-photo">
             <div class="product-badge-pill">
               <span class="badge-icon">💰</span>
@@ -305,17 +610,44 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">UGREEN</span>
           <h3>Nexode Power Bank (25K, 145W)</h3>
           <div class="specrow">
-            <span><strong>4.0</strong>/5</span>
+            <span><strong>3.8</strong>/5</span>
             <span><strong>25,000</strong> mAh</span>
             <span><strong>145</strong> W</span>
             <span><strong>505 g</strong></span>
           </div>
-          <p class="desc desc-fade">The UGREEN Nexode Power Bank (25,000mAh, 145W) features advanced PD 3.1 technology to deliver a 140W max single-port output and 145W total combined output across three ports. Built with an airline-safe 90Wh capacity, digital LED display, and pass-through charging support, it delivers high-speed mobile power for laptops, tablets, and smartphones.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€49 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B02wKsSY1" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
@@ -325,9 +657,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-banks"
            data-price="35"
            data-date="2026-07-29"
-           data-rating="3.7"
+           data-rating="3.4"
            data-title="ugreen nexode pro power bank (10k mah, 55w)">
-        <a href="../reviews/ugreen-nexode-pro-power-bank-10000-55w.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-pro-power-bank-10000-55w.html" class="card-photo-link">
           <div class="product-photo">
             <div class="product-badge-pill">
               <span class="badge-icon">🪶</span>
@@ -340,17 +673,44 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">UGREEN</span>
           <h3>Nexode Pro Power Bank (10K mAh, 55W)</h3>
           <div class="specrow">
-            <span><strong>3.7</strong>/5</span>
+            <span><strong>3.4</strong>/5</span>
             <span><strong>10,000</strong> mAh</span>
             <span><strong>55</strong> W</span>
             <span><strong>249 g</strong></span>
           </div>
-          <p class="desc desc-fade">The UGREEN Nexode Pro Power Bank (10,000mAh, 55W) utilizes exclusive AirPyra technology to pack a 36Wh capacity into an ultra-lightweight 249g body. Featuring a built-in 22cm Type-C cable, 55W Xiaomi Mi Turbo charging, and 45W Power Delivery fast charge support, it delivers high performance in a pocket-friendly form factor.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€35 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B0hWPQdN4" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
@@ -360,28 +720,56 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="1999"
            data-date="2026-07-29"
-           data-rating="3.7"
-           data-title="bluetti elite 400">
-        <a href="../reviews/bluetti-elite-400-portable-power-station.html" class="card-body-link">
+           data-rating="3.4"
+           data-title="bluetti elite 400 2600w">
+        <div class="card-content">
+          <a href="../reviews/bluetti-elite-400-portable-power-station.html" class="card-photo-link">
           <div class="product-photo">
             <img src="../images/products/bluetti-elite-400-portable-power-station-1.webp"
      srcset="../images/products/bluetti-elite-400-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-400-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-400-portable-power-station-1.webp 1600w"
      sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="BLUETTI Elite 400 - Power Stations review"
+     alt="BLUETTI Elite 400 2600W - Power Stations review"
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">BLUETTI</span>
-          <h3>Elite 400</h3>
+          <h3>Elite 400 2600W</h3>
           <div class="specrow">
-            <span><strong>3.7</strong>/5</span>
+            <span><strong>3.4</strong>/5</span>
             <span><strong>3,840</strong> Wh</span>
             <span><strong>2,600</strong> W</span>
             <span><strong>39.0 kg</strong></span>
           </div>
-          <p class="desc desc-fade">The BLUETTI Elite 400 is a heavy-duty portable power station featuring 3,840Wh LFP battery and a 2,600W AC output with 3,900W Power Lifting. Equipped with smooth-rolling transport wheels, a 15ms UPS switching time, and lightning-fast 2,800W dual charging that reaches 80% in just 70 minutes, it provides reliable off-grid and emergency backup power.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div></div>
           <span class="price">~€1,999 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B0eUTB5Hr" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
           <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-400-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
@@ -392,9 +780,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="1099"
            data-date="2026-07-29"
-           data-rating="3.1"
+           data-rating="3.0"
            data-title="bluetti pioneer na (sodium-ion)">
-        <a href="../reviews/bluetti-pioneer-na-portable-power-station.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/bluetti-pioneer-na-portable-power-station.html" class="card-photo-link">
           <div class="product-photo">
             <img src="../images/products/bluetti-pioneer-na-portable-power-station-1.webp"
      srcset="../images/products/bluetti-pioneer-na-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-pioneer-na-portable-power-station-1-md.webp 900w, ../images/products/bluetti-pioneer-na-portable-power-station-1.webp 1600w"
@@ -403,17 +792,44 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">BLUETTI</span>
           <h3>Pioneer Na (Sodium-ion)</h3>
           <div class="specrow">
-            <span><strong>3.1</strong>/5</span>
+            <span><strong>3.0</strong>/5</span>
             <span><strong>900</strong> Wh</span>
             <span><strong>1,500</strong> W</span>
             <span><strong>16.0 kg</strong></span>
           </div>
-          <p class="desc desc-fade">The BLUETTI Pioneer Na is an interesting portable power station which is utilizing sodium-ion chemistry to deliver performance in freezing temperatures down to -25°C. Featuring a 900Wh capacity, 1,500W AC output (2,250W lifting power), and fast dual AC and solar charging that reaches 80% in just 35 minutes, it offers robust and reliable off-grid power.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€1,099 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Fpioneer-na-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
         </div>
@@ -423,9 +839,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-banks"
            data-price="83.99"
            data-date="2026-07-28"
-           data-rating="3.2"
+           data-rating="3.0"
            data-title="ugreen nexode pro (25k, 200w)">
-        <a href="../reviews/ugreen-nexode-pro-powerbank-25000-200w.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-pro-powerbank-25000-200w.html" class="card-photo-link">
           <div class="product-photo">
             <img src="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp"
      srcset="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp 1600w"
@@ -434,17 +851,44 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">UGREEN</span>
           <h3>Nexode Pro (25K, 200W)</h3>
           <div class="specrow">
-            <span><strong>3.2</strong>/5</span>
+            <span><strong>3.0</strong>/5</span>
             <span><strong>25,000</strong> mAh</span>
             <span><strong>200</strong> W</span>
             <span><strong>609 g</strong></span>
           </div>
-          <p class="desc desc-fade">The UGREEN Nexode Pro Powerbank combines a 25000 mAh capacity with a 200W total output, featuring PD 3.1 support and an intelligent TFT display.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€83.99 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B02qHZFMF" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
         </div>
@@ -454,9 +898,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-banks"
            data-price="165"
            data-date="2026-07-27"
-           data-rating="3.4"
+           data-rating="3.2"
            data-title="ecoflow rapid pro power bank 300w">
-        <a href="../reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="card-body-link">
+        <div class="card-content">
+          <a href="../reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="card-photo-link">
           <div class="product-photo">
             <div class="product-badge-pill">
               <span class="badge-icon">⚡</span>
@@ -469,160 +914,46 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
      loading="lazy"
 >
           </div>
+          </a>
           <span class="brand">EcoFlow</span>
           <h3>RAPID Pro Power Bank 300W</h3>
           <div class="specrow">
-            <span><strong>3.4</strong>/5</span>
+            <span><strong>3.2</strong>/5</span>
             <span><strong>27,650</strong> mAh</span>
             <span><strong>300</strong> W</span>
             <span><strong>700 g</strong></span>
           </div>
-          <p class="desc desc-fade">The EcoFlow RAPID Pro Power Bank (27,650mAh, 300W) delivers a staggering 300W total output across four USB-C ports, featuring dual 140W single-port outputs and a 60cm retractable 140W built-in cable. Packed with an airline-compliant 99.54Wh capacity, a 20-minute 80% fast recharge via the 320W charging station, and modular magnetic cases, it represents the pinnacle of high-output travel charging.</p>
+          <div class="card-rubric-block"><div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div></div>
           <span class="price">~€165 <span class="price-est">(Est.)</span></span>
-        </a>
+        </div>
         <div class="card-buy-row">
           <a href="https://link.amazon/B0efJeZWm" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #00d98b;"
-           data-category="chargers"
-           data-price="160"
-           data-date="2026-07-27"
-           data-rating="4.2"
-           data-title="ecoflow rapid pro desktop charger 320w">
-        <a href="../reviews/ecoflow-rapid-pro-desktop-charger-320w.html" class="card-body-link">
-          <div class="product-photo">
-            <div class="product-badge-pill">
-              <span class="badge-icon">⚡</span>
-              <span>Fastest Charge</span>
-            </div>
-            <img src="../images/products/ecoflow-rapid-pro-desktop-charger-320w-1.webp"
-     srcset="../images/products/ecoflow-rapid-pro-desktop-charger-320w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-desktop-charger-320w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-desktop-charger-320w-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="EcoFlow RAPID Pro Desktop Charger 320W - Chargers review"
-     loading="lazy"
->
-          </div>
-          <span class="brand">EcoFlow</span>
-          <h3>RAPID Pro Desktop Charger 320W</h3>
-          <div class="specrow">
-            <span><strong>4.2</strong>/5</span>
-            <span><strong>320</strong> W</span>
-            <span><strong>885 g</strong></span>
-          </div>
-          <p class="desc desc-fade">The EcoFlow RAPID Pro Desktop Charger (320W, 5 Ports) is an advanced GaN-powered multi-port charging station engineered to deliver a massive 320W total output. Featuring dual 140W USB-C ports, an integrated Pogo Pin docking interface for RAPID Pro power banks, an LCD screen, and smart app-controlled energy management, it acts as the ultimate power hub for demanding multi-device setups.</p>
-          <span class="price">~€160 <span class="price-est">(Est.)</span></span>
-        </a>
-        <div class="card-buy-row">
-          <a href="https://link.amazon/B0ehv6gRC" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #00e5ff;"
-           data-category="power-banks"
-           data-price="89"
-           data-date="2026-07-27"
-           data-rating="4.0"
-           data-title="ecoflow rapid power bank (25k, 170w)">
-        <a href="../reviews/ecoflow-rapid-power-bank-25000-170w.html" class="card-body-link">
-          <div class="product-photo">
-            <div class="product-badge-pill">
-              <span class="badge-icon">🏆</span>
-              <span>Top Rated</span>
-            </div>
-            <img src="../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp"
-     srcset="../images/products/ecoflow-rapid-power-bank-25000-170w-1-sm.webp 480w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1-md.webp 900w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="EcoFlow RAPID Power Bank (25K, 170W) - Power Banks review"
-     loading="lazy"
->
-          </div>
-          <span class="brand">EcoFlow</span>
-          <h3>RAPID Power Bank (25K, 170W)</h3>
-          <div class="specrow">
-            <span><strong>4.0</strong>/5</span>
-            <span><strong>25,000</strong> mAh</span>
-            <span><strong>170</strong> W</span>
-            <span><strong>565 g</strong></span>
-          </div>
-          <p class="desc desc-fade">The EcoFlow RAPID Power Bank (25,000mAh, 170W) delivers a total output of 170W across three ports, featuring dual 140W USB-C single-port outputs and a 33W USB-A port. With an airline-friendly 25,000mAh capacity, 140W ultra-fast recharging (0-50% in 20 minutes), and a smart TFT screen, it provides robust mobile productivity.</p>
-          <span class="price">~€89 <span class="price-est">(Est.)</span></span>
-        </a>
-        <div class="card-buy-row">
-          <a href="https://link.amazon/B0iK8nzLX" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #a855f7;"
-           data-category="power-stations"
-           data-price="159"
-           data-date="2026-07-27"
-           data-rating="3.5"
-           data-title="bluetti elite 10 mini">
-        <a href="../reviews/bluetti-elite-10-mini-portable-power-station.html" class="card-body-link">
-          <div class="product-photo">
-            <div class="product-badge-pill">
-              <span class="badge-icon">🪶</span>
-              <span>Lightest</span>
-            </div>
-            <img src="../images/products/bluetti-elite-10-mini-portable-power-station-1.webp"
-     srcset="../images/products/bluetti-elite-10-mini-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-10-mini-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-10-mini-portable-power-station-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="BLUETTI Elite 10 Mini - Power Stations review"
-     loading="lazy"
->
-          </div>
-          <span class="brand">BLUETTI</span>
-          <h3>Elite 10 Mini</h3>
-          <div class="specrow">
-            <span><strong>3.5</strong>/5</span>
-            <span><strong>128</strong> Wh</span>
-            <span><strong>200</strong> W</span>
-            <span><strong>1.8 kg</strong></span>
-          </div>
-          <p class="desc desc-fade">The BLUETTI Elite 10 Mini packs a 128Wh LiFePO4 battery and a 200W AC outlet (300W peak) into an ultra-lightweight 1.8 kg handheld chassis. Featuring a 10ms UPS mode, 150W turbo AC recharging (70 mins to full), 100W USB-C fast charging, solar/car input options, and smart Bluetooth app control, it bridges the gap between high-capacity power banks and compact generators.</p>
-          <span class="price">~€159 <span class="price-est">(Est.)</span></span>
-        </a>
-        <div class="card-buy-row">
-          <a href="https://link.amazon/B0aC3NZ6U" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
-          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-10-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #a855f7;"
-           data-category="power-stations"
-           data-price="1260"
-           data-date="2026-07-27"
-           data-rating="3.8"
-           data-title="bluetti elite 300">
-        <a href="../reviews/bluetti-elite-300-portable-power-station.html" class="card-body-link">
-          <div class="product-photo">
-            <div class="product-badge-pill">
-              <span class="badge-icon">💰</span>
-              <span>Best Value</span>
-            </div>
-            <img src="../images/products/bluetti-elite-300-portable-power-station-3.webp"
-     srcset="../images/products/bluetti-elite-300-portable-power-station-3-sm.webp 480w, ../images/products/bluetti-elite-300-portable-power-station-3-md.webp 900w, ../images/products/bluetti-elite-300-portable-power-station-3.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="BLUETTI Elite 300 - Power Stations review"
-     loading="lazy"
->
-          </div>
-          <span class="brand">BLUETTI</span>
-          <h3>Elite 300</h3>
-          <div class="specrow">
-            <span><strong>3.8</strong>/5</span>
-            <span><strong>3,014.4</strong> Wh</span>
-            <span><strong>2,400</strong> W</span>
-            <span><strong>26.3 kg</strong></span>
-          </div>
-          <p class="desc desc-fade">The BLUETTI Elite 300 is a Frost & Sullivan-certified ultra-compact 3kWh portable power station packing 3,014.4Wh of capacity and 2,400W of continuous AC output (4,800W peak) into a remarkably small footprint. Featuring an RV-ready 12V/30A DC port, dual high-wattage USB-C ports (up to 140W), 1,200W solar input, a 10ms UPS mode, and Bluetooth/Wi-Fi app control, it delivers robust off-grid and emergency power.</p>
-          <span class="price">~€1,260 <span class="price-est">(Est.)</span></span>
-        </a>
-        <div class="card-buy-row">
-          <a href="https://link.amazon/B06STIGVF" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Check on Amazon</a>
-          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-300-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">Check on BLUETTI</a>
         </div>
       </div>
     </div>
@@ -631,13 +962,14 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
 
     <p class="review-empty" hidden>No results</p>
 
-    <nav class="review-pagination" id="review-pagination" aria-label="All Ratings">
+    <nav class="review-pagination" id="review-pagination" aria-label="All Reviews">
       <span class="wb-page-btn wb-page-arrow" aria-disabled="true">&lsaquo;</span>
       <span class="wb-page-btn active" aria-current="page">1</span>
       <a class="wb-page-btn" href="../reviews/page-2.html">2</a>
       <a class="wb-page-btn" href="../reviews/page-3.html">3</a>
       <a class="wb-page-btn wb-page-arrow" href="../reviews/page-2.html" aria-label="Next">&rsaquo;</a>
     </nav>
+    <nav class="review-pagination" id="catalog-pagination" aria-label="All Reviews" hidden></nav>
   </div>
 </section>
 
@@ -647,7 +979,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   <div class="wrap">
     <div class="footer-brand">
       <a href="../index.html" class="logo">WattBench</a>
-      <p class="fine">WattBench is a rating engine for power devices, including portable power stations, power banks, and chargers. We score every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data.</p>
+      <p class="fine">WattBench is a review site for power devices, including portable power stations, power banks, and chargers. We score every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
     </div>
     <div>
       <h4>Explore</h4>
@@ -664,13 +996,26 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   </div>
   <div class="footer-bottom">
     <span>© 2026 WattBench. All product names and trademarks belong to their respective owners.</span>
-    <span>Specs verified July 2026 • v0.3.1</span>
+    <span>v0.3.1</span>
   </div>
 </footer>
 
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "../";
+  window.WB_TOP_RATED_LABEL = "Top Rated";
+  window.WB_BEST_VALUE_LABEL = "Best Value";
+  window.WB_FASTEST_CHARGE_LABEL = "Fastest Charge";
+  window.WB_LIGHTEST_LABEL = "Lightest";
+  window.WB_EST_LABEL = "Est.";
+  window.WB_RUBRIC_VALUE_LABEL = "Value";
+  window.WB_RUBRIC_POWER_LABEL = "Power";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portability";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Charge Speed";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Efficiency";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Reliability";
+  window.WB_BUY_AMAZON_LABEL = "Check on Amazon";
+  window.WB_BUY_DIRECT_LABEL = "Check on";
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";

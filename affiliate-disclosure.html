@@ -94,7 +94,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
     <nav class="main-nav">
       <a href="index.html">Home</a>
       <div class="nav-dropdown">
-        <a href="reviews/index.html" class="nav-dropdown-toggle">Ratings</a>
+        <a href="reviews/index.html" class="nav-dropdown-toggle">Reviews</a>
         <div class="nav-dropdown-menu">
           <a href="reviews/index.html?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
           <a href="reviews/index.html?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
@@ -129,7 +129,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
 </header>
 
 <div class="menu-backdrop" id="menu-backdrop"></div>
-<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Ratings">
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Reviews">
   <div class="mobile-drawer-head">
     <span class="mobile-drawer-brand">WattBench</span>
     <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
@@ -159,7 +159,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   </div>
   <div class="mobile-drawer-links">
     <a href="index.html">Home</a>
-    <div class="mobile-drawer-group-label">Ratings</div>
+    <div class="mobile-drawer-group-label">Reviews</div>
     <a href="reviews/index.html?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
     <a href="reviews/index.html?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
     <a href="reviews/index.html?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
@@ -190,7 +190,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   <div class="wrap">
     <div class="footer-brand">
       <a href="index.html" class="logo">WattBench</a>
-      <p class="fine">WattBench is a rating engine for power devices, including portable power stations, power banks, and chargers. We score every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data.</p>
+      <p class="fine">WattBench is a review site for power devices, including portable power stations, power banks, and chargers. We score every device using our straightforward Rubric v1.5 framework—no overly complex methodologies, just clear and honest data. We hope you find the perfect device for your needs! We may earn a commission from qualifying purchases made through links on this site.</p>
     </div>
     <div>
       <h4>Explore</h4>
@@ -207,13 +207,26 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   </div>
   <div class="footer-bottom">
     <span>© 2026 WattBench. All product names and trademarks belong to their respective owners.</span>
-    <span>Specs verified July 2026 • v0.3.1</span>
+    <span>v0.3.1</span>
   </div>
 </footer>
 
 <script>
   window.WB_LOCALE = "en";
   window.WB_ROOT = "";
+  window.WB_TOP_RATED_LABEL = "Top Rated";
+  window.WB_BEST_VALUE_LABEL = "Best Value";
+  window.WB_FASTEST_CHARGE_LABEL = "Fastest Charge";
+  window.WB_LIGHTEST_LABEL = "Lightest";
+  window.WB_EST_LABEL = "Est.";
+  window.WB_RUBRIC_VALUE_LABEL = "Value";
+  window.WB_RUBRIC_POWER_LABEL = "Power";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portability";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Charge Speed";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Efficiency";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Reliability";
+  window.WB_BUY_AMAZON_LABEL = "Check on Amazon";
+  window.WB_BUY_DIRECT_LABEL = "Check on";
   window.WB_SEARCH_NO_RESULTS = "No results found.";
   window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
   window.WB_SEARCH_SUGGESTED = "Suggested Categories";
