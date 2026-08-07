@@ -508,14 +508,45 @@ function initReviewsFilter() {
     if (item.total_output_w) specs.push('<span><strong>' + item.total_output_w.toLocaleString() + '</strong> W</span>');
     if (item.weight_display) specs.push('<span><strong>' + item.weight_display + '</strong></span>');
 
+    // Bonus-point indicator ("+0.5", "+1", or their sum "+1.5" when a
+    // product qualifies for both) -- see "Bonus points" in the Rating
+    // engine section of README.md. || 0 fallbacks mean this quietly
+    // shows nothing rather than "+NaN" if build.py hasn't been updated
+    // to include these two fields in reviews-catalog.json yet. Now
+    // appended to the score inside .rubric-total-line (below), not the
+    // h3 -- matches where it moved to server-side.
+    var bonusSum = (item.portability_bonus || 0) + (item.rugged_bonus || 0);
+    var bonusHtml = bonusSum > 0 ? ' <span class="bonus-indicator">(+' + bonusSum + ')</span>' : "";
+
+    // Matches .rubric-total-line's exact markup from _macros.html /
+    // review.html's sidebar -- same classes, same three-part
+    // label/stars/score layout -- so this reads identically wherever
+    // it appears, not a separate one-off format invented for just this
+    // card. Star string computed inline rather than calling the
+    // starString() helper elsewhere in this file -- that helper is
+    // local to initProductFinder()'s own closure, a separate top-level
+    // function from initReviewsFilter() (which contains this
+    // function), so it was never actually reachable here despite
+    // looking like it should be via ordinary hoisting -- confirmed by
+    // an actual "starString is not defined" runtime error when this
+    // was first tried as a direct call.
+    var starFilled = Math.max(0, Math.min(5, Math.round(item.rating)));
+    var starStr = "\u2605".repeat(starFilled) + "\u2606".repeat(5 - starFilled);
+    var totalLineHtml = '<div class="rubric-total-line">' +
+      '<span class="rubric-total-label">' + (window.WB_RUBRIC_TOTAL_LABEL || "Overall Score") + '</span>' +
+      '<span class="rubric-total-stars">' + starStr + '</span>' +
+      '<span class="rubric-total-score">' + item.rating + '/5' + bonusHtml + '</span>' +
+      '</div>';
+
     // Score breakdown bars, matching product_rubric_viz() in
     // _macros.html (used server-side for this same card elsewhere) --
     // reimplemented here since a client-side render can't call a Jinja
-    // macro. Only renders if all five sub-scores are actually present
-    // on this item; falls back to the plain summary text otherwise,
-    // same graceful-degradation pattern as WB_TOTAL_REVIEWS elsewhere
-    // in this file, rather than rendering broken/undefined bars if
-    // reviews-catalog.json doesn't carry these fields yet.
+    // macro. Only renders (bars + the total-line above) if all five
+    // sub-scores are actually present on this item; falls back to the
+    // plain summary text otherwise, same graceful-degradation pattern
+    // as WB_TOTAL_REVIEWS elsewhere in this file, rather than
+    // rendering broken/undefined bars if reviews-catalog.json doesn't
+    // carry these fields yet.
     var RUBRIC_ROWS = [
       ["value", window.WB_RUBRIC_VALUE_LABEL],
       ["power", window.WB_RUBRIC_POWER_LABEL],
@@ -537,7 +568,7 @@ function initReviewsFilter() {
             '<span class="rubric-bar-pct">' + score + '/5</span>' +
             '</div>';
         }).join("") +
-        '</div></div>';
+        '</div>' + totalLineHtml + '</div>';
     } else {
       middleBlockHtml = item.summary ? '<p class="desc desc-fade">' + item.summary + '</p>' : "";
     }
@@ -559,6 +590,13 @@ function initReviewsFilter() {
         '</div>';
     }
 
+    // Price + buy buttons move together as one pinned-to-bottom unit
+    // now -- .card-footer, margin-top:auto in CSS -- matching the same
+    // restructure the server-rendered card just went through (price
+    // used to sit inside .card-content, the growing/flexible part).
+    var priceHtml = '<span class="price">~\u20AC' + (item.price_eur != null ? item.price_eur.toLocaleString() : "") + ' <span class="price-est">(' + (window.WB_EST_LABEL || "Est.") + ')</span></span>';
+    var footerHtml = '<div class="card-footer">' + priceHtml + buyButtonsHtml + '</div>';
+
     return '<div class="card review-card" style="--cat-accent:' + (item.accent || "") + ';">' +
       '<div class="card-content">' +
       '<a href="' + window.WB_ROOT + item.url + '" class="card-photo-link">' +
@@ -566,10 +604,9 @@ function initReviewsFilter() {
       '</a>' +
       '<span class="brand">' + item.brand + '</span>' +
       '<h3>' + item.model + '</h3>' +
-      '<div class="specrow"><span><strong>' + item.rating + '</strong>/5</span>' + specs.join("") + '</div>' +
+      '<div class="specrow">' + specs.join("") + '</div>' +
       middleBlockHtml +
-      '<span class="price">~\u20AC' + (item.price_eur != null ? item.price_eur.toLocaleString() : "") + ' <span class="price-est">(' + (window.WB_EST_LABEL || "Est.") + ')</span></span>' +
-      '</div>' + buyButtonsHtml + '</div>';
+      '</div>' + footerHtml + '</div>';
   }
 
   // Matches REVIEWS_PER_PAGE in build.py -- same page size client-side so
