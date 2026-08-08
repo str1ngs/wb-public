@@ -42,6 +42,7 @@ document.addEventListener("DOMContentLoaded", function () {
   // ---- Product photo gallery (review pages with more than one photo) ----
   initProductGallery();
   initRubricExplainerTabs();
+  initRubricAccordion();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
@@ -1039,6 +1040,24 @@ function initRubricExplainerTabs() {
       tab.classList.add("active");
       textEl.textContent = tab.getAttribute("data-explain");
     });
+  });
+}
+
+// Collapsed by default -- only the Overall Score summary line shows on
+// page load, saving space on both mobile and desktop as requested. The
+// trigger is a real <button> with aria-expanded/aria-controls already
+// in the markup; this just keeps that attribute and the body's native
+// hidden attribute in sync on click. The chevron's own rotation is
+// pure CSS (keyed off [aria-expanded="true"] in style.css), not
+// animated here.
+function initRubricAccordion() {
+  var trigger = document.querySelector(".rubric-accordion-trigger");
+  var body = document.getElementById("rubric-accordion-body");
+  if (!trigger || !body) return;
+  trigger.addEventListener("click", function () {
+    var expanded = trigger.getAttribute("aria-expanded") === "true";
+    trigger.setAttribute("aria-expanded", String(!expanded));
+    body.hidden = expanded;
   });
 }
 
