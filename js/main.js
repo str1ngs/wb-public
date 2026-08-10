@@ -437,7 +437,8 @@ function initReviewsFilter() {
 
   var BADGE_LABELS = {
     top_rated: window.WB_TOP_RATED_LABEL, best_value: window.WB_BEST_VALUE_LABEL,
-    fastest_charge: window.WB_FASTEST_CHARGE_LABEL, lightest: window.WB_LIGHTEST_LABEL,
+    fastest_charge: window.WB_FASTEST_CHARGE_LABEL, highest_output: window.WB_HIGHEST_OUTPUT_LABEL,
+    lightest: window.WB_LIGHTEST_LABEL,
   };
 
   function sortFn(a, b) {
@@ -1469,6 +1470,7 @@ function initProductFinder() {
       top_rated: window.WB_TOP_RATED_LABEL || "Top Rated",
       best_value: window.WB_BEST_VALUE_LABEL || "Best Value",
       fastest_charge: window.WB_FASTEST_CHARGE_LABEL || "Fastest Charge",
+      highest_output: window.WB_HIGHEST_OUTPUT_LABEL || "Highest Output",
       lightest: window.WB_LIGHTEST_LABEL || "Lightest"
     };
     var badgeHtml = item.primary_badge
