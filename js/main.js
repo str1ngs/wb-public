@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initProductGallery();
   initRubricExplainerTabs();
   initRubricAccordion();
+  initMobileRubricPlacement();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
@@ -586,8 +587,8 @@ function initReviewsFilter() {
     var buyButtonsHtml = "";
     if (item.amazon_url || item.brand_buy_url) {
       buyButtonsHtml = '<div class="card-buy-row">' +
-        (item.amazon_url ? '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Check on Amazon") + '</a>' : "") +
-        (item.brand_buy_url ? '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">' + (item.brand_buy_label || ((window.WB_BUY_DIRECT_LABEL || "Check on") + " " + item.brand)) + '</a>' : "") +
+        (item.amazon_url ? '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow noopener" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Check on Amazon") + '</a>' : "") +
+        (item.brand_buy_url ? '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow noopener" target="_blank">' + (item.brand_buy_label || ((window.WB_BUY_DIRECT_LABEL || "Check on") + " " + item.brand)) + '</a>' : "") +
         '</div>';
     }
 
@@ -755,8 +756,19 @@ function initReviewsFilter() {
     if (!query || query.length < MIN_QUERY_LENGTH) { resultsBox.classList.remove("open"); return; }
     if (!catalogIndex) return; // still loading -- the .then() chain that called this re-renders once it lands
 
+    // Scope to the active category pill FIRST, same pattern already used
+    // for the catalog grid itself (showCatalogView() above) -- this was
+    // the actual bug: the placeholder text already read state.category
+    // correctly ("Search Power Stations..."), but this function searched
+    // the entire, un-scoped catalogIndex regardless of which pill was
+    // active, so a query like "100w" matched chargers too even with
+    // Power Stations selected.
+    var pool = state.category === "all"
+      ? catalogIndex
+      : catalogIndex.filter(function (item) { return item.category === state.category; });
+
     var q = query.toLowerCase();
-    var matches = catalogIndex.filter(function (item) {
+    var matches = pool.filter(function (item) {
       var title = item.brand + " " + item.model;
       return title.toLowerCase().indexOf(q) !== -1;
     });
@@ -952,7 +964,7 @@ function initProductGallery() {
         var idx = Math.max(0, Math.min(slideCount - 1, Math.round(track.scrollLeft / track.clientWidth)));
         syncToIndex(idx);
       }, 100);
-    });
+    }, { passive: true });
 
     syncToIndex(0); // set initial arrow/counter state on load
   });
@@ -1059,6 +1071,54 @@ function initRubricAccordion() {
     trigger.setAttribute("aria-expanded", String(!expanded));
     body.hidden = expanded;
   });
+}
+
+// Moves the "Overall Score" block itself between the sidebar and the
+// article, on request -- below 700px it becomes the first thing inside
+// .review-main-bottom (directly above the lede paragraph); at/above
+// 700px it lives back in its original spot in .review-rubric-section,
+// in the sidebar, completely untouched. Same 700px breakpoint already
+// established in initProductFinder() below, matched here rather than
+// introducing a second, slightly different mobile threshold into the
+// same file.
+//
+// This moves the actual DOM node, not a duplicate -- CSS Grid can't
+// stack two separate elements sequentially inside one named
+// grid-template-area (multiple items sharing an area just overlap each
+// other, they don't stack in reading order), so reaching this specific
+// nesting requires either real DOM movement or two copies of the same
+// markup kept in sync by hand. Moving the one real node means its
+// accordion open/closed state, its click listener from
+// initRubricAccordion() above, and its content all just come along
+// with it automatically -- nothing to duplicate, nothing that can
+// drift out of sync between two copies.
+function initMobileRubricPlacement() {
+  var rubricBlock = document.querySelector(".rubric-static-block");
+  var mainBottom = document.querySelector(".review-main-bottom");
+  if (!rubricBlock || !mainBottom) return; // not on the review page
+
+  // Where the block actually starts (inside .review-rubric-section, in
+  // the sidebar) -- remembered up front so it can go back to that exact
+  // spot, not just get appended somewhere plausible-looking, once the
+  // viewport crosses back above 700px.
+  var originalParent = rubricBlock.parentNode;
+  var originalNextSibling = rubricBlock.nextSibling; // null is valid -- it may have been the last child
+
+  function applyPlacement(isMobile) {
+    if (isMobile) {
+      if (mainBottom.firstChild !== rubricBlock) {
+        mainBottom.insertBefore(rubricBlock, mainBottom.firstChild);
+      }
+    } else if (rubricBlock.parentNode !== originalParent) {
+      originalParent.insertBefore(rubricBlock, originalNextSibling);
+    }
+  }
+
+  var mq = window.matchMedia("(max-width: 700px)");
+  applyPlacement(mq.matches);
+  function handleMqChange(e) { applyPlacement(e.matches); }
+  if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
+  else mq.addListener(handleMqChange); // older Safari
 }
 
 function initRecentStacks() {
@@ -1327,14 +1387,14 @@ function initProductFinder() {
   });
 
   var touchStartX = null;
-  panel.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; });
+  panel.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
   panel.addEventListener("touchend", function (e) {
     if (touchStartX == null || !isMobile) return;
     var dx = e.changedTouches[0].clientX - touchStartX;
     if (dx < -40) goToStep(wizardStep + 1);
     else if (dx > 40) goToStep(wizardStep - 1);
     touchStartX = null;
-  });
+  }, { passive: true });
 
   function resetAll() {
     state = { usage: [], usecase: [], budget: [] };
@@ -1402,7 +1462,7 @@ function initProductFinder() {
     }
 
     var photoInner = item.image
-      ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="">'
+      ? '<img src="' + window.WB_ROOT + smallImageSrc(item.image) + '" alt="' + item.title + '" loading="lazy">'
       : "\u26A1";
     var photoClass = "finder-mobile-best-photo" + (item.image ? "" : " placeholder");
     var badgeLabels = {
