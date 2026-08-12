@@ -578,7 +578,8 @@ function initReviewsFilter() {
 
     // Buy buttons -- only if build.py has already resolved these URLs
     // server-side into reviews-catalog.json (item.amazon_url,
-    // item.brand_buy_url with a brand_buy_label for the button text).
+    // item.brand_buy_url with a brand_buy_label for the button text,
+    // plus item.amazon_unavailable/item.awin_unavailable for muting).
     // Deliberately not replicating brand_affiliate_url()'s Awin
     // merchant-ID/publisher-ID lookup logic client-side -- that's real
     // business logic that belongs in one place (build.py), not
@@ -587,10 +588,19 @@ function initReviewsFilter() {
     // pattern as the rubric bars above.
     var buyButtonsHtml = "";
     if (item.amazon_url || item.brand_buy_url) {
-      buyButtonsHtml = '<div class="card-buy-row">' +
-        (item.amazon_url ? '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow noopener" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Check on Amazon") + '</a>' : "") +
-        (item.brand_buy_url ? '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow noopener" target="_blank">' + (item.brand_buy_label || ((window.WB_BUY_DIRECT_LABEL || "Check on") + " " + item.brand)) + '</a>' : "") +
-        '</div>';
+      var amazonBtnHtml = "";
+      if (item.amazon_url) {
+        amazonBtnHtml = item.amazon_unavailable
+          ? '<span class="card-buy-btn card-buy-btn-muted" aria-disabled="true">' + (window.WB_CURRENTLY_UNAVAILABLE_LABEL || "Currently not available") + '</span>'
+          : '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow noopener" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Amazon.de Price Check") + '</a>';
+      }
+      var brandBtnHtml = "";
+      if (item.brand_buy_url) {
+        brandBtnHtml = item.awin_unavailable
+          ? '<span class="card-buy-btn card-buy-btn-alt card-buy-btn-muted" aria-disabled="true">' + (window.WB_CURRENTLY_UNAVAILABLE_LABEL || "Currently not available") + '</span>'
+          : '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow noopener" target="_blank">' + (item.brand_buy_label || (item.brand + " Store")) + '</a>';
+      }
+      buyButtonsHtml = '<div class="card-buy-row">' + amazonBtnHtml + brandBtnHtml + '</div>';
     }
 
     // Price + buy buttons move together as one pinned-to-bottom unit
