@@ -518,7 +518,7 @@ function initReviewsFilter() {
     // to include these two fields in reviews-catalog.json yet. Now
     // appended to the score inside .rubric-total-line (below), not the
     // h3 -- matches where it moved to server-side.
-    var bonusSum = (item.portability_bonus || 0) + (item.rugged_bonus || 0);
+    var bonusSum = (item.portability_bonus || 0) + (item.rugged_bonus || 0) + (item.ups_bonus || 0);
     var bonusHtml = bonusSum > 0 ? ' <span class="bonus-indicator">(+' + bonusSum + ')</span>' : "";
 
     // Matches .rubric-total-line's exact markup from _macros.html /
