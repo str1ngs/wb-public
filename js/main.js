@@ -881,7 +881,51 @@ function initTablePagination() {
     var pagination = outerWrap ? outerWrap.querySelector(".table-pagination") : null;
     var pageSize = parseInt(table.getAttribute("data-page-size"), 10) || 4;
     var tbody = table.querySelector("tbody");
-    var buttons = pagination ? pagination.querySelectorAll(".wb-page-btn") : [];
+    var totalRows = tbody.querySelectorAll("tr").length;
+    var totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
+
+    // Always shows page 1 and the last page, plus the current page and
+    // its immediate neighbors -- any larger gap between those collapses
+    // into a single "..." rather than listing every page number, so a
+    // category with many products doesn't turn this into a wall of
+    // buttons. 0-indexed throughout, matching pageIndex elsewhere in
+    // this function; only the displayed label adds 1.
+    function computePageList(current, total) {
+      var showSet = {};
+      showSet[0] = true;
+      showSet[total - 1] = true;
+      for (var d = -1; d <= 1; d++) {
+        var p = current + d;
+        if (p >= 0 && p < total) showSet[p] = true;
+      }
+      var sorted = Object.keys(showSet).map(Number).sort(function (a, b) { return a - b; });
+      var pages = [];
+      var prev = null;
+      sorted.forEach(function (p) {
+        if (prev !== null && p - prev > 1) pages.push("...");
+        pages.push(p);
+        prev = p;
+      });
+      return pages;
+    }
+
+    // Rebuilds the pagination bar's own buttons around whichever page is
+    // now current -- called every time the page changes (not just once
+    // at init), since which pages are "current's neighbors" changes as
+    // you page through, unlike the old static, build-once bar.
+    function renderPaginationBar(currentPage) {
+      if (!pagination) return;
+      pagination.innerHTML = computePageList(currentPage, totalPages).map(function (p) {
+        if (p === "...") return '<span class="wb-page-ellipsis">\u2026</span>';
+        return '<button type="button" class="wb-page-btn' + (p === currentPage ? " active" : "") +
+          '" data-page="' + p + '">' + (p + 1) + "</button>";
+      }).join("");
+      pagination.querySelectorAll(".wb-page-btn").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          showPage(parseInt(btn.getAttribute("data-page"), 10));
+        });
+      });
+    }
 
     // Page membership is computed fresh from current DOM order every time,
     // rather than the page each row was assigned at build time -- that way
@@ -892,16 +936,8 @@ function initTablePagination() {
       rows.forEach(function (row, i) {
         row.hidden = Math.floor(i / pageSize) !== pageIndex;
       });
-      buttons.forEach(function (b) {
-        b.classList.toggle("active", parseInt(b.getAttribute("data-page"), 10) === pageIndex);
-      });
+      renderPaginationBar(pageIndex);
     }
-
-    buttons.forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        showPage(parseInt(btn.getAttribute("data-page"), 10));
-      });
-    });
 
     // ---- sortable column headers ----
     var sortState = { key: null, dir: 1 };
