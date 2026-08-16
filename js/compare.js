@@ -321,6 +321,12 @@
         }, 650);
       }
 
+      function syncExclusions(){
+        var aId = ctrlA.getSelectedId(), bId = ctrlB.getSelectedId();
+        ctrlA.setExcludeId(bId);
+        ctrlB.setExcludeId(aId);
+      }
+
       function onChange(p, changedSlot){
         if (p) {
           var otherCtrl = changedSlot === "a" ? ctrlB : ctrlA;
@@ -329,18 +335,21 @@
             otherCtrl.clear();
           }
         }
+        syncExclusions();
         var aId = ctrlA.getSelectedId(), bId = ctrlB.getSelectedId();
-        ctrlA.setExcludeId(bId);
-        ctrlB.setExcludeId(aId);
 
         if (resultEl) {
           renderIfReady(true);
         } else if (aId && bId && aId !== bId) {
-          // Static pair page -- any two same-category products can
-          // always be compared on the dynamic tool, so that's the one
-          // destination that's always valid to send a changed
-          // selection to, rather than guessing whether a matching
-          // static page happens to exist.
+          // Static pair page -- this only runs from an actual user
+          // click (see initCombo's onSelect, the only caller of this
+          // function), never on initial load, which uses the plain
+          // syncExclusions() call below instead specifically so it
+          // can't trigger this navigation. Any two same-category
+          // products can always be compared on the dynamic tool, so
+          // that's the one destination that's always valid to send a
+          // changed selection to, rather than guessing whether a
+          // matching static page happens to exist.
           var compareRoot = window.WB_ROOT + "compare/index.html";
           location.href = compareRoot + "?a=" + encodeURIComponent(aId) + "&b=" + encodeURIComponent(bId);
         }
@@ -351,7 +360,7 @@
 
       if (initialA) ctrlA.setSelected(initialA);
       if (initialB) ctrlB.setSelected(initialB);
-      onChange(null, null);
+      syncExclusions();
 
       if (resultEl && initialA && initialB) renderIfReady(false);
     });
