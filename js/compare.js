@@ -261,7 +261,7 @@
         (p.id === winnerId ? '<span class="compare-winner-badge">' + strings.winnerBadge + '</span>' : '') +
         '</div>' +
         rubricBars(p) +
-        '<a class="compare-full-review-link" href="' + window.WB_ROOT + p.url + '">' + strings.viewFullReview + ' \u2192</a>' +
+        '<a class="btn-outline compare-full-review-link" href="' + window.WB_ROOT + p.url + '">' + strings.viewFullReview + ' \u2192</a>' +
         '<div class="compare-head-footer">' + buyRow(p) + '</div>' +
         '</div>';
     }).join("");
@@ -306,10 +306,20 @@
         initialB = "";
       }
 
+      function skeletonCard(){
+        return '<div class="compare-head compare-head-skeleton">' +
+          '<div class="skeleton-block skeleton-photo"></div>' +
+          '<div class="skeleton-block skeleton-line skeleton-line-brand"></div>' +
+          '<div class="skeleton-block skeleton-line skeleton-line-model"></div>' +
+          '<div class="finder-loading-spinner"></div>' +
+          '</div>';
+      }
+
       function renderIfReady(pushUrl){
         var a = byId[ctrlA.getSelectedId()], b = byId[ctrlB.getSelectedId()];
         if (!a || !b || a.id === b.id || !resultEl) return;
-        resultEl.innerHTML = '<div class="finder-loading"><div class="finder-loading-spinner"></div><p>' + strings.loadingText + '</p></div>';
+        resultEl.innerHTML = '<div class="compare-heads">' + skeletonCard() + skeletonCard() + '</div>' +
+          '<p class="compare-loading-text">' + strings.loadingText + '</p>';
         setTimeout(function(){
           renderComparison(resultEl, a, b);
           if (pushUrl) {

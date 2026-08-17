@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='impact-site-verification' value='29317810-86b0-4edf-892f-fc8d6b93c100'>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e8a13d">
+<title>CUKTECH 15 Ultra Power Bank (PB200U) Review: Full Specs & Rating (2026)</title>
+<meta name="description" content="CUKTECH 15 Ultra Power Bank (PB200U) review: 20,000mAh capacity, 165W output. Full specs, pros and cons, and who this power bank is actually for.">
+<link rel="canonical" href="https://wattbench.eu/reviews/cuktech-15-ultra-power-bank-pb200u.html">
+<link rel="alternate" hreflang="en" href="https://wattbench.eu/reviews/cuktech-15-ultra-power-bank-pb200u.html">
+<link rel="alternate" hreflang="de" href="https://wattbench.eu/de/reviews/cuktech-15-ultra-power-bank-pb200u.html">
+<link rel="alternate" hreflang="x-default" href="https://wattbench.eu/reviews/cuktech-15-ultra-power-bank-pb200u.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WattBench">
+<meta property="og:title" content="CUKTECH 15 Ultra Power Bank (PB200U) Review: Full Specs & Rating (2026)">
+<meta property="og:description" content="CUKTECH 15 Ultra Power Bank (PB200U) review: 20,000mAh capacity, 165W output. Full specs, pros and cons, and who this power bank is actually for.">
+<meta property="og:url" content="https://wattbench.eu/reviews/cuktech-15-ultra-power-bank-pb200u.html">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://wattbench.eu/images/products/cuktech-15-ultra-power-bank-pb200u-1.webp">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1600">
+<meta property="og:image:alt" content="CUKTECH 15 Ultra Power Bank (PB200U)">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wattbench.eu/images/products/cuktech-15-ultra-power-bank-pb200u-1.webp">
+
+<link rel="preload" href="../Fonts/SourceSans3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../Fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../css/style.css?v=0.3.1">
+<style>
+
+html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "CUKTECH 15 Ultra Power Bank (PB200U)",
+  "brand": {"@type":"Brand","name":"CUKTECH"},
+  "description": "The CUKTECH 15 Ultra (PB200U) is a high-performance 20,000mAh power bank delivering up to 165W total output with single-port PD3.1 140W support. It features a 1.3-inch TFT color display, ADC 2.0 protocol compatibility, and a dual-port \u0027Beast Mode\u0027 for rapid 165W recharging.",
+  "image": "https://wattbench.eu/images/products/cuktech-15-ultra-power-bank-pb200u-1.webp",
+  "review": {
+    "@type": "Review",
+    "reviewRating": {"@type":"Rating","ratingValue":"3.1","bestRating":"5"},
+    "author": {"@type":"Organization","name":"WattBench"}
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"What is Beast Mode on the CUKTECH 15 Ultra?","acceptedAnswer":{"@type":"Answer","text":"Beast Mode enables dual-port simultaneous input up to 165W, allowing the power bank to recharge from 0% to 70% in just about 20 minutes."}},    {"@type":"Question","name":"Can it charge high-wattage laptops like a MacBook Pro?","acceptedAnswer":{"@type":"Answer","text":"Yes, its single-port PD3.1 output reaches up to 140W, making it fully compatible with demanding USB-C laptops."}}  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Home","item":"https://wattbench.eu/"},
+    {"@type":"ListItem","position":2,"name":"Power Banks","item":"https://wattbench.eu/reviews/?category=power-banks"},
+    {"@type":"ListItem","position":3,"name":"CUKTECH 15 Ultra Power Bank (PB200U)","item":"https://wattbench.eu/reviews/cuktech-15-ultra-power-bank-pb200u.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <a href="../" class="logo">WattBench<small>Specs Over Spin</small></a>
+    <nav class="main-nav">
+      <a href="../">Home</a>
+      <div class="nav-dropdown">
+        <a href="../reviews/" class="nav-dropdown-toggle active">Reviews</a>
+        <div class="nav-dropdown-menu">
+          <a href="../reviews/?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+          <a href="../reviews/?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+          <a href="../reviews/?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+        </div>
+      </div>
+      <a href="../compare/">Compare</a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../reviews/cuktech-15-ultra-power-bank-pb200u.html" class="active lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../de/reviews/cuktech-15-ultra-power-bank-pb200u.html" class=" lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DARK">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Reviews">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-controls">
+    <div class="lang-switch">
+      <a href="../reviews/cuktech-15-ultra-power-bank-pb200u.html" class="active lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../de/reviews/cuktech-15-ultra-power-bank-pb200u.html" class=" lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DARK">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../">Home</a>
+    <div class="mobile-drawer-group-label">Reviews</div>
+    <a href="../reviews/?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Power Stations</a>
+    <a href="../reviews/?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Power Banks</a>
+    <a href="../reviews/?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Chargers</a>
+    <a href="../compare/">Compare</a>
+  </div>
+</nav>
+
+<div class="disclosure">
+  This site earns commission from qualifying purchases via affiliate links. <a href="../affiliate-disclosure.html">Full disclosure</a>.
+</div>
+
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="../">Home</a> / <a href="../reviews/?category=power-banks" style="color:#00e5ff;">Power Banks</a> / CUKTECH 15 Ultra Power Bank (PB200U)</p>
+</div>
+
+<section class="section-tight">
+  <div class="wrap review-layout">
+    <article class="review-main article">
+    <div class="review-main-top">
+    <h1>
+      CUKTECH 15 Ultra Power Bank (PB200U) <span class="h1-suffix">Review</span>
+      <span class="inline-rating">★★★☆☆ <span class="inline-rating-num">3.1/5</span></span>
+    </h1>
+    <div class="review-meta-row">
+      <span>Power Banks</span>
+<span>165W 20000mAh Ultra Fast Charging Power Bank with PD3.1 and TFT Display</span>      <span class="review-price">~€67<span class="price-est">(Est.)</span></span>
+      <span> August 17, 2026</span>
+<span>Updated August 17, 2026</span>    </div>
+<p class="best-for-line"><strong>Best for:</strong> High-performance laptop charging, rapid multi-device power delivery, travel, tech enthusiasts</p>    <div class="top-buy-row">
+      <a class="top-buy-btn" href="https://link.amazon/B0304DoOe" rel="sponsored nofollow" target="_blank">
+        <span class="cart-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>
+        Amazon.de Price Check
+      </a>
+    </div>
+
+    <div class="product-photo review-photo" id="product-gallery" data-full="../images/products/cuktech-15-ultra-power-bank-pb200u-1.webp">
+      <img src="../images/products/cuktech-15-ultra-power-bank-pb200u-1.webp"
+     srcset="../images/products/cuktech-15-ultra-power-bank-pb200u-1-sm.webp 480w, ../images/products/cuktech-15-ultra-power-bank-pb200u-1-md.webp 900w, ../images/products/cuktech-15-ultra-power-bank-pb200u-1.webp 1600w"
+     sizes="(max-width: 900px) 100vw, 720px"
+     alt="CUKTECH 15 Ultra Power Bank (PB200U) — Power Banks review"
+     loading="eager"
+fetchpriority="high">
+      <button type="button" class="gallery-expand" aria-label="Expand image"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m11-5v3a2 2 0 0 1-2 2h-3"></path></svg></button>
+    </div>
+<p class="gallery-credit">cuktech.com</p>
+    <div class="spec-strip">
+      <div class="spec-strip-item"><strong>Capacity</strong> 20,000 mAh</div>
+      <div class="spec-strip-item"><strong>Total Input</strong> 165 W (165W max dual-port simultaneous input in 'Beast Mode' (quick 20-minute charge to 70%))</div>
+      <div class="spec-strip-item"><strong>Total Output</strong> 165 W (Type-C1 100W Max with Type-C2 65 Max)</div>
+      <div class="spec-strip-item"><strong>Battery chemistry</strong> Li-ion (4 cells)</div>
+      <div class="spec-strip-item"><strong>Weight</strong> 590 g</div>
+      <div class="spec-strip-item"><strong>0–100% charge time</strong> 30 min</div>
+      <div class="spec-strip-item"><strong>Warranty</strong> 2 years</div>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button type="button" class="lightbox-close" aria-label="Close">✕</button>
+      <button type="button" class="lightbox-arrow prev" data-dir="-1" aria-label="Previous photo">‹</button>
+      <img class="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="">
+      <button type="button" class="lightbox-arrow next" data-dir="1" aria-label="Next photo">›</button>
+      <div class="lightbox-counter"></div>
+      <p class="lightbox-credit"></p>
+    </div>
+    </div>
+
+    <div class="review-main-bottom">
+    <p class="lede">The CUKTECH 15 Ultra (PB200U) is a high-performance 20,000mAh power bank delivering up to 165W total output with single-port PD3.1 140W support. It features a 1.3-inch TFT color display, ADC 2.0 protocol compatibility, and a dual-port 'Beast Mode' for rapid 165W recharging.</p>
+
+    <h2>Who it's for</h2>
+    <p>Power users, digital nomads, and gamers who need desktop-class charging speeds for power-hungry laptops and multiple mobile devices on the move.</p>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h3>Strengths</h3>
+        <ul><li>Single-port PD3.1 140W output capable of fast-charging high-end laptops</li><li>Dual-port input supporting up to 165W for rapid self-recharging (0-70% in 20 minutes)</li><li>1.3-inch TFT color display showing real-time telemetry, protocols, and warnings</li><li>Wide protocol support via ADC 2.0 including PPS, QC, PD3.1, and MiPPS</li><li>Includes PD3.1 cable in the box</li></ul>
+      </div>
+      <div class="cons">
+        <h3>Trade-offs</h3>
+        <ul><li>Relatively heavy at 590 g (1.3 lbs) for a 20,000mAh power bank</li><li>Reaching maximum 165W input speeds requires a dedicated high-wattage multi-charger setup</li></ul>
+      </div>
+    </div>
+
+    <h2>Charging and expansion</h2>
+    <p>Supports up to 165W dual-port simultaneous input in Beast Mode to recover power in minutes. Single-port output delivers up to 140W via PD3.1.</p>
+
+    <h2>Frequently asked questions</h2>
+    <h3>What is Beast Mode on the CUKTECH 15 Ultra?</h3>
+    <p>Beast Mode enables dual-port simultaneous input up to 165W, allowing the power bank to recharge from 0% to 70% in just about 20 minutes.</p>
+    <h3>Can it charge high-wattage laptops like a MacBook Pro?</h3>
+    <p>Yes, its single-port PD3.1 output reaches up to 140W, making it fully compatible with demanding USB-C laptops.</p>
+
+    <div class="callout" id="buy" style="--cat-accent: #00e5ff;">
+      <strong>Where to buy:</strong> Pricing fluctuates with manufacturer promotions. Check the current price and any active bundle discounts before purchasing.
+      <div class="callout-buy-row">
+        <a class="card-buy-btn" href="https://link.amazon/B0304DoOe" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+      </div>
+    </div>
+    </div>
+    </article>
+
+    <aside class="review-sidebar">
+      <div class="review-rubric-section">
+      <div class="section-head"><div class="eyebrow">Scored via Rubric v1.5</div><h2>How this score breaks down</h2></div>
+      <div class="rubric-static-block">
+        <button type="button" class="rubric-accordion-trigger" aria-expanded="false" aria-controls="rubric-accordion-body">
+        <div class="rubric-total-line">
+          <span class="rubric-total-label">Overall Score</span>
+          <span class="rubric-total-stars">★★★☆☆</span>
+          <span class="rubric-total-score">3.1/5</span>
+        </div>
+        <svg class="rubric-accordion-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="rubric-accordion-body" id="rubric-accordion-body" hidden>
+        <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+        <div class="rubric-explainer-tabs">
+          <button type="button" class="rubric-explainer-tab active" data-explain="Value compares price against real capability — capacity and power combined.">Value</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Power reflects its relationship to capacity — capacity, input, and output combined, so a huge battery that can't deliver or receive real wattage doesn't score as powerful. For chargers, it's simply the highest output in its category.">Power</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Portability ranks weight against the rest of its category, lightest first. For chargers, it's weight relative to output, so a small charger that can't deliver much doesn't automatically win just for being tiny.">Portability</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Charge Speed measures how fast a battery actually recharges relative to its size (a Wh-per-hour charging rate), not just raw minutes — so a big battery charging in a similar time to a small one is correctly recognized as charging faster. For chargers, this becomes Efficiency instead.">Charge Speed</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Reliability is based on warranty length, ranked against the rest of its category — the longer the coverage, the higher the score.">Reliability</button>
+        </div>
+        <p class="rubric-value-explainer" id="rubric-explainer-text">Value compares price against real capability — capacity and power combined.</p>
+        </div>
+      </div>
+      </div>
+      <div class="review-related-section">
+      <div class="section-head"><div class="eyebrow">Compare</div><h2>Related products</h2></div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/ecoflow-rapid-power-bank-25000-170w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp"
+     srcset="../images/products/ecoflow-rapid-power-bank-25000-170w-1-sm.webp 480w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1-md.webp 900w, ../images/products/ecoflow-rapid-power-bank-25000-170w-1.webp 1600w"
+     sizes="64px"
+     alt="EcoFlow RAPID Power Bank (25K, 170W)"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">EcoFlow</span>
+          <h3>RAPID Power Bank (25K, 170W)</h3>
+          <p class="desc desc-fade">The EcoFlow RAPID Power Bank (25,000mAh, 170W) delivers a total output of 170W across three ports, featuring dual 140W USB-C single-port outputs and a 33W USB-A port. With an airline-friendly 25,000mAh capacity, 140W ultra-fast recharging (0-50% in 20 minutes), and a smart TFT screen, it provides robust mobile productivity.</p>
+          <a class="sidebar-card-compare-link" href="../compare/ecoflow-rapid-power-bank-25000-170w-vs-cuktech-15-ultra-power-bank-pb200u.html">Full comparison →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/ugreen-nexode-pro-power-bank-10000-55w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/ugreen-nexode-pro-power-bank-10000-55w-1.webp"
+     srcset="../images/products/ugreen-nexode-pro-power-bank-10000-55w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-power-bank-10000-55w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-power-bank-10000-55w-1.webp 1600w"
+     sizes="64px"
+     alt="UGREEN Nexode Pro (10K, 55W)"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (10K, 55W)</h3>
+          <p class="desc desc-fade">The UGREEN Nexode Pro Power Bank (10,000mAh, 55W) utilizes exclusive AirPyra technology to pack a 36Wh capacity into an ultra-lightweight 249g body. Featuring a built-in 22cm Type-C cable, 55W Xiaomi Mi Turbo charging, and 45W Power Delivery fast charge support, it delivers high performance in a pocket-friendly form factor.</p>
+          <a class="sidebar-card-compare-link" href="../compare/ugreen-nexode-pro-power-bank-10000-55w-vs-cuktech-15-ultra-power-bank-pb200u.html">Full comparison →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../reviews/anker-prime-powerbank-26k-300w.html">
+        <div class="sidebar-card-photo"><img src="../images/products/anker-prime-powerbank-26k-300w-1.webp"
+     srcset="../images/products/anker-prime-powerbank-26k-300w-1-sm.webp 480w, ../images/products/anker-prime-powerbank-26k-300w-1-md.webp 900w, ../images/products/anker-prime-powerbank-26k-300w-1.webp 1600w"
+     sizes="64px"
+     alt="Anker Prime Power Bank (26K, 300W)"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">Anker</span>
+          <h3>Prime Power Bank (26K, 300W)</h3>
+          <p class="desc desc-fade">The Anker Prime Power Bank (26K, 300W) delivers a massive 300W total output across two USB-C ports and one USB-A port, capable of running two laptops simultaneously. Packed with 99.75Wh (26,250mAh) of TSA-approved airline-safe capacity, it supports blazing-fast 140W single-port output and an unprecedented 250W dual-input recharge that hits 100% in just 39 minutes.</p>
+          <a class="sidebar-card-compare-link" href="../compare/cuktech-15-ultra-power-bank-pb200u-vs-anker-prime-powerbank-26k-300w.html">Full comparison →</a>
+        </div>
+      </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../" class="logo">WattBench</a>
+      <p class="fine">WattBench is a review site for power devices, including portable power stations, power banks, and chargers.</p>
+    </div>
+    <div>
+      <h4>Explore</h4>
+      <a href="../reviews/?category=power-stations">Power Stations</a>
+      <a href="../reviews/?category=power-banks">Power Banks</a>
+      <a href="../reviews/?category=chargers">Chargers</a>
+      <a href="../compare/">Compare</a>
+    </div>
+    <div>
+      <h4>Legal</h4>
+      <a href="../about.html">About</a>
+      <a href="../affiliate-disclosure.html">Affiliate Disclosure</a>
+      <a href="../privacy-policy.html">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. All product names and trademarks belong to their respective owners.</span>
+    <span>v0.3.1</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "en";
+  window.WB_ROOT = "../";
+  window.WB_TOP_RATED_LABEL = "Top Rated";
+  window.WB_BEST_VALUE_LABEL = "Best Value";
+  window.WB_FASTEST_CHARGE_LABEL = "Fastest Charge";
+  window.WB_HIGHEST_OUTPUT_LABEL = "Highest Output";
+  window.WB_LIGHTEST_LABEL = "Lightest";
+  window.WB_EST_LABEL = "Est.";
+  window.WB_RUBRIC_VALUE_LABEL = "Value";
+  window.WB_RUBRIC_POWER_LABEL = "Power";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portability";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Charge Speed";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Efficiency";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Reliability";
+  window.WB_BUY_AMAZON_LABEL = "Amazon.de Price Check";
+  window.WB_CURRENTLY_UNAVAILABLE_LABEL = "Currently not available";
+  window.WB_SEARCH_NO_RESULTS = "No results found.";
+  window.WB_SEARCH_VIEW_ALL = "View all {count} matches for \"{query}\" \u2192";
+  window.WB_SEARCH_SUGGESTED = "Suggested Categories";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} results";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Search...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Search within {category}...";
+  window.WB_SEARCH_PREFIX = "Search";
+  window.WB_THEME_LABELS = { dark: "\u263d DARK", light: "\u2600 LIGHT" };
+  window.WB_ALT_LINKS = { "en": "../reviews/cuktech-15-ultra-power-bank-pb200u.html", "de": "../de/reviews/cuktech-15-ultra-power-bank-pb200u.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Power Stations", accent: "#a855f7", icon: "bolt", url: "../reviews/?category=power-stations" }, { id: "power-banks", label: "Power Banks", accent: "#00e5ff", icon: "battery", url: "../reviews/?category=power-banks" }, { id: "chargers", label: "Chargers", accent: "#00d98b", icon: "plug", url: "../reviews/?category=chargers" }];
+</script>
+<script src="../js/main.js?v=0.3.1"></script>
+</body>
+</html>
