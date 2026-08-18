@@ -307,14 +307,32 @@
       }
 
       function skeletonCard(){
+        var barRow = '<div class="skeleton-rubric-row">' +
+          '<div class="skeleton-block skeleton-rubric-label"></div>' +
+          '<div class="skeleton-block skeleton-rubric-track"></div>' +
+          '<div class="skeleton-block skeleton-rubric-pct"></div>' +
+          '</div>';
         return '<div class="compare-head compare-head-skeleton">' +
           '<div class="skeleton-block skeleton-photo"></div>' +
           '<div class="skeleton-block skeleton-line skeleton-line-brand"></div>' +
           '<div class="skeleton-block skeleton-line skeleton-line-model"></div>' +
-          '<div class="finder-loading-spinner"></div>' +
+          '<div class="skeleton-block skeleton-score"></div>' +
+          '<div class="skeleton-rubric">' + barRow + barRow + barRow + barRow + barRow + '</div>' +
+          '<div class="skeleton-block skeleton-review-btn"></div>' +
+          '<div class="skeleton-footer"><div class="skeleton-buy-row"><div class="skeleton-block skeleton-buy-btn"></div><div class="skeleton-block skeleton-buy-btn"></div></div></div>' +
           '</div>';
       }
 
+      // Nothing is actually being fetched during this delay -- loadIndex()
+      // (see top of this file) already resolved before init() even runs,
+      // so every product's full data, including its image URL, is already
+      // sitting in memory the moment a selection is made. The delay itself
+      // is deliberate pacing, not a wait on real data (same reasoning as
+      // the homepage finder's own artificial delay on "Show My Match").
+      // The one genuine bit of loading that happens after this timeout is
+      // the browser actually fetching the image's pixel bytes once the
+      // real <img src="..."> lands in the DOM -- the skeleton's own photo
+      // block is just a placeholder shape, not a preview of that image.
       function renderIfReady(pushUrl){
         var a = byId[ctrlA.getSelectedId()], b = byId[ctrlB.getSelectedId()];
         if (!a || !b || a.id === b.id || !resultEl) return;
@@ -328,7 +346,7 @@
             url.searchParams.set("b", b.id);
             history.replaceState(null, "", url);
           }
-        }, 650);
+        }, 850);
       }
 
       function syncExclusions(){

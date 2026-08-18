@@ -186,7 +186,6 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       <button type="button" class="hero-search-btn page-search-btn" aria-label="Search...">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
-      <div class="site-search-results page-search-results"></div>
     </div>
 
     <div class="review-filters">
@@ -196,14 +195,66 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
         <button type="button" class="filter-pill" data-filter-category="power-banks" style="--pill-accent: #00e5ff;">Power Banks</button>
         <button type="button" class="filter-pill" data-filter-category="chargers" style="--pill-accent: #00d98b;">Chargers</button>
       </div>
-      <div class="sort-control">
-        <label for="review-sort">Sort by</label>
-        <select id="review-sort">
-          <option value="recent">Recently added</option>
-          <option value="price-low">Price: low to high</option>
-          <option value="price-high">Price: high to low</option>
-          <option value="rating">Highest rated</option>
-        </select>
+      <div class="filter-controls-right">
+        <div class="sort-control">
+          <label for="review-sort">Sort by</label>
+          <select id="review-sort">
+            <option value="recent">Recently added</option>
+            <option value="price-low">Price: low to high</option>
+            <option value="price-high">Price: high to low</option>
+            <option value="rating">Highest rated</option>
+          </select>
+        </div>
+        <div class="brand-control">
+          <button type="button" class="brand-control-toggle" id="brand-filter-toggle" aria-expanded="false" aria-haspopup="true">
+            <span>Brand</span>
+            <span class="brand-control-count" id="brand-filter-count" hidden></span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="brand-control-panel" id="brand-filter-panel" hidden>
+            <label class="brand-control-option brand-control-option-all">
+              <input type="checkbox" id="brand-filter-select-all" checked>
+              <span>Select all</span>
+            </label>
+            <div class="brand-control-divider"></div>
+            <label class="brand-control-option">
+              <input type="checkbox" value="ALLPOWERS" class="brand-filter-checkbox" checked>
+              <span>ALLPOWERS</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="Anker" class="brand-filter-checkbox" checked>
+              <span>Anker</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="BLUETTI" class="brand-filter-checkbox" checked>
+              <span>BLUETTI</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="CUKTECH" class="brand-filter-checkbox" checked>
+              <span>CUKTECH</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="DJI" class="brand-filter-checkbox" checked>
+              <span>DJI</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="EcoFlow" class="brand-filter-checkbox" checked>
+              <span>EcoFlow</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="INIU" class="brand-filter-checkbox" checked>
+              <span>INIU</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="Jackery" class="brand-filter-checkbox" checked>
+              <span>Jackery</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="UGREEN" class="brand-filter-checkbox" checked>
+              <span>UGREEN</span>
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -220,10 +271,144 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       // build.py doesn't pass total_products into this template's
       // context yet -- main.js degrades to showing just the page count
       // alone in that case, rather than a wrong or broken total.
-      window.WB_TOTAL_REVIEWS = null;
+      window.WB_TOTAL_REVIEWS = 47;
     </script>
 
     <div class="grid cols-3" id="review-grid">
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="545"
+           data-date="2026-07-25"
+           data-rating="3.1"
+           data-title="ecoflow delta 3">
+        <div class="card-content">
+          <a href="../reviews/ecoflow-delta-3.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/ecoflow-delta-3-2.webp"
+     srcset="../images/products/ecoflow-delta-3-2-sm.webp 480w, ../images/products/ecoflow-delta-3-2-md.webp 900w, ../images/products/ecoflow-delta-3-2.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow DELTA 3 - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">EcoFlow</span>
+          <h3>DELTA 3</h3>
+          <div class="specrow">
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>1,800</strong> W</span>
+            <span><strong>12.5 kg</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">3.1/5 <span class="bonus-indicator">(+1)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€545 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B04U8gM45" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="699"
+           data-date="2026-07-22"
+           data-rating="3.2"
+           data-title="anker solix c1000 gen 2">
+        <div class="card-content">
+          <a href="../reviews/anker-solix-c1000-gen-2.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/anker-solix-c1000-gen-2-1.webp"
+     srcset="../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="Anker SOLIX C1000 Gen 2 - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">Anker</span>
+          <h3>SOLIX C1000 Gen 2</h3>
+          <div class="specrow">
+            <span><strong>1,024</strong> Wh</span>
+            <span><strong>2,000</strong> W</span>
+            <span><strong>11.3 kg</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">3.2/5 <span class="bonus-indicator">(+1)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€699 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B03ZiBVcy" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
       <div class="card review-card"
            style="--cat-accent: #00e5ff;"
            data-category="power-banks"
@@ -496,7 +681,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="539"
            data-date="2026-07-21"
-           data-rating="3.3"
+           data-rating="3.2"
            data-title="dji power 1000 v2">
         <div class="card-content">
           <a href="../reviews/dji-power-1000.html" class="card-photo-link">
@@ -520,8 +705,8 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
-    <span class="rubric-bar-pct">2.5/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
@@ -547,7 +732,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-total-line">
               <span class="rubric-total-label">Overall Score</span>
               <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">3.3/5 <span class="bonus-indicator">(+1)</span></span>
+              <span class="rubric-total-score">3.2/5 <span class="bonus-indicator">(+1)</span></span>
             </div>
           </div>
         </div>
