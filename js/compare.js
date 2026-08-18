@@ -231,51 +231,70 @@
     return html + "</div>";
   }
 
+  function rubricTotalLine(p){
+    var rounded = Math.round(p.overall_score);
+    var stars = "\u2605".repeat(rounded) + "\u2606".repeat(5 - rounded);
+    var bonusSum = (p.portability_bonus || 0) + (p.rugged_bonus || 0) + (p.ups_bonus || 0);
+    var bonusHtml = bonusSum > 0
+      ? ' <span class="bonus-indicator">(+' + (Number.isInteger(bonusSum) ? bonusSum : bonusSum) + ')</span>'
+      : "";
+    return '<div class="rubric-total-line">' +
+      '<span class="rubric-total-label">' + strings.rubricTotalLabel + '</span>' +
+      '<span class="rubric-total-stars">' + stars + '</span>' +
+      '<span class="rubric-total-score">' + p.overall_score + '/5' + bonusHtml + '</span>' +
+      '</div>';
+  }
+
   function buyRow(p){
-    var html = '<div class="card-buy-row compare-head-footer">';
+    var bothMuted = p.amazon_url && p.amazon_unavailable && p.brand_buy_url && p.awin_unavailable;
+    var html = "";
     if (p.amazon_url) {
       html += p.amazon_unavailable
         ? '<span class="card-buy-btn card-buy-btn-muted" aria-disabled="true">' + strings.currentlyUnavailable + '</span>'
         : '<a href="' + p.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow" target="_blank">' + strings.buyAmazon + '</a>';
     }
-    if (p.brand_buy_url) {
+    if (p.brand_buy_url && !bothMuted) {
       html += p.awin_unavailable
         ? '<span class="card-buy-btn card-buy-btn-alt card-buy-btn-muted" aria-disabled="true">' + strings.currentlyUnavailable + '</span>'
         : '<a href="' + p.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">' + p.brand_buy_label + '</a>';
     }
-    return html + "</div>";
+    return '<div class="card-buy-row">' + html + '</div>';
   }
 
-  function renderComparison(container, p1, p2){
-    var winnerId = p1.overall_score >= p2.overall_score ? p1.id : p2.id;
-    var headsHtml = [p1, p2].map(function(p){
-      var img = p.image
-        ? '<img src="' + window.WB_ROOT + p.image + '" alt="' + p.brand + ' ' + p.model + '" loading="lazy">'
-        : '<span class="table-thumb-placeholder">\u26a1</span>';
-      return '<div class="compare-head">' +
-        '<a href="' + window.WB_ROOT + p.url + '" class="compare-head-photo">' + img + '</a>' +
-        '<span class="brand">' + p.brand + '</span>' +
-        '<h2><a href="' + window.WB_ROOT + p.url + '">' + p.model + '</a></h2>' +
-        '<div class="compare-score-wrap">' +
-        '<span class="compare-score ' + scoreClass(p.overall_score) + '">' + p.overall_score + '</span>' +
-        (p.id === winnerId ? '<span class="compare-winner-badge">' + strings.winnerBadge + '</span>' : '') +
-        '</div>' +
-        rubricBars(p) +
-        '<a class="btn-outline compare-full-review-link" href="' + window.WB_ROOT + p.url + '">' + strings.viewFullReview + ' \u2192</a>' +
-        '<div class="compare-head-footer">' + buyRow(p) + '</div>' +
-        '</div>';
-    }).join("");
+  function badgeHtml(isWinner){
+    return isWinner
+      ? '<span class="compare-winner-badge">' + strings.winnerBadge + '</span>'
+      : '<span class="compare-loser-badge">' + strings.loserBadge + '</span>';
+  }
 
+  function renderCard(p, isWinner){
+    var img = p.image
+      ? '<img src="' + window.WB_ROOT + p.image + '" alt="' + p.brand + ' ' + p.model + '" loading="lazy">'
+      : '<span class="bolt-mark">\u26a1</span>' + p.brand + ' ' + p.model;
+    var imgWrapClass = p.image ? "product-photo" : "product-photo placeholder";
+    return '<div class="card compare-head">' +
+      '<div class="card-content">' +
+      '<a href="' + window.WB_ROOT + p.url + '" class="card-photo-link"><div class="' + imgWrapClass + '">' + img + '</div></a>' +
+      '<div class="compare-head-title-block">' +
+      '<span class="brand">' + p.brand + '</span><h3>' + p.model + '</h3>' +
+      badgeHtml(isWinner) +
+      '</div>' +
+      '<div class="card-rubric-block">' + rubricBars(p) + rubricTotalLine(p) + '</div>' +
+      '</div>' +
+      '<div class="card-footer">' +
+      buyRow(p) +
+      '</div>' +
+      '</div>';
+  }
+
+  function buildSpecTableHtml(p1, p2){
     var rows = buildSpecRows(p1, p2);
     var rowsHtml = rows.map(function(r){
       return '<tr><td>' + r.label + '</td>' +
         '<td class="' + (r.winner === 1 ? "compare-winner-cell" : "") + '">' + r.value1 + '</td>' +
         '<td class="' + (r.winner === 2 ? "compare-winner-cell" : "") + '">' + r.value2 + '</td></tr>';
     }).join("");
-
-    container.innerHTML =
-      '<div class="compare-heads">' + headsHtml + '</div>' +
-      '<h2>' + strings.specTableH2 + '</h2>' +
+    return '<h2>' + strings.specTableH2 + '</h2>' +
       '<div class="table-scroll"><table class="spec-table compare-spec-table"><thead><tr><th></th><th>' +
       p1.brand + ' ' + p1.model + '</th><th>' + p2.brand + ' ' + p2.model + '</th></tr></thead>' +
       '<tbody>' + rowsHtml + '</tbody></table></div>';
@@ -306,47 +325,70 @@
         initialB = "";
       }
 
-      function skeletonCard(){
-        var barRow = '<div class="skeleton-rubric-row">' +
-          '<div class="skeleton-block skeleton-rubric-label"></div>' +
-          '<div class="skeleton-block skeleton-rubric-track"></div>' +
-          '<div class="skeleton-block skeleton-rubric-pct"></div>' +
-          '</div>';
-        return '<div class="compare-head compare-head-skeleton">' +
-          '<div class="skeleton-block skeleton-photo"></div>' +
-          '<div class="skeleton-block skeleton-line skeleton-line-brand"></div>' +
-          '<div class="skeleton-block skeleton-line skeleton-line-model"></div>' +
-          '<div class="skeleton-block skeleton-score"></div>' +
-          '<div class="skeleton-rubric">' + barRow + barRow + barRow + barRow + barRow + '</div>' +
-          '<div class="skeleton-block skeleton-review-btn"></div>' +
-          '<div class="skeleton-footer"><div class="skeleton-buy-row"><div class="skeleton-block skeleton-buy-btn"></div><div class="skeleton-block skeleton-buy-btn"></div></div></div>' +
-          '</div>';
-      }
-
-      // Nothing is actually being fetched during this delay -- loadIndex()
-      // (see top of this file) already resolved before init() even runs,
-      // so every product's full data, including its image URL, is already
-      // sitting in memory the moment a selection is made. The delay itself
-      // is deliberate pacing, not a wait on real data (same reasoning as
-      // the homepage finder's own artificial delay on "Show My Match").
-      // The one genuine bit of loading that happens after this timeout is
-      // the browser actually fetching the image's pixel bytes once the
-      // real <img src="..."> lands in the DOM -- the skeleton's own photo
-      // block is just a placeholder shape, not a preview of that image.
-      function renderIfReady(pushUrl){
+      // Rendering is synchronous -- every product's full data, including
+      // its image URL, is already sitting in memory by the time init()
+      // even runs (see loadIndex() at the top of this file), so there's
+      // nothing to actually wait on here. An earlier version added a
+      // deliberate ~850ms delay with a skeleton placeholder shown during
+      // it, modeled on the homepage finder's own artificial pacing --
+      // removed per request, since it didn't match how the rest of the
+      // site behaves and wasn't covering any real work.
+      function renderIfReady(pushUrl, changedSlot){
         var a = byId[ctrlA.getSelectedId()], b = byId[ctrlB.getSelectedId()];
         if (!a || !b || a.id === b.id || !resultEl) return;
-        resultEl.innerHTML = '<div class="compare-heads">' + skeletonCard() + skeletonCard() + '</div>' +
-          '<p class="compare-loading-text">' + strings.loadingText + '</p>';
-        setTimeout(function(){
-          renderComparison(resultEl, a, b);
-          if (pushUrl) {
-            var url = new URL(location.href);
-            url.searchParams.set("a", a.id);
-            url.searchParams.set("b", b.id);
-            history.replaceState(null, "", url);
-          }
-        }, 850);
+
+        var cardA = document.getElementById("compare-card-a");
+        var cardB = document.getElementById("compare-card-b");
+        var winnerId = a.overall_score >= b.overall_score ? a.id : b.id;
+
+        if (!cardA || !cardB) {
+          // First render -- both cards genuinely need real content here,
+          // regardless of which slot's selection was the one that just
+          // completed the pair (changedSlot names that slot, not "which
+          // slot needs rendering"). Applying the changedSlot filter here
+          // too, as an earlier version of this did, left whichever card
+          // wasn't named by changedSlot stuck showing nothing real at
+          // all -- confirmed happening in practice (comparing product1
+          // with product2, product1's own card never rendering) before
+          // this was fixed.
+          resultEl.innerHTML = '<div class="compare-heads">' +
+            '<div id="compare-card-a">' + renderCard(a, a.id === winnerId) + '</div>' +
+            '<div id="compare-card-b">' + renderCard(b, b.id === winnerId) + '</div>' +
+            '</div>' +
+            '<div id="compare-spec-wrap">' + buildSpecTableHtml(a, b) + '</div>';
+        } else if (changedSlot === "a") {
+          // Only the side that actually changed gets new content; the
+          // other card's own DOM is left completely alone. Its badge
+          // still needs to stay correct if the new comparison flips
+          // who's winning, even though the rest of its content didn't
+          // change.
+          cardA.innerHTML = renderCard(a, a.id === winnerId);
+          updateBadgeOnly(cardB, b.id === winnerId);
+          document.getElementById("compare-spec-wrap").innerHTML = buildSpecTableHtml(a, b);
+        } else if (changedSlot === "b") {
+          cardB.innerHTML = renderCard(b, b.id === winnerId);
+          updateBadgeOnly(cardA, a.id === winnerId);
+          document.getElementById("compare-spec-wrap").innerHTML = buildSpecTableHtml(a, b);
+        } else {
+          cardA.innerHTML = renderCard(a, a.id === winnerId);
+          cardB.innerHTML = renderCard(b, b.id === winnerId);
+          document.getElementById("compare-spec-wrap").innerHTML = buildSpecTableHtml(a, b);
+        }
+
+        if (pushUrl) {
+          var url = new URL(location.href);
+          url.searchParams.set("a", a.id);
+          url.searchParams.set("b", b.id);
+          history.replaceState(null, "", url);
+        }
+      }
+
+      function updateBadgeOnly(cardEl, isWinner){
+        var titleBlock = cardEl.querySelector(".compare-head-title-block");
+        if (!titleBlock) return; // card is mid-skeleton (shouldn't happen for the untouched side, but safe to no-op)
+        var existing = titleBlock.querySelector(".compare-winner-badge, .compare-loser-badge");
+        if (existing) existing.remove();
+        titleBlock.insertAdjacentHTML("beforeend", badgeHtml(isWinner));
       }
 
       function syncExclusions(){
@@ -367,7 +409,7 @@
         var aId = ctrlA.getSelectedId(), bId = ctrlB.getSelectedId();
 
         if (resultEl) {
-          renderIfReady(true);
+          renderIfReady(true, changedSlot);
         } else if (aId && bId && aId !== bId) {
           // Static pair page -- this only runs from an actual user
           // click (see initCombo's onSelect, the only caller of this

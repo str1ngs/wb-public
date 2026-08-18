@@ -822,10 +822,18 @@ function initReviewsFilter() {
     }
   }
 
+  var brandSelectAllLabel = document.getElementById("brand-filter-select-all-label");
+
   function syncSelectAllState() {
     if (!brandSelectAll) return;
-    brandSelectAll.checked = state.brands.length === ALL_BRAND_VALUES.length;
-    brandSelectAll.indeterminate = state.brands.length > 0 && state.brands.length < ALL_BRAND_VALUES.length;
+    var allSelected = state.brands.length === ALL_BRAND_VALUES.length;
+    brandSelectAll.checked = allSelected;
+    brandSelectAll.indeterminate = state.brands.length > 0 && !allSelected;
+    if (brandSelectAllLabel) {
+      brandSelectAllLabel.textContent = allSelected
+        ? brandSelectAll.getAttribute("data-deselect-all-label")
+        : brandSelectAll.getAttribute("data-select-all-label");
+    }
   }
 
   function applyBrandChange() {
@@ -852,7 +860,7 @@ function initReviewsFilter() {
       var checkAll = brandSelectAll.checked;
       brandCheckboxes.forEach(function (c) { c.checked = checkAll; });
       state.brands = checkAll ? ALL_BRAND_VALUES.slice() : [];
-      brandSelectAll.indeterminate = false;
+      syncSelectAllState();
       applyBrandChange();
     });
   }
@@ -1492,7 +1500,53 @@ function initProductFinder() {
   };
   var BUDGET_RANGES = { micro: [0, 100], low: [100, 400], high: [400, Infinity] };
 
-  function byRating(a, b) { return b.rating - a.rating; }
+  // Some (usage, usecase) combinations need more than an independent
+  // filter-then-filter intersection can express -- the right category
+  // and ranking priority genuinely differ by pair, not just by usage or
+  // usecase alone. Falls back to the generic USAGE_FILTERS/USECASE_FILTERS
+  // path below for any pair not listed here.
+  var COMBO_RULES = {
+    "phone:camping": {
+      // A dead power bank mid-trip is worse than a merely mediocre one,
+      // so reliability leads -- ruggedness is a genuine plus outdoors,
+      // not a requirement, so it's a modest bonus rather than a filter.
+      filter: function (item) { return item.category === "power-banks"; },
+      score: function (item) { return item.reliability * 10 + (item.is_rugged ? 2 : 0); }
+    },
+    "laptop:camping": {
+      // This pairing is specifically about ~100W-class power banks, not
+      // "the biggest power bank available" -- closeness to that output
+      // target wins outright.
+      filter: function (item) { return item.category === "power-banks"; },
+      score: function (item) { return -Math.abs(item.output_w - 100); }
+    },
+    "fridge:traveling": {
+      // Heavy-gear power needs while still wanting to travel light is
+      // specifically a portability ask -- lightest in the category wins,
+      // but only among stations that are actually heavy-gear-capable in
+      // the first place (reuses the same fridge threshold below) --
+      // otherwise a tiny, low-capacity "mini" station could win purely
+      // for being light despite being nowhere near what heavy gear needs.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.weight_kg != null ? -item.weight_kg : -Infinity; }
+    },
+    "fridge:camping": {
+      // Needs real appliance-level output (~1200W) plus a rugged build
+      // for outdoor use -- the power rubric score and closeness to that
+      // output target both matter, with ruggedness as a solid bonus.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.power * 10 + (item.is_rugged ? 5 : 0) - Math.abs(item.output_w - 1200) / 100; }
+    },
+    "fridge:offgrid": {
+      // Emergency backup is a capacity question first -- highest Wh
+      // wins -- with true UPS (sub-10ms transfer) as a real bonus, since
+      // a backup with a noticeable gap defeats part of the point for
+      // sensitive equipment.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.effective_wh + (item.is_ups_10ms ? 200 : 0); }
+    }
+  };
+
 
   function smallImageSrc(src) {
     return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
@@ -1546,20 +1600,33 @@ function initProductFinder() {
     var pool = window.WB_FINDER_INDEX.slice();
     var usedFallback = false;
 
-    var usageFn = state.usage.length ? USAGE_FILTERS[state.usage[0]] : null;
-    var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
+    var usage = state.usage[0], usecase = state.usecase[0];
+    var combo = (usage && usecase) ? COMBO_RULES[usage + ":" + usecase] : null;
 
-    var afterUsage = usageFn ? pool.filter(usageFn) : pool;
-    if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+    var narrowed, scoreFn;
 
-    var narrowed = afterUsage;
-    if (usecaseFn) {
-      var afterUsecase = afterUsage.filter(usecaseFn);
-      if (afterUsecase.length) {
-        narrowed = afterUsecase;
-      } else {
-        usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+    if (combo) {
+      var afterCombo = pool.filter(combo.filter);
+      narrowed = afterCombo.length ? afterCombo : pool;
+      if (!afterCombo.length) usedFallback = true;
+      scoreFn = combo.score;
+    } else {
+      var usageFn = state.usage.length ? USAGE_FILTERS[state.usage[0]] : null;
+      var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
+
+      var afterUsage = usageFn ? pool.filter(usageFn) : pool;
+      if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+
+      narrowed = afterUsage;
+      if (usecaseFn) {
+        var afterUsecase = afterUsage.filter(usecaseFn);
+        if (afterUsecase.length) {
+          narrowed = afterUsecase;
+        } else {
+          usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+        }
       }
+      scoreFn = function (item) { return item.rating; };
     }
 
     if (state.budget.length) {
@@ -1574,8 +1641,18 @@ function initProductFinder() {
       }
     }
 
-    narrowed = narrowed.slice().sort(byRating);
-    return { best: narrowed[0], usedFallback: usedFallback };
+    // A product with no real, purchasable offer shouldn't win "best
+    // match" over one that has one, even with an otherwise-higher
+    // score -- confirmed happening in practice (a top-ranked
+    // recommendation with no buy link at all) before this was added.
+    // Only actually falls back to a no-offer pick when literally
+    // nothing left in the pool has one.
+    var withOffer = narrowed.filter(function (item) { return item.has_offer; });
+    var rankPool = withOffer.length ? withOffer : narrowed;
+    if (!withOffer.length && narrowed.length) usedFallback = true;
+
+    rankPool = rankPool.slice().sort(function (a, b) { return scoreFn(b) - scoreFn(a); });
+    return { best: rankPool[0], usedFallback: usedFallback };
   }
 
   function runMatch() {
