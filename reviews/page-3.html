@@ -176,6 +176,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
 
 <section class="section-tight">
   <div class="wrap">
+    <div class="mobile-intro-card">
     <h1>All Reviews</h1>
     <p class="lede">Every product we've reviewed, filterable by category, sortable by price or recency.</p>
 
@@ -186,7 +187,6 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       <button type="button" class="hero-search-btn page-search-btn" aria-label="Search...">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
       </button>
-      <div class="site-search-results page-search-results"></div>
     </div>
 
     <div class="review-filters">
@@ -196,18 +196,71 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
         <button type="button" class="filter-pill" data-filter-category="power-banks" style="--pill-accent: #00e5ff;">Power Banks</button>
         <button type="button" class="filter-pill" data-filter-category="chargers" style="--pill-accent: #00d98b;">Chargers</button>
       </div>
-      <div class="sort-control">
-        <label for="review-sort">Sort by</label>
-        <select id="review-sort">
-          <option value="recent">Recently added</option>
-          <option value="price-low">Price: low to high</option>
-          <option value="price-high">Price: high to low</option>
-          <option value="rating">Highest rated</option>
-        </select>
+      <div class="filter-controls-right">
+        <div class="sort-control">
+          <label for="review-sort">Sort by</label>
+          <select id="review-sort">
+            <option value="recent">Recently added</option>
+            <option value="price-low">Price: low to high</option>
+            <option value="price-high">Price: high to low</option>
+            <option value="rating">Highest rated</option>
+          </select>
+        </div>
+        <div class="brand-control">
+          <button type="button" class="brand-control-toggle" id="brand-filter-toggle" aria-expanded="false" aria-haspopup="true">
+            <span>Brand</span>
+            <span class="brand-control-count" id="brand-filter-count" hidden></span>
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </button>
+          <div class="brand-control-panel" id="brand-filter-panel" hidden>
+            <label class="brand-control-option brand-control-option-all">
+              <input type="checkbox" id="brand-filter-select-all" checked data-select-all-label="Select all" data-deselect-all-label="Deselect all">
+              <span id="brand-filter-select-all-label">Deselect all</span>
+            </label>
+            <div class="brand-control-divider"></div>
+            <label class="brand-control-option">
+              <input type="checkbox" value="ALLPOWERS" class="brand-filter-checkbox" checked>
+              <span>ALLPOWERS</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="Anker" class="brand-filter-checkbox" checked>
+              <span>Anker</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="BLUETTI" class="brand-filter-checkbox" checked>
+              <span>BLUETTI</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="CUKTECH" class="brand-filter-checkbox" checked>
+              <span>CUKTECH</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="DJI" class="brand-filter-checkbox" checked>
+              <span>DJI</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="EcoFlow" class="brand-filter-checkbox" checked>
+              <span>EcoFlow</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="INIU" class="brand-filter-checkbox" checked>
+              <span>INIU</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="Jackery" class="brand-filter-checkbox" checked>
+              <span>Jackery</span>
+            </label>
+            <label class="brand-control-option">
+              <input type="checkbox" value="UGREEN" class="brand-filter-checkbox" checked>
+              <span>UGREEN</span>
+            </label>
+          </div>
+        </div>
       </div>
     </div>
 
     <p class="review-count"></p>
+    </div>
 
     <script>
       window.WB_REVIEWS_STRINGS = {
@@ -220,14 +273,358 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       // build.py doesn't pass total_products into this template's
       // context yet -- main.js degrades to showing just the page count
       // alone in that case, rather than a wrong or broken total.
-      window.WB_TOTAL_REVIEWS = null;
+      window.WB_TOTAL_REVIEWS = 47;
     </script>
 
     <div class="grid cols-3" id="review-grid">
       <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="34"
+           data-date="2026-07-29"
+           data-rating="3.8"
+           data-title="ugreen nexode pro (10k, 55w)">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-pro-power-bank-10000-55w.html" class="card-photo-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">🏆</span>
+              <span>Top Rated</span>
+            </div>
+            <img src="../images/products/ugreen-nexode-pro-power-bank-10000-55w-1.webp"
+     srcset="../images/products/ugreen-nexode-pro-power-bank-10000-55w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-power-bank-10000-55w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-power-bank-10000-55w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="UGREEN Nexode Pro (10K, 55W) - Power Banks review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (10K, 55W)</h3>
+          <div class="specrow">
+            <span><strong>10,000</strong> mAh</span>
+            <span><strong>55</strong> W</span>
+            <span><strong>249 g</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★★☆</span>
+              <span class="rubric-total-score">3.8/5 <span class="bonus-indicator">(+1)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€34 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B0bmpwD7M" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="1899"
+           data-date="2026-07-29"
+           data-rating="2.8"
+           data-title="bluetti elite 400 2600w">
+        <div class="card-content">
+          <a href="../reviews/bluetti-elite-400-portable-power-station.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/bluetti-elite-400-portable-power-station-1.webp"
+     srcset="../images/products/bluetti-elite-400-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-elite-400-portable-power-station-1-md.webp 900w, ../images/products/bluetti-elite-400-portable-power-station-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Elite 400 2600W - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">BLUETTI</span>
+          <h3>Elite 400 2600W</h3>
+          <div class="specrow">
+            <span><strong>3,840</strong> Wh</span>
+            <span><strong>2,600</strong> W</span>
+            <span><strong>39.0 kg</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">2.8/5</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€1,899 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B02AOnHap" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-400-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">BLUETTI EU Store</a>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #a855f7;"
+           data-category="power-stations"
+           data-price="1099"
+           data-date="2026-07-29"
+           data-rating="2.9"
+           data-title="bluetti pioneer na (sodium-ion)">
+        <div class="card-content">
+          <a href="../reviews/bluetti-pioneer-na-portable-power-station.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/bluetti-pioneer-na-portable-power-station-1.webp"
+     srcset="../images/products/bluetti-pioneer-na-portable-power-station-1-sm.webp 480w, ../images/products/bluetti-pioneer-na-portable-power-station-1-md.webp 900w, ../images/products/bluetti-pioneer-na-portable-power-station-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="BLUETTI Pioneer Na (Sodium-ion) - Power Stations review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">BLUETTI</span>
+          <h3>Pioneer Na (Sodium-ion)</h3>
+          <div class="specrow">
+            <span><strong>900</strong> Wh</span>
+            <span><strong>1,500</strong> W</span>
+            <span><strong>16.0 kg</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">2.9/5 <span class="bonus-indicator">(+1)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€1,099 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <span class="card-buy-btn card-buy-btn-alt card-buy-btn-muted" aria-disabled="true">Currently not available</span>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="83.99"
+           data-date="2026-07-28"
+           data-rating="2.1"
+           data-title="ugreen nexode pro (25k, 200w)">
+        <div class="card-content">
+          <a href="../reviews/ugreen-nexode-pro-powerbank-25000-200w.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp"
+     srcset="../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-sm.webp 480w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1-md.webp 900w, ../images/products/ugreen-nexode-pro-powerbank-25000-200w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="UGREEN Nexode Pro (25K, 200W) - Power Banks review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">UGREEN</span>
+          <h3>Nexode Pro (25K, 200W)</h3>
+          <div class="specrow">
+            <span><strong>25,000</strong> mAh</span>
+            <span><strong>200</strong> W</span>
+            <span><strong>609 g</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★☆☆☆</span>
+              <span class="rubric-total-score">2.1/5</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€83.99 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B0aiJDbU3" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
+           style="--cat-accent: #00e5ff;"
+           data-category="power-banks"
+           data-price="94"
+           data-date="2026-07-27"
+           data-rating="3.1"
+           data-title="ecoflow rapid pro power bank 300w">
+        <div class="card-content">
+          <a href="../reviews/ecoflow-rapid-pro-power-bank-27650-300w.html" class="card-photo-link">
+          <div class="product-photo">
+            <div class="product-badge-pill">
+              <span class="badge-icon">⚡</span>
+              <span>Fastest Charge</span>
+            </div>
+            <img src="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp"
+     srcset="../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-sm.webp 480w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1-md.webp 900w, ../images/products/ecoflow-rapid-pro-power-bank-27650-300w-1.webp 1600w"
+     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
+     alt="EcoFlow RAPID Pro Power Bank 300W - Power Banks review"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <span class="brand">EcoFlow</span>
+          <h3>RAPID Pro Power Bank 300W</h3>
+          <div class="specrow">
+            <span><strong>27,650</strong> mAh</span>
+            <span><strong>300</strong> W</span>
+            <span><strong>700 g</strong></span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Value</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Power</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Charge Speed</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Reliability</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Overall Score</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">3.1/5</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <span class="price">~€94 <span class="price-est">(Est.)</span></span>
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B0hHXhtLW" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
+      <div class="card review-card"
            style="--cat-accent: #00d98b;"
            data-category="chargers"
-           data-price="108"
+           data-price="99"
            data-date="2026-07-27"
            data-rating="3.9"
            data-title="ecoflow rapid pro desktop charger 320w">
@@ -284,7 +681,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
           </div>
         </div>
         <div class="card-footer">
-          <span class="price">~€108 <span class="price-est">(Est.)</span></span>
+          <span class="price">~€99 <span class="price-est">(Est.)</span></span>
           <div class="card-buy-row">
           <a href="https://link.amazon/B0arRBed7" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
           </div>
@@ -293,9 +690,9 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       <div class="card review-card"
            style="--cat-accent: #00e5ff;"
            data-category="power-banks"
-           data-price="61"
+           data-price="66"
            data-date="2026-07-27"
-           data-rating="3.7"
+           data-rating="3.5"
            data-title="ecoflow rapid power bank (25k, 170w)">
         <div class="card-content">
           <a href="../reviews/ecoflow-rapid-power-bank-25000-170w.html" class="card-photo-link">
@@ -319,13 +716,13 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
-    <span class="rubric-bar-pct">4.0/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
+    <span class="rubric-bar-pct">3.5/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
-    <span class="rubric-bar-pct">3.5/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Portability</span>
@@ -346,12 +743,12 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-total-line">
               <span class="rubric-total-label">Overall Score</span>
               <span class="rubric-total-stars">★★★★☆</span>
-              <span class="rubric-total-score">3.7/5</span>
+              <span class="rubric-total-score">3.5/5</span>
             </div>
           </div>
         </div>
         <div class="card-footer">
-          <span class="price">~€61 <span class="price-est">(Est.)</span></span>
+          <span class="price">~€66 <span class="price-est">(Est.)</span></span>
           <div class="card-buy-row">
           <a href="https://link.amazon/B031288HJ" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
           </div>
@@ -360,7 +757,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
       <div class="card review-card"
            style="--cat-accent: #a855f7;"
            data-category="power-stations"
-           data-price="139"
+           data-price="129"
            data-date="2026-07-27"
            data-rating="3.5"
            data-title="bluetti elite 10 mini">
@@ -422,7 +819,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
           </div>
         </div>
         <div class="card-footer">
-          <span class="price">~€139 <span class="price-est">(Est.)</span></span>
+          <span class="price">~€129 <span class="price-est">(Est.)</span></span>
           <div class="card-buy-row">
           <a href="https://link.amazon/B03QJ3Zrx" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
           <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-10-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">BLUETTI EU Store</a>
@@ -434,7 +831,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="1449"
            data-date="2026-07-27"
-           data-rating="3.3"
+           data-rating="3.1"
            data-title="bluetti elite 300">
         <div class="card-content">
           <a href="../reviews/bluetti-elite-300-portable-power-station.html" class="card-photo-link">
@@ -458,8 +855,8 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-viz">
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
-    <span class="rubric-bar-pct">4.0/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
+    <span class="rubric-bar-pct">3.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Power</span>
@@ -485,7 +882,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-total-line">
               <span class="rubric-total-label">Overall Score</span>
               <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">3.3/5</span>
+              <span class="rubric-total-score">3.1/5</span>
             </div>
           </div>
         </div>
@@ -573,7 +970,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="349"
            data-date="2026-07-26"
-           data-rating="2.3"
+           data-rating="2.2"
            data-title="ecoflow river 2 max">
         <div class="card-content">
           <a href="../reviews/ecoflow-river-2-max.html" class="card-photo-link">
@@ -607,8 +1004,8 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:60%"></div></div>
-    <span class="rubric-bar-pct">3.0/5</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
   </div>
   <div class="rubric-bar-row">
     <span class="rubric-bar-label">Charge Speed</span>
@@ -624,7 +1021,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <div class="rubric-total-line">
               <span class="rubric-total-label">Overall Score</span>
               <span class="rubric-total-stars">★★☆☆☆</span>
-              <span class="rubric-total-score">2.3/5</span>
+              <span class="rubric-total-score">2.2/5</span>
             </div>
           </div>
         </div>
@@ -640,7 +1037,7 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
            data-category="power-stations"
            data-price="579"
            data-date="2026-07-26"
-           data-rating="3.3"
+           data-rating="3.0"
            data-title="bluetti elite 100 v2">
         <div class="card-content">
           <a href="../reviews/bluetti-elite-100-v2.html" class="card-photo-link">
@@ -659,74 +1056,6 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
             <span><strong>1,024</strong> Wh</span>
             <span><strong>1,800</strong> W</span>
             <span><strong>11.5 kg</strong></span>
-          </div>
-          <div class="card-rubric-block">
-            <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
-    <span class="rubric-bar-pct">1.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
-    <span class="rubric-bar-pct">1.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Charge Speed</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
-    <span class="rubric-bar-pct">1.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
-    <span class="rubric-bar-pct">4.5/5</span>
-  </div>
-</div>
-            <div class="rubric-total-line">
-              <span class="rubric-total-label">Overall Score</span>
-              <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">3.3/5 <span class="bonus-indicator">(+1)</span></span>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="price">~€579 <span class="price-est">(Est.)</span></span>
-          <div class="card-buy-row">
-          <a href="https://link.amazon/B0anJP5iE" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
-          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-100-v2-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">BLUETTI EU Store</a>
-          </div>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #a855f7;"
-           data-category="power-stations"
-           data-price="749"
-           data-date="2026-07-25"
-           data-rating="3.0"
-           data-title="ecoflow delta 3">
-        <div class="card-content">
-          <a href="../reviews/ecoflow-delta-3.html" class="card-photo-link">
-          <div class="product-photo">
-            <img src="../images/products/ecoflow-delta-3-2.webp"
-     srcset="../images/products/ecoflow-delta-3-2-sm.webp 480w, ../images/products/ecoflow-delta-3-2-md.webp 900w, ../images/products/ecoflow-delta-3-2.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="EcoFlow DELTA 3 - Power Stations review"
-     loading="lazy"
->
-          </div>
-          </a>
-          <span class="brand">EcoFlow</span>
-          <h3>DELTA 3</h3>
-          <div class="specrow">
-            <span><strong>1,024</strong> Wh</span>
-            <span><strong>1,800</strong> W</span>
-            <span><strong>12.5 kg</strong></span>
           </div>
           <div class="card-rubric-block">
             <div class="rubric-viz">
@@ -764,276 +1093,10 @@ html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
           </div>
         </div>
         <div class="card-footer">
-          <span class="price">~€749 <span class="price-est">(Est.)</span></span>
+          <span class="price">~€579 <span class="price-est">(Est.)</span></span>
           <div class="card-buy-row">
-          <a href="https://link.amazon/B04U8gM45" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
-          </div>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #a855f7;"
-           data-category="power-stations"
-           data-price="594"
-           data-date="2026-07-22"
-           data-rating="3.4"
-           data-title="anker solix c1000 gen 2">
-        <div class="card-content">
-          <a href="../reviews/anker-solix-c1000-gen-2.html" class="card-photo-link">
-          <div class="product-photo">
-            <img src="../images/products/anker-solix-c1000-gen-2-1.webp"
-     srcset="../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="Anker SOLIX C1000 Gen 2 - Power Stations review"
-     loading="lazy"
->
-          </div>
-          </a>
-          <span class="brand">Anker</span>
-          <h3>SOLIX C1000 Gen 2</h3>
-          <div class="specrow">
-            <span><strong>1,024</strong> Wh</span>
-            <span><strong>2,000</strong> W</span>
-            <span><strong>11.3 kg</strong></span>
-          </div>
-          <div class="card-rubric-block">
-            <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
-    <span class="rubric-bar-pct">2.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Charge Speed</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5.0/5</span>
-  </div>
-</div>
-            <div class="rubric-total-line">
-              <span class="rubric-total-label">Overall Score</span>
-              <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">3.4/5 <span class="bonus-indicator">(+1)</span></span>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="price">~€594 <span class="price-est">(Est.)</span></span>
-          <div class="card-buy-row">
-          <a href="https://link.amazon/B03ZiBVcy" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
-          </div>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #00e5ff;"
-           data-category="power-banks"
-           data-price="169"
-           data-date="2026-07-22"
-           data-rating="2.9"
-           data-title="anker prime power bank (26k, 300w)">
-        <div class="card-content">
-          <a href="../reviews/anker-prime-powerbank-26k-300w.html" class="card-photo-link">
-          <div class="product-photo">
-            <img src="../images/products/anker-prime-powerbank-26k-300w-1.webp"
-     srcset="../images/products/anker-prime-powerbank-26k-300w-1-sm.webp 480w, ../images/products/anker-prime-powerbank-26k-300w-1-md.webp 900w, ../images/products/anker-prime-powerbank-26k-300w-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="Anker Prime Power Bank (26K, 300W) - Power Banks review"
-     loading="lazy"
->
-          </div>
-          </a>
-          <span class="brand">Anker</span>
-          <h3>Prime Power Bank (26K, 300W)</h3>
-          <div class="specrow">
-            <span><strong>26,250</strong> mAh</span>
-            <span><strong>300</strong> W</span>
-            <span><strong>600 g</strong></span>
-          </div>
-          <div class="card-rubric-block">
-            <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
-    <span class="rubric-bar-pct">4.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
-    <span class="rubric-bar-pct">1.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Charge Speed</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
-    <span class="rubric-bar-pct">4.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5.0/5</span>
-  </div>
-</div>
-            <div class="rubric-total-line">
-              <span class="rubric-total-label">Overall Score</span>
-              <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">2.9/5</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="price">~€169 <span class="price-est">(Est.)</span></span>
-          <div class="card-buy-row">
-          <a href="https://link.amazon/B00pBHX5S" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
-          </div>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #00d98b;"
-           data-category="chargers"
-           data-price="103"
-           data-date="2026-07-22"
-           data-rating="3.8"
-           data-title="anker prime charger 160w">
-        <div class="card-content">
-          <a href="../reviews/anker-prime-charger-160w-3-port.html" class="card-photo-link">
-          <div class="product-photo">
-            <img src="../images/products/anker-prime-charger-160w-3-port-1.webp"
-     srcset="../images/products/anker-prime-charger-160w-3-port-1-sm.webp 480w, ../images/products/anker-prime-charger-160w-3-port-1-md.webp 900w, ../images/products/anker-prime-charger-160w-3-port-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="Anker Prime Charger 160W - Chargers review"
-     loading="lazy"
->
-          </div>
-          </a>
-          <span class="brand">Anker</span>
-          <h3>Prime Charger 160W</h3>
-          <div class="specrow">
-            <span><strong>160</strong> W</span>
-            <span><strong>221 g</strong></span>
-          </div>
-          <div class="card-rubric-block">
-            <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:70%"></div></div>
-    <span class="rubric-bar-pct">3.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Efficiency</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
-    <span class="rubric-bar-pct">5.0/5</span>
-  </div>
-</div>
-            <div class="rubric-total-line">
-              <span class="rubric-total-label">Overall Score</span>
-              <span class="rubric-total-stars">★★★★☆</span>
-              <span class="rubric-total-score">3.8/5</span>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="price">~€103 <span class="price-est">(Est.)</span></span>
-          <div class="card-buy-row">
-          <a href="https://link.amazon/B0gc5L5nq" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
-          </div>
-        </div>
-      </div>
-      <div class="card review-card"
-           style="--cat-accent: #a855f7;"
-           data-category="power-stations"
-           data-price="158"
-           data-date="2026-07-22"
-           data-rating="3.0"
-           data-title="jackery explorer 300d">
-        <div class="card-content">
-          <a href="../reviews/jackery-explorer-300d.html" class="card-photo-link">
-          <div class="product-photo">
-            <img src="../images/products/jackery-explorer-300d-1.webp"
-     srcset="../images/products/jackery-explorer-300d-1-sm.webp 480w, ../images/products/jackery-explorer-300d-1-md.webp 900w, ../images/products/jackery-explorer-300d-1.webp 1600w"
-     sizes="(max-width: 600px) 90vw, (max-width: 1000px) 45vw, 320px"
-     alt="Jackery Explorer 300D - Power Stations review"
-     loading="lazy"
->
-          </div>
-          </a>
-          <span class="brand">Jackery</span>
-          <h3>Explorer 300D</h3>
-          <div class="specrow">
-            <span><strong>288</strong> Wh</span>
-            <span><strong>300</strong> W</span>
-            <span><strong>2.5 kg</strong></span>
-          </div>
-          <div class="card-rubric-block">
-            <div class="rubric-viz">
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Value</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
-    <span class="rubric-bar-pct">2.5/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Power</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Portability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
-    <span class="rubric-bar-pct">4.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Charge Speed</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
-    <span class="rubric-bar-pct">1.0/5</span>
-  </div>
-  <div class="rubric-bar-row">
-    <span class="rubric-bar-label">Reliability</span>
-    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
-    <span class="rubric-bar-pct">4.5/5</span>
-  </div>
-</div>
-            <div class="rubric-total-line">
-              <span class="rubric-total-label">Overall Score</span>
-              <span class="rubric-total-stars">★★★☆☆</span>
-              <span class="rubric-total-score">3.0/5 <span class="bonus-indicator">(+0.25)</span></span>
-            </div>
-          </div>
-        </div>
-        <div class="card-footer">
-          <span class="price">~€158 <span class="price-est">(Est.)</span></span>
-          <div class="card-buy-row">
-          <a href="https://link.amazon/B0fStH0GC" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          <a href="https://link.amazon/B0anJP5iE" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=95479&awinaffid=2996599&ued=https%3A%2F%2Fwww.bluettipower.eu%2Fproducts%2Felite-100-v2-portable-power-station" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">BLUETTI EU Store</a>
           </div>
         </div>
       </div>

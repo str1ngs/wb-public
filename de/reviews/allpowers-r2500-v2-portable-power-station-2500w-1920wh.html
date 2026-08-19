@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='impact-site-verification' value='29317810-86b0-4edf-892f-fc8d6b93c100'>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e8a13d">
+<title>ALLPOWERS R2500 V2 2500W / 1920Wh Test: Alle Daten & Bewertung (2026)</title>
+<meta name="description" content="ALLPOWERS R2500 V2 2500W / 1920Wh im Test: 1,920Wh Kapazität, 2,500W Ausgangsleistung. Alle technischen Daten, Vor- und Nachteile, und für wen sich das Gerät eignet.">
+<link rel="canonical" href="https://wattbench.eu/de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html">
+<link rel="alternate" hreflang="en" href="https://wattbench.eu/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html">
+<link rel="alternate" hreflang="de" href="https://wattbench.eu/de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html">
+<link rel="alternate" hreflang="x-default" href="https://wattbench.eu/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WattBench">
+<meta property="og:title" content="ALLPOWERS R2500 V2 2500W / 1920Wh Test: Alle Daten & Bewertung (2026)">
+<meta property="og:description" content="ALLPOWERS R2500 V2 2500W / 1920Wh im Test: 1,920Wh Kapazität, 2,500W Ausgangsleistung. Alle technischen Daten, Vor- und Nachteile, und für wen sich das Gerät eignet.">
+<meta property="og:url" content="https://wattbench.eu/de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html">
+<meta property="og:locale" content="de">
+<meta property="og:image" content="https://wattbench.eu/images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp">
+<meta property="og:image:width" content="1600">
+<meta property="og:image:height" content="1600">
+<meta property="og:image:alt" content="ALLPOWERS R2500 V2 2500W / 1920Wh">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wattbench.eu/images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp">
+
+<link rel="preload" href="../../Fonts/SourceSans3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../Fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../css/style.css?v=0.3.1">
+<style>
+
+html[data-preview-theme="2"]{--card-bg-alt:#0582ff;}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "ALLPOWERS R2500 V2 2500W / 1920Wh",
+  "brand": {"@type":"Brand","name":"ALLPOWERS"},
+  "description": "Die ALLPOWERS R2500 V2 bietet 1920 Wh Kapazit\u00e4t und einen starken 2500 W Sinus-Wechselrichter (4000 W Spitze) mit langlebigem LiFePO4-Akku f\u00fcr \u00fcber 3500 Zyklen. Sie gl\u00e4nzt durch extremen Dual-Eingang bis 2000 W, 1000 W Solareistung, 200W USB-C Ports und App-Steuerung.",
+  "image": "https://wattbench.eu/images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp",
+  "review": {
+    "@type": "Review",
+    "reviewRating": {"@type":"Rating","ratingValue":"3.1","bestRating":"5"},
+    "author": {"@type":"Organization","name":"WattBench"}
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {"@type":"Question","name":"Unterst\u00fctzt die R2500 V2 einen USV-Notstrommodus?","acceptedAnswer":{"@type":"Answer","text":"Ja, sie verf\u00fcgt \u00fcber eine integrierte USV-Funktion mit einer Umschaltzeit von unter 15 ms, um empfindliche Ger\u00e4te bei Stromausf\u00e4llen zu sch\u00fctzen."}},    {"@type":"Question","name":"Wie hoch ist die maximale Solarladeleistung?","acceptedAnswer":{"@type":"Answer","text":"Sie unterst\u00fctzt dank des leistungsstarken MPPT-Solarreglers einen Solareingang von bis zu 1000 W (12-150V, 13A)."}}  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Startseite","item":"https://wattbench.eu/de/"},
+    {"@type":"ListItem","position":2,"name":"Powerstations","item":"https://wattbench.eu/de/reviews/?category=power-stations"},
+    {"@type":"ListItem","position":3,"name":"ALLPOWERS R2500 V2 2500W / 1920Wh","item":"https://wattbench.eu/de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <a href="../../de/" class="logo">WattBench<small>Daten statt Werbung</small></a>
+    <nav class="main-nav">
+      <a href="../../de/">Startseite</a>
+      <div class="nav-dropdown">
+        <a href="../../de/reviews/" class="nav-dropdown-toggle active">Testberichte</a>
+        <div class="nav-dropdown-menu">
+          <a href="../../de/reviews/?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+          <a href="../../de/reviews/?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+          <a href="../../de/reviews/?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+        </div>
+      </div>
+      <a href="../../de/compare/">Vergleichen</a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../../reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html" class=" lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../../de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html" class="active lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Testberichte">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-controls">
+    <div class="lang-switch">
+      <a href="../../reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html" class=" lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../../de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html" class="active lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../../de/">Startseite</a>
+    <div class="mobile-drawer-group-label">Testberichte</div>
+    <a href="../../de/reviews/?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+    <a href="../../de/reviews/?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+    <a href="../../de/reviews/?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+    <a href="../../de/compare/">Vergleichen</a>
+  </div>
+</nav>
+
+<div class="disclosure">
+  Diese Website erhält Provisionen für qualifizierte Käufe über Affiliate-Links. <a href="../../de/affiliate-disclosure.html">Vollständige Offenlegung</a>.
+</div>
+
+<main>
+<div class="wrap">
+  <p class="breadcrumb"><a href="../../de/">Startseite</a> / <a href="../../de/reviews/?category=power-stations" style="color:#a855f7;">Powerstations</a> / ALLPOWERS R2500 V2 2500W / 1920Wh</p>
+</div>
+
+<section class="section-tight">
+  <div class="wrap review-layout">
+    <article class="review-main article">
+    <div class="review-main-top">
+    <div class="mobile-intro-card">
+    <h1>
+      ALLPOWERS R2500 V2 2500W / 1920Wh <span class="h1-suffix">Test</span>
+      <span class="inline-rating">★★★☆☆ <span class="inline-rating-num">3.1/5</span></span>
+    </h1>
+    <div class="review-meta-row">
+      <span>Powerstations</span>
+<span>2500W 1920Wh LiFePO4 Power Station mit 1000W Solar & Dual-Ladeeingang</span>      <span class="review-price">~€854<span class="price-est">(Gesch.)</span></span>
+      <span> 17. August 2026</span>
+<span>Aktualisiert am 17. August 2026</span>    </div>
+<p class="best-for-line"><strong>Am besten geeignet für:</strong> Leistungsstarke Notstromversorgung zu Hause, Wohnmobil- und Van-Life, netzunabhängige Hütten, Betrieb schwerer Geräte</p>    <div class="top-buy-row">
+      <a class="top-buy-btn" href="https://link.amazon/B05BYBKki" rel="sponsored nofollow" target="_blank">
+        <span class="cart-icon"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"></circle><circle cx="19" cy="21" r="1"></circle><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path></svg></span>
+        Amazon.de Price Check
+      </a>
+      <a class="top-buy-btn top-buy-btn-alt" href="https://www.awin1.com/cread.php?awinmid=67914&awinaffid=2996599&ued=https%3A%2F%2Fwww.iallpowers.de%2Fproducts%2Fr2500-powerstation" rel="sponsored nofollow" target="_blank">ALLPOWERS DE Store</a>
+    </div>
+    </div>
+    <div class="mobile-intro-card">
+
+    <div class="product-gallery review-photo" id="product-gallery">
+      <div class="gallery-track">
+        <div class="gallery-slide" data-full="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp" data-credit="allpowers.eu"><img src="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp"
+     srcset="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1-sm.webp 480w, ../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1-md.webp 900w, ../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-1.webp 1600w"
+     sizes="(max-width: 900px) 100vw, 720px"
+     alt="ALLPOWERS R2500 V2 2500W / 1920Wh — photo 1 of 2"
+     loading="eager"
+fetchpriority="high"></div>
+        <div class="gallery-slide" data-full="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-2.webp" data-credit="allpowers.eu"><img src="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-2.webp"
+     srcset="../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-2-sm.webp 480w, ../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-2-md.webp 900w, ../../images/products/allpowers-r2500-v2-portable-power-station-2500w-1920wh-2.webp 1600w"
+     sizes="(max-width: 900px) 100vw, 720px"
+     alt="ALLPOWERS R2500 V2 2500W / 1920Wh — photo 2 of 2"
+     loading="lazy"
+></div>
+      </div>
+      <button type="button" class="gallery-arrow prev" data-dir="-1" aria-label="Previous photo">‹</button>
+      <button type="button" class="gallery-arrow next" data-dir="1" aria-label="Next photo">›</button>
+      <div class="gallery-counter">Bild <span class="gallery-counter-current">1</span> von 2</div>
+      <button type="button" class="gallery-expand" aria-label="Bild vergrößern"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3M3 16v3a2 2 0 0 0 2 2h3m11-5v3a2 2 0 0 1-2 2h-3"></path></svg></button>
+      <div class="gallery-dots">
+        <button type="button" class="gallery-dot active" data-index="0" aria-label="Photo 1"></button>
+        <button type="button" class="gallery-dot" data-index="1" aria-label="Photo 2"></button>
+      </div>
+    </div>
+    <p class="gallery-credit" id="gallery-credit">allpowers.eu</p>
+
+    <div class="spec-strip">
+      <div class="spec-strip-item"><strong>Kapazität</strong> 1,920 Wh</div>
+      <div class="spec-strip-item"><strong>Gesamteingang</strong> 2,000 W (1500W max AC input, plus up to 1000W solar input (12-150V, 13A); supports 2000W max dual input (AC + Solar))</div>
+      <div class="spec-strip-item"><strong>Gesamtausgang</strong> 2,500 W (2500W continuous pure sine wave AC output (4000W peak surge))</div>
+      <div class="spec-strip-item"><strong>Akku-Chemie</strong> LiFePO4</div>
+      <div class="spec-strip-item"><strong>Lebensdauer (Zyklen)</strong> 3500+ cycles to 80% capacity</div>
+      <div class="spec-strip-item"><strong>Solareingang</strong> 1,000 W</div>
+      <div class="spec-strip-item"><strong>Gewicht</strong> 24.5 kg</div>
+      <div class="spec-strip-item"><strong>Ladezeit 0–100%</strong> 1.0 hours</div>
+      <div class="spec-strip-item"><strong>Garantie</strong> 5 Jahre</div>
+    </div>
+
+    <div class="lightbox" id="lightbox" hidden>
+      <button type="button" class="lightbox-close" aria-label="Schließen">✕</button>
+      <button type="button" class="lightbox-arrow prev" data-dir="-1" aria-label="Previous photo">‹</button>
+      <img class="lightbox-img" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="">
+      <button type="button" class="lightbox-arrow next" data-dir="1" aria-label="Next photo">›</button>
+      <div class="lightbox-counter"></div>
+      <p class="lightbox-credit"></p>
+    </div>
+
+    <div class="review-main-bottom">
+    <p class="lede">Die ALLPOWERS R2500 V2 bietet 1920 Wh Kapazität und einen starken 2500 W Sinus-Wechselrichter (4000 W Spitze) mit langlebigem LiFePO4-Akku für über 3500 Zyklen. Sie glänzt durch extremen Dual-Eingang bis 2000 W, 1000 W Solareistung, 200W USB-C Ports und App-Steuerung.</p>
+
+    <h2>Für wen geeignet</h2>
+    <p>Hausbesitzer mit hohem Notstrombedarf, Camper und Off-Grid-Enthusiasten, die stromhungrige Geräte zuverlässig betreiben möchten.</p>
+
+    <div class="pros-cons">
+      <div class="pros">
+        <h3>Stärken</h3>
+        <ul><li>Hohe Dauerausgangsleistung von 2500 W (4000 W Peak) betreibt selbst anspruchsvollste Haushaltsgeräte und Werkzeuge</li><li>Großzügige Kapazität von 1920 Wh für längere Laufzeiten bei Stromausfällen</li><li>Extrem schnelles Laden durch kombinierten Dual-Eingang (AC + Solar) mit bis zu 2000 W</li><li>Hervorragender Solareingang bis zu 1000 W (12-150V, 13A) für autarkes Laden</li><li>Zwei leistungsstarke 200W USB-C Anschlüsse, USV (<15ms) und WLAN/Bluetooth App-Überwachung</li></ul>
+      </div>
+      <div class="cons">
+        <h3>Kompromisse</h3>
+        <ul><li>Mit 24,5 kg ein schweres Gerät, das am besten stationär oder mit Rollen transportiert wird</li><li>Größeres Transportvolumen im Vergleich zu kleineren Modellen</li></ul>
+      </div>
+    </div>
+
+    <h2>Laden und Erweiterung</h2>
+    <p>Lädt mit bis zu 1500 W über AC, bis zu 1000 W über Solar oder im kombinierten Dual-Modus mit bis zu 2000 W extrem schnell wieder auf.</p>
+
+    <h2>Häufig gestellte Fragen</h2>
+    <h3>Unterstützt die R2500 V2 einen USV-Notstrommodus?</h3>
+    <p>Ja, sie verfügt über eine integrierte USV-Funktion mit einer Umschaltzeit von unter 15 ms, um empfindliche Geräte bei Stromausfällen zu schützen.</p>
+    <h3>Wie hoch ist die maximale Solarladeleistung?</h3>
+    <p>Sie unterstützt dank des leistungsstarken MPPT-Solarreglers einen Solareingang von bis zu 1000 W (12-150V, 13A).</p>
+
+    <div class="callout" id="buy" style="--cat-accent: #a855f7;">
+      <strong>Wo kaufen:</strong> Die Preise schwanken je nach Herstellerangeboten. Prüfe vor dem Kauf den aktuellen Preis und eventuelle Paketrabatte.
+      <div class="callout-buy-row">
+        <a class="card-buy-btn" href="https://link.amazon/B05BYBKki" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+        <a class="card-buy-btn card-buy-btn-alt" href="https://www.awin1.com/cread.php?awinmid=67914&awinaffid=2996599&ued=https%3A%2F%2Fwww.iallpowers.de%2Fproducts%2Fr2500-powerstation" rel="sponsored nofollow" target="_blank">ALLPOWERS DE Store</a>
+      </div>
+    </div>
+    </div>
+    </div>
+    </article>
+
+    <aside class="review-sidebar">
+      <div class="review-rubric-section">
+      <div class="section-head"><div class="eyebrow">Bewertet nach Rubric v1.5</div><h2>So setzt sich diese Bewertung zusammen</h2></div>
+      <div class="rubric-static-block">
+        <button type="button" class="rubric-accordion-trigger" aria-expanded="false" aria-controls="rubric-accordion-body">
+        <div class="rubric-total-line">
+          <span class="rubric-total-label">Gesamtbewertung</span>
+          <span class="rubric-total-stars">★★★☆☆</span>
+          <span class="rubric-total-score">3.1/5</span>
+        </div>
+        <svg class="rubric-accordion-chevron" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </button>
+        <div class="rubric-accordion-body" id="rubric-accordion-body" hidden>
+        <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:20%"></div></div>
+    <span class="rubric-bar-pct">1.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladezeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:50%"></div></div>
+    <span class="rubric-bar-pct">2.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+</div>
+        <div class="rubric-explainer-tabs">
+          <button type="button" class="rubric-explainer-tab active" data-explain="Preis vergleicht den Kaufpreis mit der Kapazität.">Preis</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Leistung spiegelt ihr Verhältnis zur Kapazität wider — Kapazität, Eingangs- und Ausgangsleistung zusammen, damit ein riesiger Akku ohne echte Wattzahl nicht als leistungsstark gilt. Bei Ladegeräten ist es einfach die höchste Ausgangsleistung seiner Kategorie.">Leistung</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Portabilität bewertet das Gewicht im Vergleich zum Rest seiner Kategorie, das leichteste zuerst. Bei Ladegeräten ist es das Gewicht im Verhältnis zur Ausgangsleistung, damit ein kleines Ladegerät ohne viel Leistung nicht automatisch gewinnt, nur weil es winzig ist.">Portabilität</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Ladezeit misst, wie schnell ein Akku tatsächlich im Verhältnis zu seiner Größe lädt (eine Laderate in Wh pro Stunde), nicht nur die reine Minutenzahl — ein großer Akku, der in ähnlicher Zeit wie ein kleiner lädt, gilt daher zu Recht als schneller. Bei Ladegeräten wird daraus Effizienz.">Ladezeit</button>
+          <button type="button" class="rubric-explainer-tab" data-explain="Zuverlässigkeit basiert auf der Garantiedauer, bewertet im Vergleich zum Rest seiner Kategorie — je länger die Abdeckung, desto höher die Bewertung.">Zuverlässigkeit</button>
+        </div>
+        <p class="rubric-value-explainer" id="rubric-explainer-text">Preis vergleicht den Kaufpreis mit der Kapazität.</p>
+        </div>
+      </div>
+      </div>
+      <div class="review-related-section mobile-intro-card">
+      <div class="section-head"><div class="eyebrow">Vergleichen</div><h2>Ähnliche Produkte</h2></div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../../de/reviews/ecoflow-delta-2-max-portable-power-station.html">
+        <div class="sidebar-card-photo"><img src="../../images/products/ecoflow-delta-2-max-portable-power-station-3.webp"
+     srcset="../../images/products/ecoflow-delta-2-max-portable-power-station-3-sm.webp 480w, ../../images/products/ecoflow-delta-2-max-portable-power-station-3-md.webp 900w, ../../images/products/ecoflow-delta-2-max-portable-power-station-3.webp 1600w"
+     sizes="64px"
+     alt="EcoFlow DELTA 2 Max"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">EcoFlow</span>
+          <h3>DELTA 2 Max</h3>
+          <p class="desc desc-fade">Die EcoFlow DELTA 2 Max ist eine leistungsstarke 2.048Wh Powerstation mit langlebigem LFP-Akku für 3.000 Zyklen. Sie ist auf bis zu 6 kWh erweiterbar, liefert bis zu 3.100W mit X-Boost und bietet rasant schnelles X-Stream Laden sowie bis zu 1.000W Solarladung.</p>
+          <a class="sidebar-card-compare-link" href="../compare/index.html?a=allpowers-r2500-v2-portable-power-station-2500w-1920wh&b=ecoflow-delta-2-max-portable-power-station">EcoFlow DELTA 2 Max vs ALLPOWERS R2500 V2 2500W / 1920Wh →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../../de/reviews/ecoflow-delta-3.html">
+        <div class="sidebar-card-photo"><img src="../../images/products/ecoflow-delta-3-2.webp"
+     srcset="../../images/products/ecoflow-delta-3-2-sm.webp 480w, ../../images/products/ecoflow-delta-3-2-md.webp 900w, ../../images/products/ecoflow-delta-3-2.webp 1600w"
+     sizes="64px"
+     alt="EcoFlow DELTA 3"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">EcoFlow</span>
+          <h3>DELTA 3</h3>
+          <p class="desc desc-fade">Die EcoFlow DELTA 3 ist eine leistungsstarke 1024Wh Powerstation mit ultraschneller X-Stream Schnellladefunktion von 0 auf 100% in nur 56 Minuten. Mit 1800W Ausgangsleistung (2400W / 3600W X-Boost), 11 Anschlüssen, flüsterleisem 30dB Betrieb und modularer Erweiterbarkeit bis 5 kWh ist sie der ideale Begleiter für Notfälle und Outdoor-Abenteuer.</p>
+          <a class="sidebar-card-compare-link" href="../compare/index.html?a=allpowers-r2500-v2-portable-power-station-2500w-1920wh&b=ecoflow-delta-3">EcoFlow DELTA 3 vs ALLPOWERS R2500 V2 2500W / 1920Wh →</a>
+        </div>
+      </div>
+      <div class="sidebar-card">
+        <a class="sidebar-card-photo-link" href="../../de/reviews/anker-solix-c1000-gen-2.html">
+        <div class="sidebar-card-photo"><img src="../../images/products/anker-solix-c1000-gen-2-1.webp"
+     srcset="../../images/products/anker-solix-c1000-gen-2-1-sm.webp 480w, ../../images/products/anker-solix-c1000-gen-2-1-md.webp 900w, ../../images/products/anker-solix-c1000-gen-2-1.webp 1600w"
+     sizes="64px"
+     alt="Anker SOLIX C1000 Gen 2"
+     loading="lazy"
+></div>
+        </a>
+        <div class="sidebar-card-text">
+          <span class="brand">Anker</span>
+          <h3>SOLIX C1000 Gen 2</h3>
+          <p class="desc desc-fade">Die Anker SOLIX C1000 Gen 2 vereint 1.024Wh LiFePO4-Kapazität und robuste 2.000W Ausgangsleistung (3.000W Spitzenleistung) in einem Gehäuse, das 14% kleiner und 11% leichter als vergleichbare Modelle ist. Ausgestattet mit HyperFlash-Technologie für eine ultraschnelle Aufladung in 49 Minuten und intelligenter App-Steuerung mit TOU-Modus (Time-of-Use), dient sie als zuverlässige und langlebige Stromquelle.</p>
+          <a class="sidebar-card-compare-link" href="../compare/index.html?a=allpowers-r2500-v2-portable-power-station-2500w-1920wh&b=anker-solix-c1000-gen-2">Anker SOLIX C1000 Gen 2 vs ALLPOWERS R2500 V2 2500W / 1920Wh →</a>
+        </div>
+      </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../../de/" class="logo">WattBench</a>
+      <p class="fine">WattBench ist eine Website für Testberichte zu Power-Geräten — darunter tragbare Powerstations, Powerbanks und Ladegeräte.</p>
+    </div>
+    <div>
+      <h4>Entdecken</h4>
+      <a href="../../de/reviews/?category=power-stations">Powerstations</a>
+      <a href="../../de/reviews/?category=power-banks">Powerbanks</a>
+      <a href="../../de/reviews/?category=chargers">Ladegeräte</a>
+      <a href="../../de/compare/">Vergleichen</a>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <a href="../../de/about.html">Über uns</a>
+      <a href="../../de/affiliate-disclosure.html">Affiliate-Offenlegung</a>
+      <a href="../../de/privacy-policy.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. Alle Produktnamen und Marken gehören ihren jeweiligen Eigentümern.</span>
+    <span>v0.3.1</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "de";
+  window.WB_ROOT = "../../";
+  window.WB_TOP_RATED_LABEL = "Bestbewertet";
+  window.WB_BEST_VALUE_LABEL = "Bestes Preis-Verh\u00e4ltnis";
+  window.WB_FASTEST_CHARGE_LABEL = "Schnellste Ladung";
+  window.WB_HIGHEST_OUTPUT_LABEL = "H\u00f6chste Leistung";
+  window.WB_LIGHTEST_LABEL = "Leichtestes Modell";
+  window.WB_EST_LABEL = "Gesch.";
+  window.WB_RUBRIC_VALUE_LABEL = "Preis";
+  window.WB_RUBRIC_POWER_LABEL = "Leistung";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portabilit\u00e4t";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Ladezeit";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Effizienz";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Zuverl\u00e4ssigkeit";
+  window.WB_BUY_AMAZON_LABEL = "Amazon.de Price Check";
+  window.WB_CURRENTLY_UNAVAILABLE_LABEL = "Derzeit nicht verf\u00fcgbar";
+  window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
+  window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
+  window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} Ergebnisse";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Suchen...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Suche innerhalb {category}...";
+  window.WB_SEARCH_PREFIX = "Suche";
+  window.WB_THEME_LABELS = { dark: "\u263d DUNKEL", light: "\u2600 HELL" };
+  window.WB_ALT_LINKS = { "en": "../../reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html", "de": "../../de/reviews/allpowers-r2500-v2-portable-power-station-2500w-1920wh.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Powerstations", accent: "#a855f7", icon: "bolt", url: "../../de/reviews/?category=power-stations" }, { id: "power-banks", label: "Powerbanks", accent: "#00e5ff", icon: "battery", url: "../../de/reviews/?category=power-banks" }, { id: "chargers", label: "Ladeger\u00e4te", accent: "#00d98b", icon: "plug", url: "../../de/reviews/?category=chargers" }];
+</script>
+<script src="../../js/main.js?v=0.3.1"></script>
+</body>
+</html>

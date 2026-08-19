@@ -433,7 +433,7 @@ function initReviewsFilter() {
   // charger, not just the ones that landed on this particular page by
   // chance of sort order. Sort still applies either way, just against
   // whichever set is currently showing.
-  var state = { category: "all", sort: "recent", catalogPage: 1 };
+  var state = { category: "all", sort: "recent", catalogPage: 1, query: "", brands: [] };
 
   var BADGE_LABELS = {
     top_rated: window.WB_TOP_RATED_LABEL, best_value: window.WB_BEST_VALUE_LABEL,
@@ -588,6 +588,7 @@ function initReviewsFilter() {
     // pattern as the rubric bars above.
     var buyButtonsHtml = "";
     if (item.amazon_url || item.brand_buy_url) {
+      var bothMuted = item.amazon_url && item.amazon_unavailable && item.brand_buy_url && item.awin_unavailable;
       var amazonBtnHtml = "";
       if (item.amazon_url) {
         amazonBtnHtml = item.amazon_unavailable
@@ -595,7 +596,7 @@ function initReviewsFilter() {
           : '<a href="' + item.amazon_url + '" class="card-buy-btn" rel="sponsored nofollow noopener" target="_blank">' + (window.WB_BUY_AMAZON_LABEL || "Amazon.de Price Check") + '</a>';
       }
       var brandBtnHtml = "";
-      if (item.brand_buy_url) {
+      if (item.brand_buy_url && !bothMuted) {
         brandBtnHtml = item.awin_unavailable
           ? '<span class="card-buy-btn card-buy-btn-alt card-buy-btn-muted" aria-disabled="true">' + (window.WB_CURRENTLY_UNAVAILABLE_LABEL || "Currently not available") + '</span>'
           : '<a href="' + item.brand_buy_url + '" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow noopener" target="_blank">' + (item.brand_buy_label || (item.brand + " Store")) + '</a>';
@@ -664,9 +665,21 @@ function initReviewsFilter() {
     catalogGrid.hidden = false;
     if (paginationEl) paginationEl.hidden = true; // the server-rendered nav is for the page view specifically; the catalog view gets its own, below
 
-    var matching = state.category === "all"
-      ? catalogIndex.slice()
-      : catalogIndex.filter(function (item) { return item.category === state.category; });
+    var matching;
+    if (state.query) {
+      // A text search is meant to cut across categories -- typing
+      // "100w" should surface every matching product, not just the
+      // ones in whichever category pill happens to still be active.
+      var q = state.query.toLowerCase();
+      matching = catalogIndex.filter(function (item) {
+        return (item.brand + " " + item.model).toLowerCase().indexOf(q) !== -1;
+      });
+    } else {
+      matching = state.category === "all"
+        ? catalogIndex.slice()
+        : catalogIndex.filter(function (item) { return item.category === state.category; });
+    }
+    matching = matching.filter(function (item) { return state.brands.indexOf(item.brand) !== -1; });
     matching.sort(catalogSortFn);
 
     var totalPages = Math.max(1, Math.ceil(matching.length / CATALOG_PAGE_SIZE));
@@ -687,15 +700,18 @@ function initReviewsFilter() {
 
   function apply() {
     // The server-rendered page view is only correct for the true default
-    // state -- "all" category AND "recent" sort, which is what the page
-    // was actually built and sorted as. Anything else -- a category
-    // picked, or just the sort order changed while still on "all" -- has
-    // to mean "sort/filter the whole catalog," not "re-sort this page's
-    // 12 products," since that's what a sort dropdown reasonably implies:
-    // picking "cheapest first" should surface the cheapest thing in the
-    // whole catalog, not just the cheapest among whatever happened to
-    // land on this particular page.
-    if (state.category === "all" && state.sort === "recent") {
+    // state -- "all" category, "recent" sort, no search, every brand still
+    // checked -- which is what the page was actually built and sorted as.
+    // Anything else has to mean "sort/filter the whole catalog," not
+    // "re-sort this page's 12 products" -- a search box or a brand filter
+    // can't do their jobs at all against a 12-item slice, and a sort
+    // dropdown should surface the true cheapest/highest-rated thing in the
+    // whole catalog, not just among whatever happened to land on this
+    // page. state.brands.length === ALL_BRAND_VALUES.length, not just
+    // "non-empty," since state.brands always mirrors the checked boxes now
+    // (see the brand-filter section below) -- a subset that happens to be
+    // non-empty is still a real, active filter that needs the catalog path.
+    if (!state.query && state.brands.length === ALL_BRAND_VALUES.length && state.category === "all" && state.sort === "recent") {
       showPageView();
     } else {
       loadCatalogIndex().then(showCatalogView);
@@ -717,15 +733,6 @@ function initReviewsFilter() {
     }
   } catch (e) {}
 
-  function updatePlaceholder() {
-    if (!searchInput) return;
-    var active = pills.filter(function (p) { return p.classList.contains("active"); })[0];
-    var label = active ? active.textContent.trim() : "";
-    var prefix = window.WB_SEARCH_PREFIX || "Search";
-    searchInput.placeholder = label ? prefix + " " + label + "\u2026" : prefix + "\u2026";
-  }
-  updatePlaceholder();
-
   pills.forEach(function (pill) {
     pill.addEventListener("click", function () {
       pills.forEach(function (p) { p.classList.remove("active"); });
@@ -733,7 +740,6 @@ function initReviewsFilter() {
       state.category = pill.getAttribute("data-filter-category");
       state.catalogPage = 1;
       apply();
-      updatePlaceholder();
     });
   });
 
@@ -748,127 +754,134 @@ function initReviewsFilter() {
   // ---- catalog-wide text search (same lazily-fetched index as category
   // filtering above -- one fetch, shared). Fetched exactly once, on
   // first focus (never on page load, so a visitor who never touches
-  // either feature never pays for the request), then renders live
-  // matches from the ENTIRE catalog into a dropdown -- same visual
-  // pattern and CSS classes as the header search (initSiteSearch above).
+  // either feature never pays for the request). Filters the same grid
+  // category filtering already renders into, via state.query and
+  // showCatalogView() above -- not a separate dropdown overlaying the
+  // grid, which is what this used to be: typing showed a floating list
+  // of matches, but the actual product grid underneath never changed,
+  // so the only way to browse full result cards was clicking into the
+  // dropdown one at a time. Searching also always covers the ENTIRE
+  // catalog regardless of which category pill happens to be active
+  // (see showCatalogView()'s own query-handling) and resets that pill
+  // to "all" -- leaving e.g. "Power Stations" shown as active while a
+  // cross-category search result set displays would misrepresent what
+  // the grid is actually showing.
   var searchInput = document.querySelector(".page-search-input");
   var searchBtn = document.querySelector(".page-search-btn");
-  var resultsBox = document.querySelector(".page-search-results");
   var MIN_QUERY_LENGTH = 2;
-  var RENDER_CAP = 20;
 
-  function ratingBadge(rating) {
-    if (rating === undefined || rating === null) return "";
-    return '<span class="search-rating-badge">\u2605 ' + rating + '</span>';
+  function setSearchQuery(query) {
+    state.query = query.length >= MIN_QUERY_LENGTH ? query : "";
+    state.category = "all";
+    pills.forEach(function (p) { p.classList.toggle("active", p.getAttribute("data-filter-category") === "all"); });
+    state.catalogPage = 1;
+    apply();
   }
 
-  function renderCatalogResults(query) {
-    if (!resultsBox) return;
-    if (!query || query.length < MIN_QUERY_LENGTH) { resultsBox.classList.remove("open"); return; }
-    if (!catalogIndex) return; // still loading -- the .then() chain that called this re-renders once it lands
-
-    // Scope to the active category pill FIRST, same pattern already used
-    // for the catalog grid itself (showCatalogView() above) -- this was
-    // the actual bug: the placeholder text already read state.category
-    // correctly ("Search Power Stations..."), but this function searched
-    // the entire, un-scoped catalogIndex regardless of which pill was
-    // active, so a query like "100w" matched chargers too even with
-    // Power Stations selected.
-    var pool = state.category === "all"
-      ? catalogIndex
-      : catalogIndex.filter(function (item) { return item.category === state.category; });
-
-    var q = query.toLowerCase();
-    var matches = pool.filter(function (item) {
-      var title = item.brand + " " + item.model;
-      return title.toLowerCase().indexOf(q) !== -1;
-    });
-    // Same "starts with the query" ranking as the header search, so
-    // typing "anker" with a dozen Anker products doesn't return an
-    // arbitrary-looking order.
-    matches.sort(function (a, b) {
-      var aTitle = (a.brand + " " + a.model).toLowerCase();
-      var bTitle = (b.brand + " " + b.model).toLowerCase();
-      var aStarts = aTitle.indexOf(q) === 0 ? 0 : 1;
-      var bStarts = bTitle.indexOf(q) === 0 ? 0 : 1;
-      if (aStarts !== bStarts) return aStarts - bStarts;
-      return aTitle.localeCompare(bTitle);
-    });
-
-    if (!matches.length) {
-      resultsBox.innerHTML = '<div class="site-search-empty">' + (window.WB_SEARCH_NO_RESULTS || "No results found.") + '</div>';
-      resultsBox.classList.add("open");
-      return;
-    }
-    var countHeading = '<div class="site-search-heading">' +
-      (window.WB_SEARCH_RESULTS_COUNT || "{count} results").replace("{count}", matches.length) +
-      '</div>';
-    var rows = matches.slice(0, RENDER_CAP).map(function (item) {
-      var accentStyle = item.accent ? ' style="--row-accent:' + item.accent + ';"' : "";
-      return '<a class="site-search-result" href="' + window.WB_ROOT + item.url + '"' + accentStyle + '>' +
-        '<span class="search-result-text">' +
-        '<span class="r-title">' + item.brand + ' ' + item.model + '</span>' +
-        '<span class="r-subtitle">' + item.category_label + '</span>' +
-        '</span>' +
-        ratingBadge(item.rating) +
-        '</a>';
-    }).join("");
-    resultsBox.innerHTML = countHeading + '<div class="site-search-list">' + rows + '</div>';
-    resultsBox.classList.add("open");
-  }
-
-  var SEARCH_GLASS_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>';
-  var CLEAR_X_SVG = '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>';
-
-  function updateSearchBtn() {
-    if (!searchBtn) return;
-    var hasText = !!(searchInput && searchInput.value.trim());
-    searchBtn.innerHTML = hasText ? CLEAR_X_SVG : SEARCH_GLASS_SVG;
-    searchBtn.classList.toggle("is-clear", hasText);
+  function runSearch() {
+    if (!searchInput) return;
+    var query = searchInput.value.trim();
+    loadCatalogIndex().then(function () { setSearchQuery(query); });
   }
 
   if (searchInput) {
     searchInput.addEventListener("focus", function () { loadCatalogIndex(); }, { once: true });
-
-    var searchDebounce = null;
-    searchInput.addEventListener("input", function () {
-      updateSearchBtn();
-      clearTimeout(searchDebounce);
-      var query = searchInput.value.trim();
-      searchDebounce = setTimeout(function () {
-        loadCatalogIndex().then(function () { renderCatalogResults(query); });
-      }, 150);
-    });
     searchInput.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") e.preventDefault(); // already filtering live, nothing to "submit"
+      if (e.key === "Enter") { e.preventDefault(); runSearch(); }
     });
-    updateSearchBtn();
   }
   if (searchBtn) {
-    searchBtn.addEventListener("click", function () {
-      if (!searchInput) return;
-      if (searchBtn.classList.contains("is-clear")) {
-        searchInput.value = "";
-        if (resultsBox) resultsBox.classList.remove("open");
-        updateSearchBtn();
+    searchBtn.addEventListener("click", runSearch);
+  }
+
+  // ---- brand multi-select, next to Sort -- additive on top of
+  // whichever of query/category is currently narrowing the grid (see
+  // showCatalogView()'s own brand-filtering step), not an alternative
+  // to either. Starts with every brand checked (matching the markup's
+  // own checked-by-default checkboxes), so state.brands always mirrors
+  // exactly which boxes are checked rather than the old "empty array
+  // means no filter" shorthand -- that broke once deselecting
+  // everything needed to mean "show nothing" instead of silently
+  // falling back to "show everything." ----
+  var brandToggle = document.getElementById("brand-filter-toggle");
+  var brandPanel = document.getElementById("brand-filter-panel");
+  var brandCount = document.getElementById("brand-filter-count");
+  var brandSelectAll = document.getElementById("brand-filter-select-all");
+  var brandCheckboxes = Array.prototype.slice.call(document.querySelectorAll(".brand-filter-checkbox"));
+  var ALL_BRAND_VALUES = brandCheckboxes.map(function (c) { return c.value; });
+  state.brands = ALL_BRAND_VALUES.slice();
+
+  function updateBrandCount() {
+    if (!brandCount) return;
+    var excluded = ALL_BRAND_VALUES.length - state.brands.length;
+    if (excluded > 0) {
+      brandCount.textContent = excluded;
+      brandCount.hidden = false;
+    } else {
+      brandCount.hidden = true;
+    }
+  }
+
+  var brandSelectAllLabel = document.getElementById("brand-filter-select-all-label");
+
+  function syncSelectAllState() {
+    if (!brandSelectAll) return;
+    var allSelected = state.brands.length === ALL_BRAND_VALUES.length;
+    brandSelectAll.checked = allSelected;
+    brandSelectAll.indeterminate = state.brands.length > 0 && !allSelected;
+    if (brandSelectAllLabel) {
+      brandSelectAllLabel.textContent = allSelected
+        ? brandSelectAll.getAttribute("data-deselect-all-label")
+        : brandSelectAll.getAttribute("data-select-all-label");
+    }
+  }
+
+  function applyBrandChange() {
+    state.catalogPage = 1;
+    updateBrandCount();
+    loadCatalogIndex().then(apply);
+  }
+
+  if (brandToggle && brandPanel) {
+    brandToggle.addEventListener("click", function () {
+      var open = brandPanel.hidden;
+      brandPanel.hidden = !open;
+      brandToggle.setAttribute("aria-expanded", String(open));
+    });
+    document.addEventListener("click", function (e) {
+      if (!e.target.closest(".brand-control")) {
+        brandPanel.hidden = true;
+        brandToggle.setAttribute("aria-expanded", "false");
       }
-      searchInput.focus();
     });
   }
-  document.addEventListener("click", function (e) {
-    if (resultsBox && !e.target.closest(".page-search")) resultsBox.classList.remove("open");
+  if (brandSelectAll) {
+    brandSelectAll.addEventListener("change", function () {
+      var checkAll = brandSelectAll.checked;
+      brandCheckboxes.forEach(function (c) { c.checked = checkAll; });
+      state.brands = checkAll ? ALL_BRAND_VALUES.slice() : [];
+      syncSelectAllState();
+      applyBrandChange();
+    });
+  }
+  brandCheckboxes.forEach(function (cb) {
+    cb.addEventListener("change", function () {
+      state.brands = brandCheckboxes.filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+      syncSelectAllState();
+      applyBrandChange();
+    });
   });
 
   // ?q=<text> in the URL -- the homepage search can land people here
-  // with a query already typed. Pre-fills the box AND immediately shows
-  // catalog-wide matches, fetching the index right away rather than
-  // waiting for a focus event that already effectively just happened.
+  // with a query already typed. Pre-fills the box AND immediately
+  // filters the grid to catalog-wide matches, fetching the index right
+  // away rather than waiting for a focus event that already
+  // effectively just happened.
   try {
     var qParam = new URLSearchParams(window.location.search).get("q");
     if (qParam && searchInput) {
       searchInput.value = qParam;
-      updateSearchBtn();
-      loadCatalogIndex().then(function () { renderCatalogResults(qParam); });
+      loadCatalogIndex().then(function () { setSearchQuery(qParam); });
     }
   } catch (e) {}
 
@@ -1487,7 +1500,53 @@ function initProductFinder() {
   };
   var BUDGET_RANGES = { micro: [0, 100], low: [100, 400], high: [400, Infinity] };
 
-  function byRating(a, b) { return b.rating - a.rating; }
+  // Some (usage, usecase) combinations need more than an independent
+  // filter-then-filter intersection can express -- the right category
+  // and ranking priority genuinely differ by pair, not just by usage or
+  // usecase alone. Falls back to the generic USAGE_FILTERS/USECASE_FILTERS
+  // path below for any pair not listed here.
+  var COMBO_RULES = {
+    "phone:camping": {
+      // A dead power bank mid-trip is worse than a merely mediocre one,
+      // so reliability leads -- ruggedness is a genuine plus outdoors,
+      // not a requirement, so it's a modest bonus rather than a filter.
+      filter: function (item) { return item.category === "power-banks"; },
+      score: function (item) { return item.reliability * 10 + (item.is_rugged ? 2 : 0); }
+    },
+    "laptop:camping": {
+      // This pairing is specifically about ~100W-class power banks, not
+      // "the biggest power bank available" -- closeness to that output
+      // target wins outright.
+      filter: function (item) { return item.category === "power-banks"; },
+      score: function (item) { return -Math.abs(item.output_w - 100); }
+    },
+    "fridge:traveling": {
+      // Heavy-gear power needs while still wanting to travel light is
+      // specifically a portability ask -- lightest in the category wins,
+      // but only among stations that are actually heavy-gear-capable in
+      // the first place (reuses the same fridge threshold below) --
+      // otherwise a tiny, low-capacity "mini" station could win purely
+      // for being light despite being nowhere near what heavy gear needs.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.weight_kg != null ? -item.weight_kg : -Infinity; }
+    },
+    "fridge:camping": {
+      // Needs real appliance-level output (~1200W) plus a rugged build
+      // for outdoor use -- the power rubric score and closeness to that
+      // output target both matter, with ruggedness as a solid bonus.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.power * 10 + (item.is_rugged ? 5 : 0) - Math.abs(item.output_w - 1200) / 100; }
+    },
+    "fridge:offgrid": {
+      // Emergency backup is a capacity question first -- highest Wh
+      // wins -- with true UPS (sub-10ms transfer) as a real bonus, since
+      // a backup with a noticeable gap defeats part of the point for
+      // sensitive equipment.
+      filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
+      score: function (item) { return item.effective_wh + (item.is_ups_10ms ? 200 : 0); }
+    }
+  };
+
 
   function smallImageSrc(src) {
     return src && src.slice(-5) === ".webp" ? src.slice(0, -5) + "-sm.webp" : src;
@@ -1541,20 +1600,33 @@ function initProductFinder() {
     var pool = window.WB_FINDER_INDEX.slice();
     var usedFallback = false;
 
-    var usageFn = state.usage.length ? USAGE_FILTERS[state.usage[0]] : null;
-    var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
+    var usage = state.usage[0], usecase = state.usecase[0];
+    var combo = (usage && usecase) ? COMBO_RULES[usage + ":" + usecase] : null;
 
-    var afterUsage = usageFn ? pool.filter(usageFn) : pool;
-    if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+    var narrowed, scoreFn;
 
-    var narrowed = afterUsage;
-    if (usecaseFn) {
-      var afterUsecase = afterUsage.filter(usecaseFn);
-      if (afterUsecase.length) {
-        narrowed = afterUsecase;
-      } else {
-        usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+    if (combo) {
+      var afterCombo = pool.filter(combo.filter);
+      narrowed = afterCombo.length ? afterCombo : pool;
+      if (!afterCombo.length) usedFallback = true;
+      scoreFn = combo.score;
+    } else {
+      var usageFn = state.usage.length ? USAGE_FILTERS[state.usage[0]] : null;
+      var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
+
+      var afterUsage = usageFn ? pool.filter(usageFn) : pool;
+      if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+
+      narrowed = afterUsage;
+      if (usecaseFn) {
+        var afterUsecase = afterUsage.filter(usecaseFn);
+        if (afterUsecase.length) {
+          narrowed = afterUsecase;
+        } else {
+          usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+        }
       }
+      scoreFn = function (item) { return item.rating; };
     }
 
     if (state.budget.length) {
@@ -1569,8 +1641,18 @@ function initProductFinder() {
       }
     }
 
-    narrowed = narrowed.slice().sort(byRating);
-    return { best: narrowed[0], usedFallback: usedFallback };
+    // A product with no real, purchasable offer shouldn't win "best
+    // match" over one that has one, even with an otherwise-higher
+    // score -- confirmed happening in practice (a top-ranked
+    // recommendation with no buy link at all) before this was added.
+    // Only actually falls back to a no-offer pick when literally
+    // nothing left in the pool has one.
+    var withOffer = narrowed.filter(function (item) { return item.has_offer; });
+    var rankPool = withOffer.length ? withOffer : narrowed;
+    if (!withOffer.length && narrowed.length) usedFallback = true;
+
+    rankPool = rankPool.slice().sort(function (a, b) { return scoreFn(b) - scoreFn(a); });
+    return { best: rankPool[0], usedFallback: usedFallback };
   }
 
   function runMatch() {
