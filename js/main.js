@@ -1123,13 +1123,16 @@ function initRubricExplainerTabs() {
 // pure CSS (keyed off [aria-expanded="true"] in style.css), not
 // animated here.
 function initRubricAccordion() {
-  var trigger = document.querySelector(".rubric-accordion-trigger");
-  var body = document.getElementById("rubric-accordion-body");
-  if (!trigger || !body) return;
-  trigger.addEventListener("click", function () {
-    var expanded = trigger.getAttribute("aria-expanded") === "true";
-    trigger.setAttribute("aria-expanded", String(!expanded));
-    body.hidden = expanded;
+  var triggers = Array.prototype.slice.call(document.querySelectorAll(".rubric-accordion-trigger"));
+  triggers.forEach(function (trigger) {
+    var bodyId = trigger.getAttribute("aria-controls");
+    var body = bodyId ? document.getElementById(bodyId) : null;
+    if (!body) return;
+    trigger.addEventListener("click", function () {
+      var expanded = trigger.getAttribute("aria-expanded") === "true";
+      trigger.setAttribute("aria-expanded", String(!expanded));
+      body.hidden = expanded;
+    });
   });
 }
 
@@ -1174,7 +1177,7 @@ function initMobileRubricPlacement() {
     }
   }
 
-  var mq = window.matchMedia("(max-width: 700px)");
+  var mq = window.matchMedia("(max-width: 1300px)");
   applyPlacement(mq.matches);
   function handleMqChange(e) { applyPlacement(e.matches); }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
