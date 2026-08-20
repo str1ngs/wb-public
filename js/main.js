@@ -44,6 +44,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initRubricExplainerTabs();
   initRubricAccordion();
   initMobileRubricPlacement();
+  initMobileRelatedPlacement();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
@@ -1182,6 +1183,31 @@ function initMobileRubricPlacement() {
   function handleMqChange(e) { applyPlacement(e.matches); }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
   else mq.addListener(handleMqChange); // older Safari
+}
+
+function initMobileRelatedPlacement() {
+  var relatedSection = document.querySelector(".review-related-section");
+  var mainBottom = document.querySelector(".review-main-bottom");
+  if (!relatedSection || !mainBottom) return; // not on the review page
+
+  var originalParent = relatedSection.parentNode;
+  var originalNextSibling = relatedSection.nextSibling;
+
+  function applyPlacement(isMobile) {
+    if (isMobile) {
+      if (relatedSection.parentNode !== mainBottom) {
+        mainBottom.appendChild(relatedSection);
+      }
+    } else if (relatedSection.parentNode !== originalParent) {
+      originalParent.insertBefore(relatedSection, originalNextSibling);
+    }
+  }
+
+  var mq2 = window.matchMedia("(max-width: 1300px)");
+  applyPlacement(mq2.matches);
+  function handleMq2Change(e) { applyPlacement(e.matches); }
+  if (mq2.addEventListener) mq2.addEventListener("change", handleMq2Change);
+  else mq2.addListener(handleMq2Change);
 }
 
 function initRecentStacks() {
