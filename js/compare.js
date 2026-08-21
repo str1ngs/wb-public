@@ -10,16 +10,16 @@
     return indexPromise;
   }
 
-  // ---- searchable combobox picker, replacing the old native <select>.
-  // Two things forced this rebuild, not just a styling tweak: native
-  // <option> elements can't be reliably restyled for dark mode across
-  // browsers, and there was no way to restrict the second product to
-  // the first one's category with a plain <select> without a jarring
-  // full repopulation. This owns its own tabs (filtering by category,
-  // same visual component as the homepage's mobile tabs) and its own
-  // results list (sorted by rating, filtered by the typed query and by
-  // whatever the other slot already has selected, so a product can't
-  // be compared to itself). ----
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   function initCombo(comboEl, products, byId, onSelect){
     var slot = comboEl.getAttribute("data-compare-slot");
     var input = comboEl.querySelector(".compare-combo-input");
@@ -67,7 +67,7 @@
     function select(id){
       var p = byId[id];
       if (!p) return;
-      if (excludeId && id === excludeId) return; // never allow comparing a product to itself
+      if (excludeId && id === excludeId) return; 
       selectedId = id;
       input.value = p.brand + " " + p.model;
       closePanel();
@@ -98,11 +98,11 @@
     });
 
     return {
-      // Resets this combo back to no selection -- called by the OTHER
-      // slot's onChange when a category mismatch is detected, so
-      // picking a different category on one side clears the other
-      // side's now-invalid pairing instead of being blocked from
-      // happening in the first place.
+      
+      
+      
+      
+      
       clear: function(){
         selectedId = null;
         input.value = "";
@@ -119,14 +119,14 @@
     };
   }
 
-  // ---- spec rows: mirrors COMPARE_SPEC_ROWS / compare_row_display() /
-  // compare_row_raw() in build.py field-for-field -- same row ids, same
-  // category applicability, same higher-is-better direction, same
-  // formatting per field. Keeping this list identical to the Python
-  // side (not just similar) is the actual point of shipping raw values
-  // in compare-index.json rather than pre-formatted text: one canonical
-  // ruleset, expressed twice because Python and JS can't literally
-  // share code, not two independently-drifting ones. ----
+  
+  
+  
+  
+  
+  
+  
+  
   var SPEC_ROWS = [
     { id: "price_eur", cats: ["power-stations", "power-banks", "chargers"], higherBetter: false },
     { id: "capacity_wh", cats: ["power-stations"], higherBetter: true },
@@ -276,7 +276,7 @@
       '<div class="card-content">' +
       '<a href="' + window.WB_ROOT + p.url + '" class="card-photo-link"><div class="' + imgWrapClass + '">' + img + '</div></a>' +
       '<div class="compare-head-title-block">' +
-      '<span class="brand">' + p.brand + '</span><h3>' + p.model + '</h3>' +
+      '<span class="brand">' + p.brand + '</span><h2>' + p.model + '</h2>' +
       badgeHtml(isWinner) +
       '</div>' +
       '<div class="card-rubric-block">' + rubricBars(p) + rubricTotalLine(p) + '</div>' +
@@ -305,8 +305,8 @@
     var comboB = document.querySelector('.compare-combo[data-compare-slot="b"]');
     if (!comboA || !comboB) return;
 
-    var resultEl = document.getElementById("compare-tool-result"); // present on the dynamic tool only
-    var current = window.WB_COMPARE_CURRENT; // present on a static pair page only
+    var resultEl = document.getElementById("compare-tool-result"); 
+    var current = window.WB_COMPARE_CURRENT; 
 
     loadIndex().then(function(products){
       var byId = {};
@@ -315,24 +315,24 @@
       var params = new URLSearchParams(location.search);
       var initialA = (current && current.a) || params.get("a") || "";
       var initialB = (current && current.b) || params.get("b") || "";
-      // A query-string pair from a stale/hand-edited link could name the
-      // same product twice, or two different categories -- neither is a
-      // valid pair under the same-category, no-self-compare rules, so
-      // only trust initialB if it's actually a different product in the
-      // same category as initialA.
+      
+      
+      
+      
+      
       if (initialA && initialB && byId[initialA] && byId[initialB] &&
           (initialA === initialB || byId[initialA].category !== byId[initialB].category)) {
         initialB = "";
       }
 
-      // Rendering is synchronous -- every product's full data, including
-      // its image URL, is already sitting in memory by the time init()
-      // even runs (see loadIndex() at the top of this file), so there's
-      // nothing to actually wait on here. An earlier version added a
-      // deliberate ~850ms delay with a skeleton placeholder shown during
-      // it, modeled on the homepage finder's own artificial pacing --
-      // removed per request, since it didn't match how the rest of the
-      // site behaves and wasn't covering any real work.
+      
+      
+      
+      
+      
+      
+      
+      
       function renderIfReady(pushUrl, changedSlot){
         var a = byId[ctrlA.getSelectedId()], b = byId[ctrlB.getSelectedId()];
         if (!a || !b || a.id === b.id || !resultEl) return;
@@ -342,26 +342,26 @@
         var winnerId = a.overall_score >= b.overall_score ? a.id : b.id;
 
         if (!cardA || !cardB) {
-          // First render -- both cards genuinely need real content here,
-          // regardless of which slot's selection was the one that just
-          // completed the pair (changedSlot names that slot, not "which
-          // slot needs rendering"). Applying the changedSlot filter here
-          // too, as an earlier version of this did, left whichever card
-          // wasn't named by changedSlot stuck showing nothing real at
-          // all -- confirmed happening in practice (comparing product1
-          // with product2, product1's own card never rendering) before
-          // this was fixed.
+          
+          
+          
+          
+          
+          
+          
+          
+          
           resultEl.innerHTML = '<div class="compare-heads">' +
             '<div id="compare-card-a">' + renderCard(a, a.id === winnerId) + '</div>' +
             '<div id="compare-card-b">' + renderCard(b, b.id === winnerId) + '</div>' +
             '</div>' +
             '<div id="compare-spec-wrap">' + buildSpecTableHtml(a, b) + '</div>';
         } else if (changedSlot === "a") {
-          // Only the side that actually changed gets new content; the
-          // other card's own DOM is left completely alone. Its badge
-          // still needs to stay correct if the new comparison flips
-          // who's winning, even though the rest of its content didn't
-          // change.
+          
+          
+          
+          
+          
           cardA.innerHTML = renderCard(a, a.id === winnerId);
           updateBadgeOnly(cardB, b.id === winnerId);
           document.getElementById("compare-spec-wrap").innerHTML = buildSpecTableHtml(a, b);
@@ -385,7 +385,7 @@
 
       function updateBadgeOnly(cardEl, isWinner){
         var titleBlock = cardEl.querySelector(".compare-head-title-block");
-        if (!titleBlock) return; // card is mid-skeleton (shouldn't happen for the untouched side, but safe to no-op)
+        if (!titleBlock) return; 
         var existing = titleBlock.querySelector(".compare-winner-badge, .compare-loser-badge");
         if (existing) existing.remove();
         titleBlock.insertAdjacentHTML("beforeend", badgeHtml(isWinner));
@@ -411,15 +411,15 @@
         if (resultEl) {
           renderIfReady(true, changedSlot);
         } else if (aId && bId && aId !== bId) {
-          // Static pair page -- this only runs from an actual user
-          // click (see initCombo's onSelect, the only caller of this
-          // function), never on initial load, which uses the plain
-          // syncExclusions() call below instead specifically so it
-          // can't trigger this navigation. Any two same-category
-          // products can always be compared on the dynamic tool, so
-          // that's the one destination that's always valid to send a
-          // changed selection to, rather than guessing whether a
-          // matching static page happens to exist.
+          
+          
+          
+          
+          
+          
+          
+          
+          
           var compareRoot = window.WB_ROOT + "compare/index.html";
           location.href = compareRoot + "?a=" + encodeURIComponent(aId) + "&b=" + encodeURIComponent(bId);
         }

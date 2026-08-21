@@ -1,12 +1,12 @@
 document.addEventListener("DOMContentLoaded", function () {
   initMobileDrawer();
 
-  // Dark mode toggle. The actual theme is applied earlier by an inline
-  // script in <head> (see templates/base.html) so there's no flash of
-  // the wrong theme on load -- this just wires up the button(s) and
-  // keeps localStorage in sync with clicks. There are two of these now
-  // (header, for desktop; drawer footer, for mobile) so every instance
-  // updates together rather than assuming there's only one on the page.
+  
+  
+  
+  
+  
+  
   var themeBtns = Array.prototype.slice.call(document.querySelectorAll(".theme-toggle"));
   if (themeBtns.length) {
     var setLabel = function () {
@@ -29,44 +29,45 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
-  // ---- Categories dropdown: the toggle is now a real link to the
-  // All Reviews page, so clicking it always goes somewhere. The submenu
-  // itself only needs to appear on hover (desktop) -- pure CSS, no JS.
+  
+  
+  
 
-  // ---- Site search ----
+  
   initSiteSearch();
 
-  // ---- All-reviews filter/sort/lazy-load ----
+  
   initReviewsFilter();
 
-  // ---- Product photo gallery (review pages with more than one photo) ----
+  
   initProductGallery();
   initRubricExplainerTabs();
   initRubricAccordion();
   initMobileRubricPlacement();
+  initMobileRelatedPlacement();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
 
-  // ---- Comparison table pagination ----
+  
   initTablePagination();
 
-  // ---- Language memory ----
-  // Remember an explicit language choice so returning visitors land on
-  // their preferred language automatically, without ever silently
-  // redirecting a first-time visitor or someone who followed a specific
-  // link/search result on purpose (see main.js comments below).
+  
+  
+  
+  
+  
   initLanguageMemory();
 });
 
-// ---- Mobile slide-out drawer ----
-// App-style pattern: hamburger (far left of the header, before the logo)
-// opens a fixed full-height panel that slides in from the left over a
-// fading backdrop, replacing the old in-place collapsing dropdown. Closes
-// on: backdrop click, the drawer's own close button, Escape, clicking any
-// link inside it (so it doesn't stay open behind a page navigation on the
-// live site), or the viewport growing past the desktop breakpoint while
-// it happens to be open.
+
+
+
+
+
+
+
+
 function initMobileDrawer() {
   var toggle = document.querySelector(".nav-toggle");
   var drawer = document.getElementById("mobile-drawer");
@@ -117,7 +118,7 @@ function initLanguageMemory() {
     de: { suggest: "Diese Seite ist auch auf Deutsch verf\u00fcgbar.", action: "Zu Deutsch wechseln" }
   };
 
-  // Remember explicit choices made via the header language switcher.
+  
   document.querySelectorAll(".lang-link").forEach(function (link) {
     link.addEventListener("click", function () {
       try { localStorage.setItem(STORAGE_KEY, link.getAttribute("data-lang")); } catch (e) {}
@@ -131,8 +132,8 @@ function initLanguageMemory() {
 
   if (stored && stored !== window.WB_LOCALE && window.WB_ALT_LINKS[stored]) {
     if (isHomepage) {
-      // Returning visitor landing on the homepage -- take them straight
-      // to their remembered language, no prompt needed.
+      
+      
       window.location.replace(window.WB_ALT_LINKS[stored]);
       return;
     }
@@ -141,8 +142,8 @@ function initLanguageMemory() {
   }
 
   if (!stored) {
-    // First-time visitor: suggest based on browser language, but never
-    // auto-redirect -- they may have landed here via a specific link.
+    
+    
     var browserLang = (navigator.language || "").slice(0, 2).toLowerCase();
     if (browserLang && browserLang !== window.WB_LOCALE && window.WB_ALT_LINKS[browserLang] && BANNER_TEXT[browserLang]) {
       showLanguageBanner(browserLang, BANNER_TEXT[browserLang]);
@@ -179,23 +180,23 @@ function initSiteSearch() {
   var chip = document.getElementById("search-cat-chip");
   var chipLabel = chip ? chip.querySelector(".chip-label") : null;
   var chipRemove = chip ? chip.querySelector(".chip-remove") : null;
-  var categories = window.WB_CATEGORIES || []; // tiny (one row per category) -- stays inline, no reason to fetch this separately
-  var activeCategory = null; // the locked chip, if any -- {id, label, accent, icon}
+  var categories = window.WB_CATEGORIES || []; 
+  var activeCategory = null; 
 
   var VISIBLE_ROWS = 5;
-  var RENDER_CAP = 20; // plenty for this catalog size; scroll handles the rest
+  var RENDER_CAP = 20; 
   var MIN_QUERY_LENGTH = 2;
 
-  // The full product index used to be embedded inline in EVERY page's
-  // HTML (window.WB_SEARCH_INDEX) -- meaning every visitor downloaded
-  // the whole catalog's search data on every single page load, whether
-  // they ever touched search or not, and that payload only grows as the
-  // catalog does. Fetched lazily now instead -- on first focus, not on
-  // page load -- same principle as the /reviews/ hub's search. One real
-  // trade-off, not a bug if you see it: fetch() is blocked under
-  // file://, so this specifically no longer works opening a page
-  // straight from disk. Only works served over real HTTP -- tools/
-  // start.py's local server, or the live deployed site.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   var searchData = null;
   var indexPromise = null;
   function loadIndex() {
@@ -218,11 +219,11 @@ function initSiteSearch() {
     return '<svg viewBox="0 0 24 24" width="15" height="15" ' + attrs + '>' + body + '</svg>';
   }
 
-  // The button and Enter key both "submit" the search -- they take you to
-  // the reviews page with the same filter(s) applied, rather than just
-  // re-displaying the same dropdown that's already open. Clicking an
-  // individual row in the dropdown is still the fast path straight to one
-  // product; this is the "show me everything that matches" path.
+  
+  
+  
+  
+  
   function goToResults() {
     var params = [];
     if (activeCategory) params.push("category=" + encodeURIComponent(activeCategory.id));
@@ -237,10 +238,10 @@ function initSiteSearch() {
     return '<span class="search-rating-badge">\u2605 ' + rating + '</span>';
   }
 
-  // The chip is a locked filter, not editable text -- picking a category
-  // narrows the dataset, and whatever the visitor types after that searches
-  // only inside that narrowed set. Removing the chip (the X) is the only
-  // way back out, same as a filter tag in any faceted-search UI.
+  
+  
+  
+  
   function setActiveCategory(cat) {
     activeCategory = cat;
     if (!chip) return;
@@ -265,13 +266,13 @@ function initSiteSearch() {
     });
   }
 
-  // Default state (nothing typed, no category chip): surface the 3
-  // categories rather than a generic "recent searches" list, since that's
-  // the whole shape of this catalog -- picking a category is almost
-  // always the first real move a visitor makes here. Doesn't need
-  // searchData at all -- categories (WB_CATEGORIES) are already available,
-  // so this renders instantly regardless of whether the index fetch below
-  // has landed yet.
+  
+  
+  
+  
+  
+  
+  
   function renderSuggested() {
     if (!categories.length) { resultsBox.classList.remove("open"); return; }
     var heading = '<div class="site-search-heading">' + (window.WB_SEARCH_SUGGESTED || "Suggested Categories") + '</div>';
@@ -284,10 +285,10 @@ function initSiteSearch() {
     resultsBox.innerHTML = '<div class="site-search-list">' + heading + rows + '</div>';
     resultsBox.classList.add("open");
 
-    // Clicking a suggested category locks it in as a chip and immediately
-    // shows every product in that category -- the input stays empty and
-    // editable for narrowing further (e.g. typing "anker"), rather than
-    // the category name itself becoming editable text.
+    
+    
+    
+    
     resultsBox.querySelectorAll(".site-search-suggested-row").forEach(function (btn) {
       btn.addEventListener("click", function () {
         var cat = categories.filter(function (c) { return c.id === btn.getAttribute("data-cat-id"); })[0];
@@ -321,12 +322,12 @@ function initSiteSearch() {
         '</a>';
     }).join("");
     var html = '<div class="site-search-list">' + listHtml + '</div>';
-    // "View all" only makes sense when it points somewhere that actually
-    // applies the same filter -- reviews/index.html supports filtering by
-    // category, not by arbitrary search text, so a plain-text search (no
-    // category chip) has nowhere accurate to send people. RENDER_CAP is
-    // already generous enough that everything fits in the scrollable list
-    // anyway, so nothing is actually lost by not showing that link here.
+    
+    
+    
+    
+    
+    
     if (activeCategory && items.length > VISIBLE_ROWS) {
       var viewAllText = (window.WB_SEARCH_VIEW_ALL || 'View all {count} matches for "{query}" \u2192')
         .replace("{count}", items.length).replace("{query}", query || activeCategory.label);
@@ -339,16 +340,16 @@ function initSiteSearch() {
   function runSearch(rawQuery) {
     var query = rawQuery.trim().toLowerCase();
 
-    // With no category chip locked in, an empty or too-short query falls
-    // back to the category suggestions -- that guard doesn't apply once a
-    // category is already locked, since the pool to search is already
-    // small and an empty query there just means "show the whole category".
+    
+    
+    
+    
     if (!activeCategory && query.length < MIN_QUERY_LENGTH) { renderSuggested(); return; }
 
-    // Waits on the lazy-loaded index rather than reading an already-
-    // embedded global -- in practice this resolves near-instantly for
-    // anyone who actually types something, since loadIndex() already
-    // started on focus, well before the debounced keystroke gets here.
+    
+    
+    
+    
     loadIndex().then(function (data) {
       var pool = activeCategory
         ? data.filter(function (item) { return item.subtitle === activeCategory.label; })
@@ -360,9 +361,9 @@ function initSiteSearch() {
           })
         : pool;
 
-      // rank matches where the title starts with the query above ones where
-      // the query just appears somewhere -- otherwise "anker" with a dozen
-      // Anker products returns an arbitrary-looking order
+      
+      
+      
       if (query) {
         matches.sort(function (a, b) {
           var aStarts = a.title.toLowerCase().indexOf(query) === 0 ? 0 : 1;
@@ -384,18 +385,18 @@ function initSiteSearch() {
   });
 
   input.addEventListener("focus", function () {
-    loadIndex(); // start the fetch now, so it's ready (or close to it) by the time typing or a category click actually needs it
+    loadIndex(); 
     if (input.value.trim() || activeCategory) runSearch(input.value);
     else renderSuggested();
   });
 
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") {
-      e.preventDefault(); // stop the native form submit -- goToResults() below handles navigation, and also carries the category chip state a plain submit can't
+      e.preventDefault(); 
       goToResults();
     } else if (e.key === "Backspace" && !input.value && activeCategory) {
-      // Backspacing from an empty box is the natural way to "delete" the
-      // chip too, same as removing a tag in a chip-based filter UI.
+      
+      
       clearActiveCategory();
       renderSuggested();
     }
@@ -403,7 +404,7 @@ function initSiteSearch() {
 
   if (button) {
     button.addEventListener("click", function (e) {
-      e.preventDefault(); // see the matching comment on the Enter-key handler above
+      e.preventDefault(); 
       goToResults();
     });
   }
@@ -415,7 +416,7 @@ function initSiteSearch() {
 
 function initReviewsFilter() {
   var grid = document.getElementById("review-grid");
-  if (!grid) return; // not on the all-reviews page
+  if (!grid) return; 
 
   var catalogGrid = document.getElementById("catalog-results-grid");
   var paginationEl = document.getElementById("review-pagination");
@@ -426,13 +427,13 @@ function initReviewsFilter() {
   var emptyMsg = document.querySelector(".review-empty");
   var strings = window.WB_REVIEWS_STRINGS || { showingCount: "Showing {shown} of {total}", noMatches: "No matches." };
 
-  // "all" shows this page's own server-rendered cards (real pagination,
-  // nothing to fetch). Any specific category filters the WHOLE catalog
-  // via the lazily-fetched index below, not just whatever happens to be
-  // on this one page -- a visitor picking "Chargers" expects every
-  // charger, not just the ones that landed on this particular page by
-  // chance of sort order. Sort still applies either way, just against
-  // whichever set is currently showing.
+  
+  
+  
+  
+  
+  
+  
   var state = { category: "all", sort: "recent", catalogPage: 1, query: "", brands: [] };
 
   var BADGE_LABELS = {
@@ -458,18 +459,18 @@ function initReviewsFilter() {
     if (paginationEl) paginationEl.hidden = false;
 
     var sorted = cards.slice().sort(sortFn);
-    sorted.forEach(function (c) { grid.appendChild(c); }); // reorder DOM to match sort order
+    sorted.forEach(function (c) { grid.appendChild(c); }); 
 
     if (countLabel) {
       var pageTotal = (typeof window.WB_TOTAL_REVIEWS === "number") ? window.WB_TOTAL_REVIEWS : cards.length;
       countLabel.textContent = strings.showingCount.replace("{shown}", cards.length).replace("{total}", pageTotal);
     }
-    if (emptyMsg) emptyMsg.hidden = true; // "all" on a real page always has at least one card, or the page wouldn't exist
+    if (emptyMsg) emptyMsg.hidden = true; 
   }
 
-  // ---- catalog-wide index (shared by category filtering and search --
-  // one fetch covers both, so a visitor who filters by category and
-  // then searches, or vice versa, only ever pays for the request once) ----
+  
+  
+  
   var catalogIndex = null;
   var indexPromise = null;
 
@@ -492,10 +493,10 @@ function initReviewsFilter() {
     }
   }
 
-  // Deliberately simpler than the server-rendered cards -- no buy
-  // buttons (replicating brand_affiliate_url()'s Awin/locale logic
-  // client-side isn't worth it for a card whose whole job is "click
-  // through to the real review page," where those buttons already are).
+  
+  
+  
+  
   function renderCatalogCard(item) {
     var photoInner = item.image
       ? '<img src="' + window.WB_ROOT + item.image + '" alt="' + item.brand + ' ' + item.model + '" loading="lazy">'
@@ -511,28 +512,28 @@ function initReviewsFilter() {
     if (item.total_output_w) specs.push('<span><strong>' + item.total_output_w.toLocaleString() + '</strong> W</span>');
     if (item.weight_display) specs.push('<span><strong>' + item.weight_display + '</strong></span>');
 
-    // Bonus-point indicator ("+0.5", "+1", or their sum "+1.5" when a
-    // product qualifies for both) -- see "Bonus points" in the Rating
-    // engine section of README.md. || 0 fallbacks mean this quietly
-    // shows nothing rather than "+NaN" if build.py hasn't been updated
-    // to include these two fields in reviews-catalog.json yet. Now
-    // appended to the score inside .rubric-total-line (below), not the
-    // h3 -- matches where it moved to server-side.
+    
+    
+    
+    
+    
+    
+    
     var bonusSum = (item.portability_bonus || 0) + (item.rugged_bonus || 0) + (item.ups_bonus || 0);
     var bonusHtml = bonusSum > 0 ? ' <span class="bonus-indicator">(+' + bonusSum + ')</span>' : "";
 
-    // Matches .rubric-total-line's exact markup from _macros.html /
-    // review.html's sidebar -- same classes, same three-part
-    // label/stars/score layout -- so this reads identically wherever
-    // it appears, not a separate one-off format invented for just this
-    // card. Star string computed inline rather than calling the
-    // starString() helper elsewhere in this file -- that helper is
-    // local to initProductFinder()'s own closure, a separate top-level
-    // function from initReviewsFilter() (which contains this
-    // function), so it was never actually reachable here despite
-    // looking like it should be via ordinary hoisting -- confirmed by
-    // an actual "starString is not defined" runtime error when this
-    // was first tried as a direct call.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     var starFilled = Math.max(0, Math.min(5, Math.round(item.rating)));
     var starStr = "\u2605".repeat(starFilled) + "\u2606".repeat(5 - starFilled);
     var totalLineHtml = '<div class="rubric-total-line">' +
@@ -541,15 +542,15 @@ function initReviewsFilter() {
       '<span class="rubric-total-score">' + item.rating + '/5' + bonusHtml + '</span>' +
       '</div>';
 
-    // Score breakdown bars, matching product_rubric_viz() in
-    // _macros.html (used server-side for this same card elsewhere) --
-    // reimplemented here since a client-side render can't call a Jinja
-    // macro. Only renders (bars + the total-line above) if all five
-    // sub-scores are actually present on this item; falls back to the
-    // plain summary text otherwise, same graceful-degradation pattern
-    // as WB_TOTAL_REVIEWS elsewhere in this file, rather than
-    // rendering broken/undefined bars if reviews-catalog.json doesn't
-    // carry these fields yet.
+    
+    
+    
+    
+    
+    
+    
+    
+    
     var RUBRIC_ROWS = [
       ["value", window.WB_RUBRIC_VALUE_LABEL],
       ["power", window.WB_RUBRIC_POWER_LABEL],
@@ -576,16 +577,16 @@ function initReviewsFilter() {
       middleBlockHtml = item.summary ? '<p class="desc desc-fade">' + item.summary + '</p>' : "";
     }
 
-    // Buy buttons -- only if build.py has already resolved these URLs
-    // server-side into reviews-catalog.json (item.amazon_url,
-    // item.brand_buy_url with a brand_buy_label for the button text,
-    // plus item.amazon_unavailable/item.awin_unavailable for muting).
-    // Deliberately not replicating brand_affiliate_url()'s Awin
-    // merchant-ID/publisher-ID lookup logic client-side -- that's real
-    // business logic that belongs in one place (build.py), not
-    // duplicated and kept in sync by hand in two languages. Omitted
-    // entirely, gracefully, if those fields aren't present yet, same
-    // pattern as the rubric bars above.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     var buyButtonsHtml = "";
     if (item.amazon_url || item.brand_buy_url) {
       var bothMuted = item.amazon_url && item.amazon_unavailable && item.brand_buy_url && item.awin_unavailable;
@@ -604,10 +605,10 @@ function initReviewsFilter() {
       buyButtonsHtml = '<div class="card-buy-row">' + amazonBtnHtml + brandBtnHtml + '</div>';
     }
 
-    // Price + buy buttons move together as one pinned-to-bottom unit
-    // now -- .card-footer, margin-top:auto in CSS -- matching the same
-    // restructure the server-rendered card just went through (price
-    // used to sit inside .card-content, the growing/flexible part).
+    
+    
+    
+    
     var priceHtml = '<span class="price">~\u20AC' + (item.price_eur != null ? item.price_eur.toLocaleString() : "") + ' <span class="price-est">(' + (window.WB_EST_LABEL || "Est.") + ')</span></span>';
     var footerHtml = '<div class="card-footer">' + priceHtml + buyButtonsHtml + '</div>';
 
@@ -623,9 +624,9 @@ function initReviewsFilter() {
       '</div>' + footerHtml + '</div>';
   }
 
-  // Matches REVIEWS_PER_PAGE in build.py -- same page size client-side so
-  // the catalog-wide view paginates the same way the server-rendered one
-  // does, rather than dumping every match into one unpaginated page.
+  
+  
+  
   var CATALOG_PAGE_SIZE = 12;
 
   function renderCatalogPagination(totalItems, currentPage) {
@@ -659,17 +660,17 @@ function initReviewsFilter() {
   }
 
   function showCatalogView() {
-    if (!catalogIndex) return; // still loading -- the .then() chain that triggered this re-calls once it lands
+    if (!catalogIndex) return; 
 
     grid.hidden = true;
     catalogGrid.hidden = false;
-    if (paginationEl) paginationEl.hidden = true; // the server-rendered nav is for the page view specifically; the catalog view gets its own, below
+    if (paginationEl) paginationEl.hidden = true; 
 
     var matching;
     if (state.query) {
-      // A text search is meant to cut across categories -- typing
-      // "100w" should surface every matching product, not just the
-      // ones in whichever category pill happens to still be active.
+      
+      
+      
       var q = state.query.toLowerCase();
       matching = catalogIndex.filter(function (item) {
         return (item.brand + " " + item.model).toLowerCase().indexOf(q) !== -1;
@@ -699,18 +700,18 @@ function initReviewsFilter() {
   }
 
   function apply() {
-    // The server-rendered page view is only correct for the true default
-    // state -- "all" category, "recent" sort, no search, every brand still
-    // checked -- which is what the page was actually built and sorted as.
-    // Anything else has to mean "sort/filter the whole catalog," not
-    // "re-sort this page's 12 products" -- a search box or a brand filter
-    // can't do their jobs at all against a 12-item slice, and a sort
-    // dropdown should surface the true cheapest/highest-rated thing in the
-    // whole catalog, not just among whatever happened to land on this
-    // page. state.brands.length === ALL_BRAND_VALUES.length, not just
-    // "non-empty," since state.brands always mirrors the checked boxes now
-    // (see the brand-filter section below) -- a subset that happens to be
-    // non-empty is still a real, active filter that needs the catalog path.
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     if (!state.query && state.brands.length === ALL_BRAND_VALUES.length && state.category === "all" && state.sort === "recent") {
       showPageView();
     } else {
@@ -718,10 +719,10 @@ function initReviewsFilter() {
     }
   }
 
-  // Honor ?category=<id> in the URL -- the homepage search box can land
-  // people here with a category pre-selected. ?q= is handled further
-  // down (see the search section), since query text searches the whole
-  // catalog via the same lazily-fetched index, not this page alone.
+  
+  
+  
+  
   try {
     var params = new URLSearchParams(window.location.search);
     var requestedCat = params.get("category");
@@ -751,21 +752,21 @@ function initReviewsFilter() {
     });
   }
 
-  // ---- catalog-wide text search (same lazily-fetched index as category
-  // filtering above -- one fetch, shared). Fetched exactly once, on
-  // first focus (never on page load, so a visitor who never touches
-  // either feature never pays for the request). Filters the same grid
-  // category filtering already renders into, via state.query and
-  // showCatalogView() above -- not a separate dropdown overlaying the
-  // grid, which is what this used to be: typing showed a floating list
-  // of matches, but the actual product grid underneath never changed,
-  // so the only way to browse full result cards was clicking into the
-  // dropdown one at a time. Searching also always covers the ENTIRE
-  // catalog regardless of which category pill happens to be active
-  // (see showCatalogView()'s own query-handling) and resets that pill
-  // to "all" -- leaving e.g. "Power Stations" shown as active while a
-  // cross-category search result set displays would misrepresent what
-  // the grid is actually showing.
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   var searchInput = document.querySelector(".page-search-input");
   var searchBtn = document.querySelector(".page-search-btn");
   var MIN_QUERY_LENGTH = 2;
@@ -794,15 +795,15 @@ function initReviewsFilter() {
     searchBtn.addEventListener("click", runSearch);
   }
 
-  // ---- brand multi-select, next to Sort -- additive on top of
-  // whichever of query/category is currently narrowing the grid (see
-  // showCatalogView()'s own brand-filtering step), not an alternative
-  // to either. Starts with every brand checked (matching the markup's
-  // own checked-by-default checkboxes), so state.brands always mirrors
-  // exactly which boxes are checked rather than the old "empty array
-  // means no filter" shorthand -- that broke once deselecting
-  // everything needed to mean "show nothing" instead of silently
-  // falling back to "show everything." ----
+  
+  
+  
+  
+  
+  
+  
+  
+  
   var brandToggle = document.getElementById("brand-filter-toggle");
   var brandPanel = document.getElementById("brand-filter-panel");
   var brandCount = document.getElementById("brand-filter-count");
@@ -872,11 +873,11 @@ function initReviewsFilter() {
     });
   });
 
-  // ?q=<text> in the URL -- the homepage search can land people here
-  // with a query already typed. Pre-fills the box AND immediately
-  // filters the grid to catalog-wide matches, fetching the index right
-  // away rather than waiting for a focus event that already
-  // effectively just happened.
+  
+  
+  
+  
+  
   try {
     var qParam = new URLSearchParams(window.location.search).get("q");
     if (qParam && searchInput) {
@@ -897,12 +898,12 @@ function initTablePagination() {
     var totalRows = tbody.querySelectorAll("tr").length;
     var totalPages = Math.max(1, Math.ceil(totalRows / pageSize));
 
-    // Always shows page 1 and the last page, plus the current page and
-    // its immediate neighbors -- any larger gap between those collapses
-    // into a single "..." rather than listing every page number, so a
-    // category with many products doesn't turn this into a wall of
-    // buttons. 0-indexed throughout, matching pageIndex elsewhere in
-    // this function; only the displayed label adds 1.
+    
+    
+    
+    
+    
+    
     function computePageList(current, total) {
       var showSet = {};
       showSet[0] = true;
@@ -922,10 +923,10 @@ function initTablePagination() {
       return pages;
     }
 
-    // Rebuilds the pagination bar's own buttons around whichever page is
-    // now current -- called every time the page changes (not just once
-    // at init), since which pages are "current's neighbors" changes as
-    // you page through, unlike the old static, build-once bar.
+    
+    
+    
+    
     function renderPaginationBar(currentPage) {
       if (!pagination) return;
       pagination.innerHTML = computePageList(currentPage, totalPages).map(function (p) {
@@ -940,10 +941,10 @@ function initTablePagination() {
       });
     }
 
-    // Page membership is computed fresh from current DOM order every time,
-    // rather than the page each row was assigned at build time -- that way
-    // sorting the table and paging through it keep working together instead
-    // of the two features fighting over stale page numbers.
+    
+    
+    
+    
     function showPage(pageIndex) {
       var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
       rows.forEach(function (row, i) {
@@ -952,7 +953,7 @@ function initTablePagination() {
       renderPaginationBar(pageIndex);
     }
 
-    // ---- sortable column headers ----
+    
     var sortState = { key: null, dir: 1 };
     table.querySelectorAll("th.sortable").forEach(function (th) {
       th.addEventListener("click", function () {
@@ -1026,7 +1027,7 @@ function initProductGallery() {
       }, 100);
     }, { passive: true });
 
-    syncToIndex(0); // set initial arrow/counter state on load
+    syncToIndex(0); 
   });
 
   initLightbox();
@@ -1043,17 +1044,17 @@ function initLightbox() {
   var nextBtn = lightbox.querySelector(".lightbox-arrow.next");
   var closeBtn = lightbox.querySelector(".lightbox-close");
 
-  // Collect the full-size src + credit for every photo on the page, in
-  // order, whether it's a multi-photo gallery or a single static photo.
+  
+  
   var photos = [];
   document.querySelectorAll(".gallery-slide").forEach(function (slide) {
-    photos.push({ full: slide.getAttribute("data-full"), credit: slide.getAttribute("data-credit") || "" });
+    photos.push({ full: slide.getAttribute("data-full"), credit: slide.getAttribute("data-credit") || "", alt: slide.getAttribute("data-alt") || "" });
   });
   if (!photos.length) {
     var single = document.querySelector(".product-photo[data-full]");
     if (single) {
       var creditP = single.parentElement.querySelector(".gallery-credit");
-      photos.push({ full: single.getAttribute("data-full"), credit: creditP ? creditP.textContent : "" });
+      photos.push({ full: single.getAttribute("data-full"), credit: creditP ? creditP.textContent : "", alt: single.getAttribute("data-alt") || "" });
     }
   }
   if (!photos.length) return;
@@ -1063,6 +1064,7 @@ function initLightbox() {
   function show(idx) {
     current = Math.max(0, Math.min(photos.length - 1, idx));
     img.src = photos[current].full;
+    img.alt = photos[current].alt;
     if (counter) counter.textContent = photos.length > 1 ? (current + 1) + " / " + photos.length : "";
     if (creditEl) creditEl.textContent = photos[current].credit;
     if (prevBtn) prevBtn.classList.toggle("is-hidden", photos.length < 2 || current === 0);
@@ -1107,7 +1109,7 @@ function initRubricExplainerTabs() {
   if (!tabs.length || !textEl) return;
   tabs.forEach(function (tab) {
     tab.addEventListener("click", function (e) {
-      e.stopPropagation(); // don't let this bubble up into the popover's own drag/close handling
+      e.stopPropagation(); 
       tabs.forEach(function (t) { t.classList.remove("active"); });
       tab.classList.add("active");
       textEl.textContent = tab.getAttribute("data-explain");
@@ -1115,54 +1117,57 @@ function initRubricExplainerTabs() {
   });
 }
 
-// Collapsed by default -- only the Overall Score summary line shows on
-// page load, saving space on both mobile and desktop as requested. The
-// trigger is a real <button> with aria-expanded/aria-controls already
-// in the markup; this just keeps that attribute and the body's native
-// hidden attribute in sync on click. The chevron's own rotation is
-// pure CSS (keyed off [aria-expanded="true"] in style.css), not
-// animated here.
+
+
+
+
+
+
+
 function initRubricAccordion() {
-  var trigger = document.querySelector(".rubric-accordion-trigger");
-  var body = document.getElementById("rubric-accordion-body");
-  if (!trigger || !body) return;
-  trigger.addEventListener("click", function () {
-    var expanded = trigger.getAttribute("aria-expanded") === "true";
-    trigger.setAttribute("aria-expanded", String(!expanded));
-    body.hidden = expanded;
+  var triggers = Array.prototype.slice.call(document.querySelectorAll(".rubric-accordion-trigger"));
+  triggers.forEach(function (trigger) {
+    var bodyId = trigger.getAttribute("aria-controls");
+    var body = bodyId ? document.getElementById(bodyId) : null;
+    if (!body) return;
+    trigger.addEventListener("click", function () {
+      var expanded = trigger.getAttribute("aria-expanded") === "true";
+      trigger.setAttribute("aria-expanded", String(!expanded));
+      body.hidden = expanded;
+    });
   });
 }
 
-// Moves the "Overall Score" block itself between the sidebar and the
-// article, on request -- below 700px it becomes the first thing inside
-// .review-main-bottom (directly above the lede paragraph); at/above
-// 700px it lives back in its original spot in .review-rubric-section,
-// in the sidebar, completely untouched. Same 700px breakpoint already
-// established in initProductFinder() below, matched here rather than
-// introducing a second, slightly different mobile threshold into the
-// same file.
-//
-// This moves the actual DOM node, not a duplicate -- CSS Grid can't
-// stack two separate elements sequentially inside one named
-// grid-template-area (multiple items sharing an area just overlap each
-// other, they don't stack in reading order), so reaching this specific
-// nesting requires either real DOM movement or two copies of the same
-// markup kept in sync by hand. Moving the one real node means its
-// accordion open/closed state, its click listener from
-// initRubricAccordion() above, and its content all just come along
-// with it automatically -- nothing to duplicate, nothing that can
-// drift out of sync between two copies.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 function initMobileRubricPlacement() {
   var rubricBlock = document.querySelector(".rubric-static-block");
   var mainBottom = document.querySelector(".review-main-bottom");
-  if (!rubricBlock || !mainBottom) return; // not on the review page
+  if (!rubricBlock || !mainBottom) return; 
 
-  // Where the block actually starts (inside .review-rubric-section, in
-  // the sidebar) -- remembered up front so it can go back to that exact
-  // spot, not just get appended somewhere plausible-looking, once the
-  // viewport crosses back above 700px.
+  
+  
+  
+  
   var originalParent = rubricBlock.parentNode;
-  var originalNextSibling = rubricBlock.nextSibling; // null is valid -- it may have been the last child
+  var originalNextSibling = rubricBlock.nextSibling; 
 
   function applyPlacement(isMobile) {
     if (isMobile) {
@@ -1174,11 +1179,36 @@ function initMobileRubricPlacement() {
     }
   }
 
-  var mq = window.matchMedia("(max-width: 700px)");
+  var mq = window.matchMedia("(max-width: 1300px)");
   applyPlacement(mq.matches);
   function handleMqChange(e) { applyPlacement(e.matches); }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
-  else mq.addListener(handleMqChange); // older Safari
+  else mq.addListener(handleMqChange); 
+}
+
+function initMobileRelatedPlacement() {
+  var relatedSection = document.querySelector(".review-related-section");
+  var mainBottom = document.querySelector(".review-main-bottom");
+  if (!relatedSection || !mainBottom) return; 
+
+  var originalParent = relatedSection.parentNode;
+  var originalNextSibling = relatedSection.nextSibling;
+
+  function applyPlacement(isMobile) {
+    if (isMobile) {
+      if (relatedSection.parentNode !== mainBottom) {
+        mainBottom.appendChild(relatedSection);
+      }
+    } else if (relatedSection.parentNode !== originalParent) {
+      originalParent.insertBefore(relatedSection, originalNextSibling);
+    }
+  }
+
+  var mq2 = window.matchMedia("(max-width: 1300px)");
+  applyPlacement(mq2.matches);
+  function handleMq2Change(e) { applyPlacement(e.matches); }
+  if (mq2.addEventListener) mq2.addEventListener("change", handleMq2Change);
+  else mq2.addListener(handleMq2Change);
 }
 
 function initRecentStacks() {
@@ -1186,7 +1216,7 @@ function initRecentStacks() {
     var cards = Array.prototype.slice.call(stack.querySelectorAll("[data-stack-card]"));
     var dots = Array.prototype.slice.call(stack.querySelectorAll(".recent-stack-dot"));
     var total = cards.length;
-    if (total < 2) return; // only one card in this category -- nothing to page through
+    if (total < 2) return; 
 
     var front = 0;
 
@@ -1198,9 +1228,9 @@ function initRecentStacks() {
     }
     layout();
 
-    // Wraps in both directions (front - 1 on card 0 lands on the last
-    // card) -- same endless-loop behavior the old swipe stack had, so
-    // Back/Next never need a disabled state.
+    
+    
+    
     function goTo(index) {
       front = ((index % total) + total) % total;
       layout();
@@ -1210,10 +1240,10 @@ function initRecentStacks() {
       dot.addEventListener("click", function () { goTo(i); });
     });
 
-    // Back/Next -- same goTo()/layout() the dots already use, so the
-    // motion comes for free from the .35s transform transition already
-    // on .recent-stack .recent-card in CSS. Mirrors the finder wizard's
-    // nav pattern instead of the old pointer-drag/fling gesture.
+    
+    
+    
+    
     var backBtn = stack.querySelector(".recent-stack-back");
     var nextBtn = stack.querySelector(".recent-stack-next");
     if (backBtn) backBtn.addEventListener("click", function () { goTo(front - 1); });
@@ -1221,11 +1251,11 @@ function initRecentStacks() {
   });
 }
 
-// Mobile category tabs -- used by both the recent-reviews showcase and
-// the comparison tables below it. Scoped per [data-tabs-group] rather
-// than one flat document-wide lookup, since both sections have a
-// "power-stations"/"power-banks"/"chargers" panel and a global lookup
-// would let one section's tab click control the other section's panel.
+
+
+
+
+
 function initCategoryTabs() {
   document.querySelectorAll("[data-tabs-group]").forEach(function (tabsGroup) {
     var tabs = Array.prototype.slice.call(tabsGroup.querySelectorAll(".recent-tab"));
@@ -1254,12 +1284,12 @@ function initProductFinder() {
   var panel = document.querySelector(".finder-grid");
   if (!panel || !window.WB_FINDER_INDEX) return;
 
-  // No default selections and no default result anymore -- the panel
-  // starts genuinely empty (see the placeholder in #finder-best) until
-  // the person actually answers. "usage" and "usecase" are required
-  // (computeMatch() needs both to produce a real ranked answer);
-  // "budget" stays optional exactly as before, zero selected just means
-  // no price filter.
+  
+  
+  
+  
+  
+  
   var state = { usage: [], usecase: [], budget: [] };
 
   function canSubmit() {
@@ -1269,11 +1299,11 @@ function initProductFinder() {
     if (submitBtn && !hasShownResult) submitBtn.disabled = !canSubmit();
   }
 
-  // "usage" (device type) is a single-select group -- exactly one option
-  // is always the current answer, same idea as a radio group, because
-  // "traveling with a phone AND a fridge" isn't a meaningful combination
-  // the way "traveling AND camping" is for use case. usecase/budget stay
-  // multi-select/optional exactly as before.
+  
+  
+  
+  
+  
   panel.querySelectorAll(".finder-pills").forEach(function (group) {
     var groupName = group.getAttribute("data-finder-group");
     var isSingleSelect = groupName === "usage" || groupName === "usecase";
@@ -1289,7 +1319,7 @@ function initProductFinder() {
       }
       pill.addEventListener("click", function () {
         if (isSingleSelect) {
-          if (state[groupName][0] === value) return; // already the only answer -- radio groups don't unselect down to none
+          if (state[groupName][0] === value) return; 
           state[groupName] = [value];
           pills.forEach(function (p) {
             var isActive = p === pill;
@@ -1312,12 +1342,12 @@ function initProductFinder() {
     });
   });
 
-  // ---- mobile step-wizard: below 700px, only one step is visible at a
-  // time (usage -> usecase -> budget -> results), driven by the nav bar
-  // below. Above 700px this whole block is a no-op and every step is
-  // always visible at once via the two-column layout. (This breakpoint
-  // must stay in sync with the CSS breakpoints for .finder-grid,
-  // .finder-step-submit, .finder-pair, and the mobile-nav merge rules.) ----
+  
+  
+  
+  
+  
+  
   var STEP_ORDER = ["usage", "usecase", "budget", "results"];
   var stepEls = {};
   document.querySelectorAll("[data-finder-step]").forEach(function (el) {
@@ -1328,7 +1358,7 @@ function initProductFinder() {
   var backBtn = document.getElementById("finder-back");
   var nextBtn = document.getElementById("finder-next");
   var submitBtn = document.getElementById("finder-submit");
-  var hasShownResult = false; // tracks which of the two labels/actions the shared desktop button is currently in
+  var hasShownResult = false; 
 
   function setSubmitButtonState(showingResult) {
     hasShownResult = showingResult;
@@ -1340,15 +1370,15 @@ function initProductFinder() {
       submitBtn.classList.toggle("is-reset", showingResult);
     }
     setPillsInteractive(!showingResult);
-    if (!showingResult) updateSubmitAvailability(); // re-locks the button until a fresh selection is made -- this was the bug: Reset called this with showingResult=false but nothing re-evaluated .disabled, so the button stayed clickable from before Reset was pressed
+    if (!showingResult) updateSubmitAvailability(); 
   }
-  // While a result is showing, the pills are locked rather than left live --
-  // changing them wouldn't do anything until Reset is clicked anyway (the
-  // shown result deliberately doesn't recompute itself), so leaving them
-  // clickable was misleading. Native `disabled` rather than a CSS-only
-  // treatment: it blocks the click for free, skips them in tab order, and
-  // gets announced correctly by screen readers, instead of reimplementing
-  // all of that by hand.
+  
+  
+  
+  
+  
+  
+  
   function setPillsInteractive(enabled) {
     panel.querySelectorAll(".finder-pill").forEach(function (pill) {
       pill.disabled = !enabled;
@@ -1356,21 +1386,21 @@ function initProductFinder() {
   }
   var mq = window.matchMedia("(max-width: 700px)");
   var isMobile = mq.matches;
-  // Starts on the first question, not the results step -- there's no
-  // longer a default result computed up front (see below), so jumping
-  // straight to results would just show an empty placeholder as if it
-  // were step 1. Desktop is unaffected either way since every step is
-  // visible at once there regardless of wizardStep.
+  
+  
+  
+  
+  
   var wizardStep = 0;
 
   function updateWizardView() {
-    // .finder-col-left/.finder-col-right/.finder-pair are never hidden by
-    // the per-step loop below -- only the individual [data-finder-step]
-    // divs inside them are. Left on their own, the *empty* wrapper still
-    // occupies a grid row (finder-grid) or flex slot (finder-col-left),
-    // which still gets a `gap` around it even with nothing visible inside
-    // -- a phantom blank strip between the visible card and the nav bar.
-    // Collapsing the wrapper itself removes it from layout entirely.
+    
+    
+    
+    
+    
+    
+    
     var colLeft = panel.querySelector(".finder-col-left");
     var colRight = panel.querySelector(".finder-col-right");
     var pairEl = panel.querySelector(".finder-pair");
@@ -1396,11 +1426,11 @@ function initProductFinder() {
     if (backBtn && !isResultsStep) backBtn.disabled = wizardStep === 0;
     if (nextBtn) {
       if (isResultsStep) {
-        // Nothing to advance to from the last slide -- this button becomes
-        // the wizard's reset control instead of being hidden, styled to
-        // match the desktop Show My Match / Reset button exactly (see
-        // .finder-next.is-reset in style.css) rather than the plain
-        // .finder-nav-btn look the Back/Next pair normally has.
+        
+        
+        
+        
+        
         nextBtn.hidden = false;
         nextBtn.textContent = "\u21BA " + window.WB_FINDER_RESET_LABEL;
         nextBtn.classList.remove("is-submit");
@@ -1416,9 +1446,9 @@ function initProductFinder() {
     }
   }
 
-  // Landing on the results step (from anywhere else) recomputes the
-  // match, since that's the wizard's equivalent of clicking the desktop
-  // submit button -- selections may have changed since it was last shown.
+  
+  
+  
   function goToStep(newStep) {
     var wasResults = wizardStep === STEP_ORDER.length - 1;
     wizardStep = Math.max(0, Math.min(STEP_ORDER.length - 1, newStep));
@@ -1433,7 +1463,7 @@ function initProductFinder() {
     updateWizardView();
   }
   if (mq.addEventListener) mq.addEventListener("change", handleMqChange);
-  else mq.addListener(handleMqChange); // older Safari
+  else mq.addListener(handleMqChange); 
 
   if (backBtn) backBtn.addEventListener("click", function () { goToStep(wizardStep - 1); });
   if (nextBtn) nextBtn.addEventListener("click", function () {
@@ -1470,29 +1500,29 @@ function initProductFinder() {
       wizardStep = 0;
       updateWizardView();
     }
-    // deliberately no runMatch() here -- the shown result stays put until Show My Match is clicked again
+    
   }
 
   updateWizardView();
 
-  // Step 1, device type -- Wh/W thresholds against the real catalog
-  // rather than a fixed category mapping, so a small power station and a
-  // large power bank can both legitimately show up for "Medium Gear" if
-  // their numbers actually fit, instead of one category being silently
-  // excluded just because of what it's called.
+  
+  
+  
+  
+  
   var USAGE_FILTERS = {
     phone: function (item) { return item.category === "power-banks" || item.effective_wh <= 300; },
     laptop: function (item) { return item.effective_wh >= 300 && item.effective_wh <= 1000; },
     fridge: function (item) { return item.effective_wh >= 1000 && item.output_w >= 1000; },
   };
 
-  // Step 2, use case -- real hard filters now (this used to be a
-  // ranking-only formula that never actually excluded anything). "On the
-  // Go" deliberately drops the "AND category IN (power-bank,
-  // power-station)" clause a station-inclusive version of this rule
-  // would need: a real power station is never <=1.5kg, so that clause
-  // never excluded anything a weight threshold alone doesn't already
-  // handle -- keeping it would've been redundant, not more correct.
+  
+  
+  
+  
+  
+  
+  
   var USECASE_FILTERS = {
     traveling: function (item) { return item.weight_kg != null && item.weight_kg <= 1.5; },
     camping: function (item) { return item.weight_kg != null && item.weight_kg <= 25 && item.effective_wh >= 300; },
@@ -1500,48 +1530,48 @@ function initProductFinder() {
   };
   var BUDGET_RANGES = { micro: [0, 100], low: [100, 400], high: [400, Infinity] };
 
-  // Some (usage, usecase) combinations need more than an independent
-  // filter-then-filter intersection can express -- the right category
-  // and ranking priority genuinely differ by pair, not just by usage or
-  // usecase alone. Falls back to the generic USAGE_FILTERS/USECASE_FILTERS
-  // path below for any pair not listed here.
+  
+  
+  
+  
+  
   var COMBO_RULES = {
     "phone:camping": {
-      // A dead power bank mid-trip is worse than a merely mediocre one,
-      // so reliability leads -- ruggedness is a genuine plus outdoors,
-      // not a requirement, so it's a modest bonus rather than a filter.
+      
+      
+      
       filter: function (item) { return item.category === "power-banks"; },
       score: function (item) { return item.reliability * 10 + (item.is_rugged ? 2 : 0); }
     },
     "laptop:camping": {
-      // This pairing is specifically about ~100W-class power banks, not
-      // "the biggest power bank available" -- closeness to that output
-      // target wins outright.
+      
+      
+      
       filter: function (item) { return item.category === "power-banks"; },
       score: function (item) { return -Math.abs(item.output_w - 100); }
     },
     "fridge:traveling": {
-      // Heavy-gear power needs while still wanting to travel light is
-      // specifically a portability ask -- lightest in the category wins,
-      // but only among stations that are actually heavy-gear-capable in
-      // the first place (reuses the same fridge threshold below) --
-      // otherwise a tiny, low-capacity "mini" station could win purely
-      // for being light despite being nowhere near what heavy gear needs.
+      
+      
+      
+      
+      
+      
       filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
       score: function (item) { return item.weight_kg != null ? -item.weight_kg : -Infinity; }
     },
     "fridge:camping": {
-      // Needs real appliance-level output (~1200W) plus a rugged build
-      // for outdoor use -- the power rubric score and closeness to that
-      // output target both matter, with ruggedness as a solid bonus.
+      
+      
+      
       filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
       score: function (item) { return item.power * 10 + (item.is_rugged ? 5 : 0) - Math.abs(item.output_w - 1200) / 100; }
     },
     "fridge:offgrid": {
-      // Emergency backup is a capacity question first -- highest Wh
-      // wins -- with true UPS (sub-10ms transfer) as a real bonus, since
-      // a backup with a noticeable gap defeats part of the point for
-      // sensitive equipment.
+      
+      
+      
+      
       filter: function (item) { return item.category === "power-stations" && USAGE_FILTERS.fridge(item); },
       score: function (item) { return item.effective_wh + (item.is_ups_10ms ? 200 : 0); }
     }
@@ -1582,9 +1612,9 @@ function initProductFinder() {
       ? '<div class="product-badge-pill"><span class="badge-icon">' + item.primary_badge_emoji + '</span><span>' + badgeLabels[item.primary_badge] + '</span></div>'
       : "";
 
-    // Only the photo is the actual link now (matches the same pattern
-    // used for the homepage recent-cards) -- title/rating/description
-    // are plain text underneath, not part of any clickable area.
+    
+    
+    
     bestEl.innerHTML =
       '<div class="finder-best-card">' +
         '<a class="finder-best-photo-link" href="' + window.WB_ROOT + item.url + '" aria-label="' + item.title + ' \u2014 ' + window.WB_FINDER_CTA + '">' +
@@ -1615,7 +1645,7 @@ function initProductFinder() {
       var usecaseFn = state.usecase.length ? USECASE_FILTERS[state.usecase[0]] : null;
 
       var afterUsage = usageFn ? pool.filter(usageFn) : pool;
-      if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } // this device type matched nothing at all -- whole pool instead of a dead end
+      if (!afterUsage.length) { afterUsage = pool; usedFallback = true; } 
 
       narrowed = afterUsage;
       if (usecaseFn) {
@@ -1623,7 +1653,7 @@ function initProductFinder() {
         if (afterUsecase.length) {
           narrowed = afterUsecase;
         } else {
-          usedFallback = true; // this use case is too narrow for the chosen device type (e.g. Heavy Gear + On the Go is a real contradiction) -- keep the device-type pool instead
+          usedFallback = true; 
         }
       }
       scoreFn = function (item) { return item.rating; };
@@ -1637,16 +1667,16 @@ function initProductFinder() {
       if (inBudget.length) {
         narrowed = inBudget;
       } else {
-        usedFallback = true; // no exact match in any selected range -- show the closest fit instead
+        usedFallback = true; 
       }
     }
 
-    // A product with no real, purchasable offer shouldn't win "best
-    // match" over one that has one, even with an otherwise-higher
-    // score -- confirmed happening in practice (a top-ranked
-    // recommendation with no buy link at all) before this was added.
-    // Only actually falls back to a no-offer pick when literally
-    // nothing left in the pool has one.
+    
+    
+    
+    
+    
+    
     var withOffer = narrowed.filter(function (item) { return item.has_offer; });
     var rankPool = withOffer.length ? withOffer : narrowed;
     if (!withOffer.length && narrowed.length) usedFallback = true;
@@ -1702,5 +1732,5 @@ function initProductFinder() {
     });
   }
 
-  setSubmitButtonState(false); // starts as "Show My Match" (not "Reset"), disabled, and bold/is-submit -- all handled internally now
+  setSubmitButtonState(false); 
 }
