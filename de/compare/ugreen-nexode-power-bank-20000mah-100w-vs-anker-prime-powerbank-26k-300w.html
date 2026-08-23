@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<script>
+(function(){
+  try{
+    var saved = localStorage.getItem("wattbench-theme");
+    var theme;
+    if (saved) {
+      theme = saved; // manual toggle always wins, regardless of time of day
+    } else {
+      var hour = new Date().getHours(); // local device clock only -- no network, no location, nothing sent anywhere
+      theme = (hour >= 20 || hour < 6) ? "dark" : "light"; // 20:00-05:59 -> dark, 06:00-19:59 -> light
+    }
+    document.documentElement.setAttribute("data-theme", theme);
+
+    // theme2 preview -- for trying out the "development" theme from the
+    // editor's Theme Settings tab against the real, already-built site.
+    // ?theme=2 turns it on and remembers that for the rest of this browser
+    // tab's session (sessionStorage, not localStorage -- deliberately
+    // temporary, so it can't get left on by accident for a normal visitor
+    // days later); ?theme=default turns it back off explicitly. Neither
+    // parameter present just keeps whatever this session already had, if
+    // anything, so it survives clicking through to other pages.
+    var params = new URLSearchParams(location.search);
+    var themeParam = params.get("theme");
+    if (themeParam === "2") {
+      sessionStorage.setItem("wattbench-preview-theme", "2");
+    } else if (themeParam === "default") {
+      sessionStorage.removeItem("wattbench-preview-theme");
+    }
+    if (sessionStorage.getItem("wattbench-preview-theme") === "2") {
+      document.documentElement.setAttribute("data-preview-theme", "2");
+    }
+  }catch(e){}
+})();
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name='impact-site-verification' value='29317810-86b0-4edf-892f-fc8d6b93c100'>
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="manifest" href="/site.webmanifest">
+<meta name="theme-color" content="#e8a13d">
+<title>UGREEN Nexode (20K, 100W) vs Anker Prime Power Bank (26K, 300W): Welches ist besser?</title>
+<meta name="description" content="UGREEN Nexode (20K, 100W) schlägt Anker Prime Power Bank (26K, 300W) bei der Gesamtbewertung (4.1/5 vs. 3.1/5) — vergleiche Spezifikationen, Preise und Bezugsquellen.">
+<link rel="canonical" href="https://wattbench.eu/de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html">
+<link rel="alternate" hreflang="en" href="https://wattbench.eu/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html">
+<link rel="alternate" hreflang="de" href="https://wattbench.eu/de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html">
+<link rel="alternate" hreflang="x-default" href="https://wattbench.eu/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="WattBench">
+<meta property="og:title" content="UGREEN Nexode (20K, 100W) vs Anker Prime Power Bank (26K, 300W): Welches ist besser?">
+<meta property="og:description" content="UGREEN Nexode (20K, 100W) schlägt Anker Prime Power Bank (26K, 300W) bei der Gesamtbewertung (4.1/5 vs. 3.1/5) — vergleiche Spezifikationen, Preise und Bezugsquellen.">
+<meta property="og:url" content="https://wattbench.eu/de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html">
+<meta property="og:locale" content="de">
+<meta property="og:image" content="https://wattbench.eu/images/pages/og-cover.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="WattBench — Daten statt Werbung">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://wattbench.eu/images/pages/og-cover.jpg">
+
+<link rel="preload" href="../../Fonts/SourceSans3-Regular.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="../../Fonts/BarlowCondensed-Bold.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../../css/style.css?v=0.3.1">
+<style>
+
+html[data-preview-theme="2"]{--amber:#0571ff;--card-bg-alt:#0582ff;}
+
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type":"ListItem","position":1,"name":"Startseite","item":"https://wattbench.eu/de/"},
+    {"@type":"ListItem","position":2,"name":"Vergleich","item":"https://wattbench.eu/de/compare/"},
+    {"@type":"ListItem","position":3,"name":"UGREEN Nexode (20K, 100W) vs Anker Prime Power Bank (26K, 300W)","item":"https://wattbench.eu/de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html"}
+  ]
+}
+</script>
+</head>
+<body>
+
+<div class="theme2-preview-badge">Theme 2 preview — <a href="?theme=default">exit</a></div>
+
+<header class="site-header">
+  <div class="wrap">
+    <button class="nav-toggle" id="nav-toggle" aria-expanded="false" aria-controls="mobile-drawer" aria-label="Toggle menu">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+    </button>
+    <a href="../../de/" class="logo">WattBench<small>Daten statt Werbung</small></a>
+    <nav class="main-nav">
+      <a href="../../de/">Startseite</a>
+      <div class="nav-dropdown">
+        <a href="../../de/reviews/" class="nav-dropdown-toggle">Testberichte</a>
+        <div class="nav-dropdown-menu">
+          <a href="../../de/reviews/?category=power-stations"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+          <a href="../../de/reviews/?category=power-banks"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+          <a href="../../de/reviews/?category=chargers"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+        </div>
+      </div>
+      <a href="../../de/compare/">Vergleichen</a>
+    </nav>
+
+    <div class="nav-controls">
+      <div class="lang-switch">
+        <a href="../../compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html" class=" lang-link" data-lang="en" hreflang="en">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+          </span>en
+        </a>
+        <a href="../../de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html" class="active lang-link" data-lang="de" hreflang="de">
+          <span class="lang-flag">
+            <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+          </span>de
+        </a>
+      </div>
+      <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu-backdrop" id="menu-backdrop"></div>
+<nav class="mobile-drawer" id="mobile-drawer" aria-hidden="true" aria-label="Testberichte">
+  <div class="mobile-drawer-head">
+    <span class="mobile-drawer-brand">WattBench</span>
+    <button class="mobile-drawer-close" id="drawer-close" aria-label="Close menu" type="button">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    </button>
+  </div>
+  <div class="mobile-drawer-controls">
+    <div class="lang-switch">
+      <a href="../../compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html" class=" lang-link" data-lang="en" hreflang="en">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#003399"/><g fill="#FFCC00"><circle cx="10" cy="2.6" r="0.85"/><circle cx="13.4" cy="3.6" r="0.85"/><circle cx="15.4" cy="7" r="0.85"/><circle cx="13.4" cy="10.4" r="0.85"/><circle cx="10" cy="11.4" r="0.85"/><circle cx="6.6" cy="10.4" r="0.85"/><circle cx="4.6" cy="7" r="0.85"/><circle cx="6.6" cy="3.6" r="0.85"/></g></svg>
+        </span>en
+      </a>
+      <a href="../../de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html" class="active lang-link" data-lang="de" hreflang="de">
+        <span class="lang-flag">
+          <svg viewBox="0 0 20 14" width="18" height="13"><rect width="20" height="14" rx="1" fill="#FFCE00"/><rect width="20" height="9.34" fill="#DD0000"/><rect width="20" height="4.67" fill="#000000"/></svg>
+        </span>de
+      </a>
+    </div>
+    <button class="theme-toggle" type="button" role="switch" aria-checked="false" aria-label="☽ DUNKEL">
+      <span class="theme-toggle-track">
+        <svg class="theme-toggle-icon sun" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4" fill="currentColor" stroke="none"></circle><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path></svg>
+        <svg class="theme-toggle-icon moon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"></path></svg>
+        <span class="theme-toggle-thumb"></span>
+      </span>
+    </button>
+  </div>
+  <div class="mobile-drawer-links">
+    <a href="../../de/">Startseite</a>
+    <div class="mobile-drawer-group-label">Testberichte</div>
+    <a href="../../de/reviews/?category=power-stations" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations</a>
+    <a href="../../de/reviews/?category=power-banks" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks</a>
+    <a href="../../de/reviews/?category=chargers" class="mobile-drawer-sublink"><span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte</a>
+    <a href="../../de/compare/">Vergleichen</a>
+  </div>
+</nav>
+
+<div class="disclosure">
+  Diese Website erhält Provisionen für qualifizierte Käufe über Affiliate-Links. <a href="../../de/affiliate-disclosure.html">Vollständige Offenlegung</a>.
+</div>
+
+<main>
+<div class="wrap"><p class="breadcrumb"><a href="../../de/">Startseite</a> / <a href="../../de/compare/">Vergleich</a> / UGREEN Nexode (20K, 100W) vs Anker Prime Power Bank (26K, 300W)</p></div>
+
+<section class="section-tight">
+  <div class="wrap compare-page">
+    <div class="mobile-intro-card">
+    <h1>UGREEN Nexode (20K, 100W) vs Anker Prime Power Bank (26K, 300W)</h1>
+
+    <div class="compare-picker">
+      <div class="compare-picker-select">
+  <label for="compare-input-a">Erstes Produkt wählen</label>
+  <div class="compare-combo" data-compare-slot="a">
+    <input type="text" id="compare-input-a" class="compare-combo-input" placeholder="Produkt auswählen…" autocomplete="off" value="UGREEN Nexode (20K, 100W)">
+    <div class="compare-combo-panel">
+      <div class="compare-combo-tabs" role="tablist">
+        <button type="button" class="recent-tab active" data-category-tab="power-stations" role="tab" aria-selected="true">
+          <span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations
+        </button>
+        <button type="button" class="recent-tab" data-category-tab="power-banks" role="tab" aria-selected="false">
+          <span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks
+        </button>
+        <button type="button" class="recent-tab" data-category-tab="chargers" role="tab" aria-selected="false">
+          <span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte
+        </button>
+      </div>
+      <div class="compare-combo-results"></div>
+    </div>
+  </div>
+</div>
+      <span class="compare-picker-vs">vs</span>
+      <div class="compare-picker-select">
+  <label for="compare-input-b">Zweites Produkt wählen</label>
+  <div class="compare-combo" data-compare-slot="b">
+    <input type="text" id="compare-input-b" class="compare-combo-input" placeholder="Produkt auswählen…" autocomplete="off" value="Anker Prime Power Bank (26K, 300W)">
+    <div class="compare-combo-panel">
+      <div class="compare-combo-tabs" role="tablist">
+        <button type="button" class="recent-tab active" data-category-tab="power-stations" role="tab" aria-selected="true">
+          <span class="cat-icon" style="color:#a855f7;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="currentColor"><path d="M13 2 4 14h6l-1 8 9-12h-6z"></path></svg></span>Powerstations
+        </button>
+        <button type="button" class="recent-tab" data-category-tab="power-banks" role="tab" aria-selected="false">
+          <span class="cat-icon" style="color:#00e5ff;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="18" height="10" rx="2"></rect><line x1="22" y1="11" x2="22" y2="13"></line></svg></span>Powerbanks
+        </button>
+        <button type="button" class="recent-tab" data-category-tab="chargers" role="tab" aria-selected="false">
+          <span class="cat-icon" style="color:#00d98b;"><svg class="spec-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 2v4M15 2v4M6 8h12l-1 6a5 5 0 0 1-10 0z"></path><path d="M12 18v4"></path></svg></span>Ladegeräte
+        </button>
+      </div>
+      <div class="compare-combo-results"></div>
+    </div>
+  </div>
+</div>
+    </div>
+    </div>
+
+    <div class="compare-heads">
+      <div class="card compare-head">
+        <div class="card-content">
+          <a href="../../de/reviews/ugreen-nexode-power-bank-20000mah-100w.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../../images/products/ugreen-nexode-power-bank-20000mah-100w-2.webp"
+     srcset="../../images/products/ugreen-nexode-power-bank-20000mah-100w-2-sm.webp 480w, ../../images/products/ugreen-nexode-power-bank-20000mah-100w-2-md.webp 900w, ../../images/products/ugreen-nexode-power-bank-20000mah-100w-2.webp 1600w"
+     sizes="(max-width: 700px) 90vw, 320px"
+     alt="UGREEN Nexode (20K, 100W)"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <div class="compare-head-title-block">
+            <span class="brand">UGREEN</span>
+            <h3>Nexode (20K, 100W)</h3>
+            <span class="compare-winner-badge">Sieger</span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladezeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Gesamtbewertung</span>
+              <span class="rubric-total-stars">★★★★☆</span>
+              <span class="rubric-total-score">4.1/5 <span class="bonus-indicator">(+0.5)</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B0cDMsDkN" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          <a href="https://www.awin1.com/cread.php?awinmid=128039&awinaffid=2996599&ued=https%3A%2F%2Fde.ugreen.com%2Fproducts%2Fugreen-100w-power-bank-20000mah-powerbank" class="card-buy-btn card-buy-btn-alt" rel="sponsored nofollow" target="_blank">UGREEN DE Store</a>
+          </div>
+        </div>
+      </div>
+      <div class="card compare-head">
+        <div class="card-content">
+          <a href="../../de/reviews/anker-prime-powerbank-26k-300w.html" class="card-photo-link">
+          <div class="product-photo">
+            <img src="../../images/products/anker-prime-powerbank-26k-300w-1.webp"
+     srcset="../../images/products/anker-prime-powerbank-26k-300w-1-sm.webp 480w, ../../images/products/anker-prime-powerbank-26k-300w-1-md.webp 900w, ../../images/products/anker-prime-powerbank-26k-300w-1.webp 1600w"
+     sizes="(max-width: 700px) 90vw, 320px"
+     alt="Anker Prime Power Bank (26K, 300W)"
+     loading="lazy"
+>
+          </div>
+          </a>
+          <div class="compare-head-title-block">
+            <span class="brand">Anker</span>
+            <h3>Prime Power Bank (26K, 300W)</h3>
+            <span class="compare-loser-badge">Verlierer</span>
+          </div>
+          <div class="card-rubric-block">
+            <div class="rubric-viz">
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Preis</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:30%"></div></div>
+    <span class="rubric-bar-pct">1.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Leistung</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:90%"></div></div>
+    <span class="rubric-bar-pct">4.5/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Portabilität</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:40%"></div></div>
+    <span class="rubric-bar-pct">2.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Ladezeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:80%"></div></div>
+    <span class="rubric-bar-pct">4.0/5</span>
+  </div>
+  <div class="rubric-bar-row">
+    <span class="rubric-bar-label">Zuverlässigkeit</span>
+    <div class="rubric-bar-track"><div class="rubric-bar-fill" style="width:100%"></div></div>
+    <span class="rubric-bar-pct">5.0/5</span>
+  </div>
+</div>
+            <div class="rubric-total-line">
+              <span class="rubric-total-label">Gesamtbewertung</span>
+              <span class="rubric-total-stars">★★★☆☆</span>
+              <span class="rubric-total-score">3.1/5</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-footer">
+          <div class="card-buy-row">
+          <a href="https://link.amazon/B00pBHX5S" class="card-buy-btn" rel="sponsored nofollow" target="_blank">Amazon.de Price Check</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h2>Vollständiger Spezifikationsvergleich</h2>
+    <div class="table-scroll">
+      <table class="spec-table compare-spec-table">
+        <thead>
+          <tr><th></th><th>UGREEN Nexode (20K, 100W)</th><th>Anker Prime Power Bank (26K, 300W)</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Preis</td>
+            <td class="compare-winner-cell">€48</td>
+            <td class="">€159</td>
+          </tr>
+          <tr>
+            <td>Kapazität</td>
+            <td class="">20,000 mAh</td>
+            <td class="compare-winner-cell">26,250 mAh</td>
+          </tr>
+          <tr>
+            <td>Gesamtausgang</td>
+            <td class="">100 W</td>
+            <td class="compare-winner-cell">300 W</td>
+          </tr>
+          <tr>
+            <td>Gesamteingang</td>
+            <td class="">65 W</td>
+            <td class="compare-winner-cell">250 W</td>
+          </tr>
+          <tr>
+            <td>Gewicht</td>
+            <td class="compare-winner-cell">420 g</td>
+            <td class="">600 g</td>
+          </tr>
+          <tr>
+            <td>Ladezeit</td>
+            <td class="">2.0 hours</td>
+            <td class="compare-winner-cell">39 min</td>
+          </tr>
+          <tr>
+            <td>Akkutyp</td>
+            <td class="">Li-ion (20000mAh / 3.6V / 72Wh)</td>
+            <td class="">Lithium-ion</td>
+          </tr>
+          <tr>
+            <td>Zyklenlebensdauer</td>
+            <td class="">—</td>
+            <td class="">500 to 80%</td>
+          </tr>
+          <tr>
+            <td>Garantie</td>
+            <td class="">2 Jahre</td>
+            <td class="">2 Jahre</td>
+          </tr>
+          <tr>
+            <td>Robust / Wetterfest</td>
+            <td class="">Nein</td>
+            <td class="">Nein</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>Weitere Vergleiche</h2>
+    <ul class="compare-other-list">
+      <li><a href="../../de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-ecoflow-rapid-power-bank-25000-170w.html">UGREEN Nexode (20K, 100W) vs EcoFlow RAPID Power Bank (25K, 170W)</a></li>
+      <li><a href="../../de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-cuktech-15-ultra-power-bank-pb200u.html">UGREEN Nexode (20K, 100W) vs CUKTECH 15 Ultra Power Bank (PB200U)</a></li>
+      <li><a href="../../de/compare/ecoflow-rapid-power-bank-25000-170w-vs-cuktech-15-ultra-power-bank-pb200u.html">EcoFlow RAPID Power Bank (25K, 170W) vs CUKTECH 15 Ultra Power Bank (PB200U)</a></li>
+      <li><a href="../../de/compare/ecoflow-rapid-power-bank-25000-170w-vs-anker-prime-powerbank-26k-300w.html">EcoFlow RAPID Power Bank (25K, 170W) vs Anker Prime Power Bank (26K, 300W)</a></li>
+      <li><a href="../../de/compare/cuktech-15-ultra-power-bank-pb200u-vs-anker-prime-powerbank-26k-300w.html">CUKTECH 15 Ultra Power Bank (PB200U) vs Anker Prime Power Bank (26K, 300W)</a></li>
+    </ul>
+  </div>
+</section>
+
+<script>
+  window.WB_COMPARE_CURRENT = { a: "ugreen-nexode-power-bank-20000mah-100w", b: "anker-prime-powerbank-26k-300w" };
+</script>
+<script src="../../js/compare.js?v=0.3.1"></script>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-brand">
+      <a href="../../de/" class="logo">WattBench</a>
+      <p class="fine">WattBench ist eine Website für Testberichte zu Power-Geräten — darunter tragbare Powerstations, Powerbanks und Ladegeräte.</p>
+    </div>
+    <div>
+      <h4>Entdecken</h4>
+      <a href="../../de/reviews/?category=power-stations">Powerstations</a>
+      <a href="../../de/reviews/?category=power-banks">Powerbanks</a>
+      <a href="../../de/reviews/?category=chargers">Ladegeräte</a>
+      <a href="../../de/compare/">Vergleichen</a>
+    </div>
+    <div>
+      <h4>Rechtliches</h4>
+      <a href="../../de/about.html">Über uns</a>
+      <a href="../../de/affiliate-disclosure.html">Affiliate-Offenlegung</a>
+      <a href="../../de/privacy-policy.html">Datenschutz</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 WattBench. Alle Produktnamen und Marken gehören ihren jeweiligen Eigentümern.</span>
+    <span>v0.3.1</span>
+  </div>
+</footer>
+
+<script>
+  window.WB_LOCALE = "de";
+  window.WB_ROOT = "../../";
+  window.WB_TOP_RATED_LABEL = "Bestbewertet";
+  window.WB_BEST_VALUE_LABEL = "Bestes Preis-Verh\u00e4ltnis";
+  window.WB_FASTEST_CHARGE_LABEL = "Schnellste Ladung";
+  window.WB_HIGHEST_OUTPUT_LABEL = "H\u00f6chste Leistung";
+  window.WB_LIGHTEST_LABEL = "Leichtestes Modell";
+  window.WB_EST_LABEL = "Gesch.";
+  window.WB_RUBRIC_VALUE_LABEL = "Preis";
+  window.WB_RUBRIC_POWER_LABEL = "Leistung";
+  window.WB_RUBRIC_PORTABILITY_LABEL = "Portabilit\u00e4t";
+  window.WB_RUBRIC_CHARGE_SPEED_LABEL = "Ladezeit";
+  window.WB_RUBRIC_EFFICIENCY_LABEL = "Effizienz";
+  window.WB_RUBRIC_RELIABILITY_LABEL = "Zuverl\u00e4ssigkeit";
+  window.WB_BUY_AMAZON_LABEL = "Amazon.de Price Check";
+  window.WB_CURRENTLY_UNAVAILABLE_LABEL = "Derzeit nicht verf\u00fcgbar";
+  window.WB_SEARCH_NO_RESULTS = "Keine Ergebnisse gefunden.";
+  window.WB_SEARCH_VIEW_ALL = "Alle {count} Treffer f\u00fcr \u201e{query}\u201c anzeigen \u2192";
+  window.WB_SEARCH_SUGGESTED = "Vorgeschlagene Kategorien";
+  window.WB_SEARCH_RESULTS_COUNT = "{count} Ergebnisse";
+  window.WB_SEARCH_PLACEHOLDER_DEFAULT = "Suchen...";
+  window.WB_SEARCH_PLACEHOLDER_FILTERED = "Suche innerhalb {category}...";
+  window.WB_SEARCH_PREFIX = "Suche";
+  window.WB_THEME_LABELS = { dark: "\u263d DUNKEL", light: "\u2600 HELL" };
+  window.WB_ALT_LINKS = { "en": "../../compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html", "de": "../../de/compare/ugreen-nexode-power-bank-20000mah-100w-vs-anker-prime-powerbank-26k-300w.html" };
+  window.WB_CATEGORIES = [{ id: "power-stations", label: "Powerstations", accent: "#a855f7", icon: "bolt", url: "../../de/reviews/?category=power-stations" }, { id: "power-banks", label: "Powerbanks", accent: "#00e5ff", icon: "battery", url: "../../de/reviews/?category=power-banks" }, { id: "chargers", label: "Ladeger\u00e4te", accent: "#00d98b", icon: "plug", url: "../../de/reviews/?category=chargers" }];
+</script>
+<script src="../../js/main.js?v=0.3.1"></script>
+</body>
+</html>
