@@ -45,6 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
   initRubricAccordion();
   initMobileRubricPlacement();
   initMobileRelatedPlacement();
+  initMobileBuyPlacement();
   initRecentStacks();
   initCategoryTabs();
   initProductFinder();
@@ -1048,13 +1049,13 @@ function initLightbox() {
   // order, whether it's a multi-photo gallery or a single static photo.
   var photos = [];
   document.querySelectorAll(".gallery-slide").forEach(function (slide) {
-    photos.push({ full: slide.getAttribute("data-full"), credit: slide.getAttribute("data-credit") || "" });
+    photos.push({ full: slide.getAttribute("data-full"), credit: slide.getAttribute("data-credit") || "", alt: slide.getAttribute("data-alt") || "" });
   });
   if (!photos.length) {
     var single = document.querySelector(".product-photo[data-full]");
     if (single) {
       var creditP = single.parentElement.querySelector(".gallery-credit");
-      photos.push({ full: single.getAttribute("data-full"), credit: creditP ? creditP.textContent : "" });
+      photos.push({ full: single.getAttribute("data-full"), credit: creditP ? creditP.textContent : "", alt: single.getAttribute("data-alt") || "" });
     }
   }
   if (!photos.length) return;
@@ -1064,6 +1065,7 @@ function initLightbox() {
   function show(idx) {
     current = Math.max(0, Math.min(photos.length - 1, idx));
     img.src = photos[current].full;
+    img.alt = photos[current].alt;
     if (counter) counter.textContent = photos.length > 1 ? (current + 1) + " / " + photos.length : "";
     if (creditEl) creditEl.textContent = photos[current].credit;
     if (prevBtn) prevBtn.classList.toggle("is-hidden", photos.length < 2 || current === 0);
@@ -1203,11 +1205,37 @@ function initMobileRelatedPlacement() {
     }
   }
 
-  var mq2 = window.matchMedia("(max-width: 1300px)");
+  var mq2 = window.matchMedia("(max-width: 1300px) and (min-width: 701px)");
   applyPlacement(mq2.matches);
   function handleMq2Change(e) { applyPlacement(e.matches); }
   if (mq2.addEventListener) mq2.addEventListener("change", handleMq2Change);
   else mq2.addListener(handleMq2Change);
+}
+
+function initMobileBuyPlacement() {
+  var buyCallout = document.getElementById("buy");
+  var introCard = document.querySelector(".review-main-top > .mobile-intro-card");
+  var introCardParent = introCard ? introCard.parentNode : null;
+  if (!buyCallout || !introCard || !introCardParent) return; // not on the review page
+
+  var originalParent = buyCallout.parentNode;
+  var originalNextSibling = buyCallout.nextSibling;
+
+  function applyPlacement(isMobile) {
+    if (isMobile) {
+      if (buyCallout.parentNode !== introCardParent) {
+        introCardParent.insertBefore(buyCallout, introCard.nextSibling);
+      }
+    } else if (buyCallout.parentNode !== originalParent) {
+      originalParent.insertBefore(buyCallout, originalNextSibling);
+    }
+  }
+
+  var mq3 = window.matchMedia("(max-width: 700px)");
+  applyPlacement(mq3.matches);
+  function handleMq3Change(e) { applyPlacement(e.matches); }
+  if (mq3.addEventListener) mq3.addEventListener("change", handleMq3Change);
+  else mq3.addListener(handleMq3Change);
 }
 
 function initRecentStacks() {
